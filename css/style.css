@@ -1,0 +1,18 @@
+:root {
+    --color-primary: #2563eb;      /* Bleu principal */
+    --color-primary-dark: #1e40af; /* Bleu foncé */
+    --color-primary-light: #60a5fa;/* Bleu clair */
+    --color-secondary: #fbbf24;    /* Jaune accent */
+    --color-white: #ffffff;
+    --color-gray-light: #f3f4f6;
+    --color-gray: #6b7280;
+    --color-gray-dark: #374151;
+    --color-text: #1f2937;
+    
+    --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --transition: all 0.3s ease;
+    
+    --container-width: 1200px;
+    --border-radius: 12px;
+}
+
