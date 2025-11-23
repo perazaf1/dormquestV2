@@ -1,8 +1,12 @@
 :root {
-    --color-primary: #2563eb;      /* Bleu principal */
-    --color-primary-dark: #1e40af; /* Bleu foncé */
-    --color-primary-light: #60a5fa;/* Bleu clair */
-    --color-secondary: #fbbf24;    /* Jaune accent */
+    --color-primary: #2563eb;
+    /* Bleu principal */
+    --color-primary-dark: #1e40af;
+    /* Bleu foncé */
+    --color-primary-light: #60a5fa;
+    /* Bleu clair */
+    --color-secondary: #fbbf24;
+    /* Jaune accent */
     --color-white: #ffffff;
     --color-gray-light: #f3f4f6;
     --color-gray: #6b7280;
@@ -45,4 +49,3 @@ a {
 ul {
     list-style: none;
 }
-
