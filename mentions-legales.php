@@ -206,7 +206,7 @@ session_start();
             </div>
             <div class="footer__section">
                 <h4 class="footer__title">Powered by</h4>
-                <img src="images/logo-nyzer.png" alt="Nyzer" class="footer__nyzer-logo">
+                <img src="img/logo-nyzer.png" alt="Nyzer" class="footer__nyzer-logo">
             </div>
         </div>
         <div class="footer__bottom">
