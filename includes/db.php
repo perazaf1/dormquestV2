@@ -21,8 +21,7 @@ try {
     );
     
 } catch(PDOException $e) {
-    // En production, ne jamais afficher les détails de l'erreur
-    // Ici c'est pour le développement
+
     die("❌ Erreur de connexion à la base de données : " . $e->getMessage());
 }
 ?>
