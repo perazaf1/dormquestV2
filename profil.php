@@ -214,38 +214,7 @@ try {
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header__container">
-            <a href="index.php" class="header__logo">
-                <img src="images/logo-dormquest.png" alt="DormQuest Logo" class="header__logo-img">
-                <span class="header__logo-text">DormQuest</span>
-            </a>
-            <nav class="header__nav">
-                <?php if (is_etudiant()): ?>
-                    <a href="annonces.php" class="header__nav-link">Annonces</a>
-                    <a href="favoris.php" class="header__nav-link">Mes favoris</a>
-                    <a href="candidatures.php" class="header__nav-link">Mes candidatures</a>
-                    <a href="dashboard-etudiant.php" class="header__nav-link">Dashboard</a>
-                <?php else: ?>
-                    <a href="dashboard-loueur.php" class="header__nav-link">Mes annonces</a>
-                    <a href="create-annonce.php" class="header__nav-link">Créer une annonce</a>
-                <?php endif; ?>
-                
-                
-                <div class="header__user">
-                    <img src="<?php echo htmlspecialchars(get_user_photo()); ?>" 
-                         alt="Photo de profil" 
-                         class="header__user-photo"
-                         onerror="this.src='images/default-avatar.png'"
-                         width="100px" 
-                         height="100px">
-                    <span class="header__user-name"><?php echo htmlspecialchars(get_user_prenom()); ?></span>
-                </div>
-                <a href="logout.php" class="header__btn header__btn--logout">Déconnexion</a>
-            </nav>
-        </div>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <main class="profil-page">
         <div class="profil-page__container">
@@ -488,13 +457,7 @@ try {
         </div>
     </main>
 
-    <footer class="footer footer--minimal">
-        <div class="footer__container">
-            <p class="footer__copyright">
-                &copy; 2024 DormQuest by Nyzer. Tous droits réservés.
-            </p>
-        </div>
-    </footer>
+    <?php include 'includes/footer.php'; ?>
 
     <script src="js/profil.js"></script>
 </body>

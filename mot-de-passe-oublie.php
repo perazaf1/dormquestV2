@@ -9,6 +9,10 @@ $errors = [];
 $success = '';
 $email = '';
 
+// Variables pour le header
+$isLoggedIn = isset($_SESSION['user_id']);
+$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
 
@@ -110,6 +114,7 @@ body {
 </style>
 </head>
 <body>
+<?php include 'includes/header.php'; ?>
 
 <div class="login-box">
 <h2>🔐 Mot de passe oublié</h2>
@@ -135,5 +140,6 @@ body {
 </div>
 </div>
 
+<?php include 'includes/footer.php'; ?>
 </body>
 </html>

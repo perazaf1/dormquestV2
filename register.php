@@ -24,6 +24,10 @@ $nom = '';
 $email = '';
 $role = isset($_GET['type']) ? $_GET['type'] : 'etudiant';
 
+// Variables pour le header
+$isLoggedIn = isset($_SESSION['user_id']);
+$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
+
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupération des données
@@ -175,19 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/forms.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header__container">
-            <a href="index.php" class="header__logo">
-                <img src="images/logo-dormquest.png" alt="DormQuest Logo" class="header__logo-img">
-                <span class="header__logo-text">DormQuest</span>
-            </a>
-            <nav class="header__nav">
-                <a href="index.php" class="header__nav-link">Accueil</a>
-                <a href="login.php" class="header__btn header__btn--login">Connexion</a>
-            </nav>
-        </div>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <!-- Formulaire d'inscription -->
     <main class="form-page">
@@ -354,14 +346,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer footer--minimal">
-        <div class="footer__container">
-            <p class="footer__copyright">
-                &copy; 2025 DormQuest by Nyzer. Tous droits réservés.
-            </p>
-        </div>
-    </footer>
+    <?php include 'includes/footer.php'; ?>
 
     <script src="js/register.js"></script>
 </body>

@@ -1,6 +1,10 @@
 <?php
 // mentions-legales.php - Mentions légales (DormQuest)
 session_start();
+
+// Variables pour le header
+$isLoggedIn = isset($_SESSION['user_id']);
+$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -71,20 +75,7 @@ session_start();
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header__container">
-            <a href="index.php" class="header__logo">
-                <img src="images/logo-dormquest.png" alt="DormQuest Logo" class="header__logo-img">
-                <span class="header__logo-text">DormQuest</span>
-            </a>
-            <nav class="header__nav">
-                <a href="annonces.php" class="header__nav-link">Annonces</a>
-                <a href="login.php" class="header__nav-link">Connexion</a>
-                <a href="register.php" class="header__nav-link">Inscription</a>
-                <a href="contact.php" class="header__nav-link">Contact</a>
-            </nav>
-        </div>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
     <main class="legal" id="mentions">
         <div class="legal__container">
@@ -186,32 +177,6 @@ session_start();
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="footer__container">
-            <div class="footer__section">
-                <h4 class="footer__title">DormQuest</h4>
-                <p class="footer__text">Trouvez le logement parfait pour vos études !</p>
-            </div>
-            <div class="footer__section">
-                <h4 class="footer__title">Navigation</h4>
-                <ul class="footer__list">
-                    <li class="footer__item"><a href="annonces.php" class="footer__link">Annonces</a></li>
-                    <li class="footer__item"><a href="CGU.php" class="footer__link">CGU</a></li>
-                    <li class="footer__item"><a href="mentions-legales.php" class="footer__link">Mentions</a></li>
-                </ul>
-            </div>
-            <div class="footer__section">
-                <h4 class="footer__title">Contact</h4>
-                <p class="footer__text"><a href="mailto:contact@dormquest.fr" class="footer__link">contact@dormquest.fr</a></p>
-            </div>
-            <div class="footer__section">
-                <h4 class="footer__title">Powered by</h4>
-                <img src="img/logo-nyzer.png" alt="Nyzer" class="footer__nyzer-logo">
-            </div>
-        </div>
-        <div class="footer__bottom">
-            <p class="footer__copyright">&copy; <?php echo date('Y'); ?> DormQuest. Tous droits réservés.</p>
-        </div>
-    </footer>
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>
