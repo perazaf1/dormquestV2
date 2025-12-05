@@ -19,6 +19,10 @@ $success = '';
 $email = '';
 $remember_me = false;
 
+// Variables pour le header
+$isLoggedIn = isset($_SESSION['user_id']);
+$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
+
 if (isset($_GET['success']) && $_GET['success'] === 'registered') {
     $success = "🎉 Inscription réussie ! Vous pouvez maintenant vous connecter.";
 }
@@ -162,6 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <?php include 'includes/header.php'; ?>
 
     <div class="login-box">
         <h2>Connexion DormQuest</h2>
@@ -191,6 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
+    <?php include 'includes/footer.php'; ?>
 </body>
 
 </html>

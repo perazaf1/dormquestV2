@@ -10,6 +10,10 @@ $success = '';
 $validToken = false;
 $token = $_GET['token'] ?? $_POST['token'] ?? '';
 
+// Variables pour le header
+$isLoggedIn = isset($_SESSION['user_id']);
+$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
+
 // Vérifier la validité du token
 if ($token !== '') {
     try {
@@ -103,6 +107,7 @@ body {
 </style>
 </head>
 <body>
+<?php include 'includes/header.php'; ?>
 
 <div class="login-box">
 <h2>🔑 Nouveau mot de passe</h2>
@@ -146,5 +151,6 @@ body {
 
 </div>
 
+<?php include 'includes/footer.php'; ?>
 </body>
 </html>
