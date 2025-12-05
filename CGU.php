@@ -1,8 +1,8 @@
 <?php
-// CGU.php - Conditions Générales d'Utilisation
+// CGU.php - Condi tions Gï¿½nï¿½rales d'Utilisation
 session_start();
 
-// Vérifier si l'utilisateur est connecté
+// Vï¿½rifier si l'utilisateur est connectï¿½
 $isLoggedIn = isset($_SESSION['user_id']);
 $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 ?>
@@ -19,7 +19,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 <body>
     <?php include 'includes/header.php'; ?>
 
-    <!-- Contenu des CGU à ajouter ici -->
+    <!-- Contenu des CGU ï¿½ ajouter ici -->
 
     <?php include 'includes/footer.php'; ?>
 </body>
