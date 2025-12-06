@@ -1,5 +1,6 @@
 <?php
 // CGU.php - Conditions G�n�rales d'Utilisation
+// CGU.php - Condi tions G�n�rales d'Utilisation
 session_start();
 
 // V�rifier si l'utilisateur est connect�
