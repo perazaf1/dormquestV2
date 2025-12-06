@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mot de passe oublié - DormQuest</title>
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/style.css">
 <style>
 body {
   margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; background:#f0f2f5; display:flex; justify-content:center; align-items:center; height:100vh;
