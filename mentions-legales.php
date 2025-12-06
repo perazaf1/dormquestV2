@@ -14,7 +14,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     <title>Mentions légales - DormQuest</title>
     <meta name="description" content="Mentions légales du site DormQuest, plateforme de mise en relation entre loueurs et étudiants.">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
     .legal {
         padding: 4rem 0;

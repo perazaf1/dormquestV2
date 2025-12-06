@@ -1,8 +1,8 @@
 <?php
-// create-annonce.php - Créer une annonce (loueur)
+// create-annonce.php - Crï¿½er une annonce (loueur)
 session_start();
 
-// Vérifier si l'utilisateur est connecté
+// Vï¿½rifier si l'utilisateur est connectï¿½
 $isLoggedIn = isset($_SESSION['user_id']);
 $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 ?>
@@ -12,15 +12,15 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer une annonce - DormQuest</title>
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Crï¿½er une annonce - DormQuest</title>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/stylecss">
     <link rel="stylesheet" href="css/forms.css">
 </head>
 <body>
     <?php include 'includes/header.php'; ?>
 
-    <!-- Contenu de la page création d'annonce à ajouter ici -->
+    <!-- Contenu de la page crï¿½ation d'annonce ï¿½ ajouter ici -->
 
     <?php include 'includes/footer.php'; ?>
 </body>

@@ -96,7 +96,7 @@
             <div class="footer-divider"></div>
             <div class="footer-copyright">
                 <p>&copy; <?php echo date('Y'); ?> DormQuest. Tous droits réservés.</p>
-                <p class="footer-tagline">Trouvez votre chez-vous, simplement.</p>
+                <p class="footer-tagline">Trouvez le logement parfait pour vos études !</p>
             </div>
         </div>
     </div>
