@@ -1,51 +1,391 @@
+/**
+ * ============================================
+ * VARIABLES CSS GLOBALES
+ * ============================================
+ * :root définit les variables CSS réutilisables dans tout le site.
+ * Utilisation : var(--nom-de-variable)
+ * Exemple : color: var(--color-primary);
+ */
 :root {
-    --color-primary: #2563eb;
-    /* Bleu principal */
-    --color-primary-dark: #1e40af;
-    /* Bleu foncé */
-    --color-primary-light: #60a5fa;
-    /* Bleu clair */
-    --color-secondary: #fbbf24;
-    /* Jaune accent */
-    --color-white: #ffffff;
-    --color-gray-light: #f3f4f6;
-    --color-gray: #6b7280;
-    --color-gray-dark: #374151;
-    --color-text: #1f2937;
+  /* ===== PALETTE DE COULEURS ===== */
+  --color-primary: #2563eb; /* Bleu principal - couleur principale du site */
+  --color-primary-dark: #1e40af; /* Bleu foncé - pour les dégradés et survols */
+  --color-primary-light: #60a5fa; /* Bleu clair - pour les dégradés */
+  --color-secondary: #fbbf24; /* Jaune accent - pour attirer l'attention */
 
-    --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --transition: all 0.3s ease;
+  /* Couleurs neutres */
+  --color-white: #ffffff; /* Blanc pur */
+  --color-gray-light: #f3f4f6; /* Gris très clair - arrière-plans */
+  --color-gray: #6b7280; /* Gris moyen - textes secondaires */
+  --color-gray-dark: #374151; /* Gris foncé */
+  --color-text: #1f2937; /* Gris très foncé - texte principal */
 
-    --container-width: 1200px;
-    --border-radius: 12px;
+  /* ===== TYPOGRAPHIE ===== */
+  --font-primary: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  /* ===== TRANSITIONS ===== */
+  --transition: all 0.3s ease; /* Transition standard pour tous les effets hover */
+
+  /* ===== DIMENSIONS ===== */
+  --container-width: 1200px; /* Largeur maximale du contenu */
+  --border-radius: 12px; /* Arrondi des coins des éléments */
 }
 
-/* ===== Reset & Base Styles ===== */
+/**
+ * ============================================
+ * RESET & STYLES DE BASE
+ * ============================================
+ * Supprime les styles par défaut du navigateur pour avoir une base propre
+ */
+
+/* Sélecteur universel : applique ces styles à TOUS les éléments HTML */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0; /* Supprime toutes les marges extérieures par défaut */
+  padding: 0; /* Supprime tous les espacements intérieurs par défaut */
+  box-sizing: border-box; /* La largeur/hauteur inclut padding et border (facilite les calculs) */
 }
 
+/* Styles du corps de la page */
 body {
-    font-family: var(--font-primary);
-    color: var(--color-text);
-    line-height: 1.6;
-    background-color: var(--color-white);
-    overflow-x: hidden;
+  font-family: var(--font-primary); /* Police de caractères principale */
+  color: var(--color-text); /* Couleur du texte par défaut */
+  line-height: 1.6; /* Espacement entre les lignes (160% de la hauteur du texte) */
+  background-color: var(--color-white); /* Fond blanc */
+  overflow-x: hidden; /* Empêche le scroll horizontal */
 }
 
+/* Toutes les images du site */
 img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+  max-width: 100%; /* L'image ne peut pas dépasser la largeur de son conteneur */
+  height: auto; /* La hauteur s'ajuste automatiquement pour garder les proportions */
+  display: block; /* Supprime l'espace en dessous des images */
 }
 
+/* Tous les liens du site */
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none; /* Supprime le soulignement des liens */
+  color: inherit; /* Hérite de la couleur du parent (pas de bleu par défaut) */
 }
 
+/* Toutes les listes (ul, ol) */
 ul {
-    list-style: none;
+  list-style: none; /* Supprime les puces ou numéros de liste */
+}
+
+/**
+ * ============================================
+ * SECTION HERO (Page d'accueil)
+ * ============================================
+ * Méthodologie BEM (Block Element Modifier)
+ * - Block : .hero
+ * - Element : .hero__container, .hero__title, etc. (__ = fait partie de)
+ * - Modifier : .hero__btn--primary (-- = variation)
+ */
+
+/* Conteneur principal de la section Hero */
+.hero {
+  padding: 100px 20px 80px; /* Espacement : haut 100px, côtés 20px, bas 80px */
+  /* Dégradé de bleu très léger en arrière-plan (0.05 = 5% d'opacité) */
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.05) 0%,
+    rgba(96, 165, 250, 0.05) 100%
+  );
+  min-height: 600px; /* Hauteur minimale de la section */
+  display: flex; /* Utilise Flexbox pour le centrage vertical */
+  align-items: center; /* Centre le contenu verticalement */
+}
+
+/* Conteneur interne qui limite la largeur du contenu */
+.hero__container {
+  max-width: var(--container-width); /* Largeur max = 1200px */
+  margin: 0 auto; /* Centre horizontalement */
+  display: grid; /* Utilise CSS Grid pour la mise en page */
+  grid-template-columns: 1fr 1fr; /* 2 colonnes égales (texte | image) */
+  gap: 60px; /* Espace entre les colonnes */
+  align-items: center; /* Aligne le contenu verticalement au centre */
+}
+
+/* Titre principal "Trouvez le logement parfait..." */
+.hero__title {
+  font-size: 3.5rem; /* Très grand (56px) */
+  font-weight: 800; /* Extra gras */
+  line-height: 1.2; /* Espacement entre lignes serré pour grand titre */
+  color: var(--color-text); /* Couleur du texte */
+  margin-bottom: 24px; /* Espace en dessous */
+  /* Dégradé bleu appliqué au texte (effet moderne) */
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  -webkit-background-clip: text; /* Pour Safari/Chrome */
+  -webkit-text-fill-color: transparent; /* Rend le texte transparent pour voir le dégradé */
+  background-clip: text; /* Standard CSS */
+}
+
+/* Sous-titre "DormQuest relie les étudiants..." */
+.hero__subtitle {
+  font-size: 1.25rem; /* Taille moyenne (20px) */
+  color: var(--color-gray); /* Gris pour moins d'emphase que le titre */
+  line-height: 1.8; /* Espacement généreux pour lisibilité */
+  margin-bottom: 40px; /* Espace avant les boutons */
+}
+
+/* Conteneur des boutons d'action */
+.hero__button {
+  display: flex; /* Flexbox pour aligner les boutons horizontalement */
+  gap: 20px; /* Espace de 20px entre les boutons */
+  flex-wrap: wrap; /* Passe à la ligne si pas assez d'espace (mobile) */
+}
+
+/* Style commun à tous les boutons Hero */
+.hero__btn {
+  padding: 16px 32px; /* Espacement interne : vertical 16px, horizontal 32px */
+  font-size: 1rem; /* Taille normale (16px) */
+  font-weight: 600; /* Semi-gras */
+  border-radius: var(--border-radius); /* Coins arrondis (12px) */
+  transition: var(
+    --transition
+  ); /* Animation douce sur les changements (0.3s) */
+  display: inline-block; /* Permet d'appliquer padding et transform */
+  text-align: center; /* Centre le texte */
+  cursor: pointer; /* Change le curseur en main au survol */
+}
+
+/* Bouton primaire (bleu) - "Je cherche un logement" */
+.hero__btn--primary {
+  /* Dégradé de bleu */
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  color: var(--color-white); /* Texte blanc */
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); /* Ombre bleue légère */
+}
+
+/* Effet au survol du bouton primaire */
+.hero__btn--primary:hover {
+  transform: translateY(-3px); /* Monte de 3px */
+  box-shadow: 0 6px 25px rgba(37, 99, 235, 0.4); /* Ombre plus prononcée */
+}
+
+/* Bouton secondaire (bordure bleue, fond blanc) - "Je propose un logement" */
+.hero__btn--secondary {
+  background-color: var(--color-white); /* Fond blanc */
+  color: var(--color-primary); /* Texte bleu */
+  border: 2px solid var(--color-primary); /* Bordure bleue de 2px */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Ombre légère */
+}
+
+/* Effet au survol du bouton secondaire */
+.hero__btn--secondary:hover {
+  background-color: var(--color-primary); /* Fond devient bleu */
+  color: var(--color-white); /* Texte devient blanc (inversion) */
+  transform: translateY(-3px); /* Monte de 3px */
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2); /* Ombre bleue */
+}
+
+/* Conteneur de l'image Hero */
+.hero__img {
+  grid-column: 2; /* Se place dans la 2ème colonne de la grille */
+  grid-row: 1 / span 4; /* Prend 4 lignes de hauteur */
+  position: relative; /* Pour pouvoir positionner des éléments à l'intérieur */
+}
+
+/* L'image elle-même */
+.hero__img img {
+  width: 100%; /* Prend toute la largeur disponible */
+  height: auto; /* Hauteur automatique pour garder les proportions */
+  border-radius: var(--border-radius); /* Coins arrondis */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); /* Ombre importante pour effet de profondeur */
+  transition: var(--transition); /* Animation douce */
+}
+
+/* Effet au survol de l'image */
+.hero__img img:hover {
+  transform: scale(1.02); /* Agrandit légèrement (102%) */
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2); /* Ombre encore plus prononcée */
+}
+
+/**
+ * ============================================
+ * RESPONSIVE HERO - TABLETTES
+ * ============================================
+ * @media = règle qui s'applique uniquement si la condition est vraie
+ * max-width: 968px = écrans de 968px de large ou moins (tablettes)
+ */
+@media (max-width: 968px) {
+  .hero {
+    padding: 80px 20px 60px; /* Réduit le padding pour tablette */
+    min-height: auto; /* Supprime la hauteur minimale */
+  }
+
+  .hero__container {
+    grid-template-columns: 1fr; /* Passe de 2 colonnes à 1 colonne */
+    gap: 40px; /* Réduit l'espace entre éléments */
+  }
+
+  .hero__img {
+    grid-column: 1; /* Image prend la 1ère colonne */
+    grid-row: auto; /* Ligne automatique (en dessous du texte) */
+  }
+
+  .hero__title {
+    font-size: 2.5rem; /* Titre plus petit (40px au lieu de 56px) */
+  }
+
+  .hero__subtitle {
+    font-size: 1.1rem; /* Sous-titre plus petit */
+  }
+}
+
+/**
+ * ============================================
+ * RESPONSIVE HERO - MOBILE
+ * ============================================
+ */
+@media (max-width: 480px) {
+  .hero {
+    padding: 60px 15px 40px; /* Encore moins de padding sur mobile */
+  }
+
+  .hero__title {
+    font-size: 2rem; /* Titre encore plus petit (32px) pour mobile */
+  }
+
+  .hero__subtitle {
+    font-size: 1rem; /* Taille normale pour sous-titre */
+    margin-bottom: 30px; /* Moins d'espace */
+  }
+
+  .hero__button {
+    flex-direction: column; /* Boutons empilés verticalement au lieu d'horizontalement */
+    gap: 15px; /* Espace réduit entre boutons */
+  }
+
+  .hero__btn {
+    width: 100%; /* Boutons prennent toute la largeur */
+    padding: 14px 24px; /* Padding légèrement réduit */
+  }
+}
+
+/**
+ * ============================================
+ * SECTION STATISTIQUES
+ * ============================================
+ * Affiche les chiffres clés : nombre d'étudiants, loueurs, logements, satisfaction
+ * Les chiffres s'animent au scroll (voir main.js)
+ */
+
+/* Conteneur principal de la section Stats */
+.stats {
+  padding: 80px 20px; /* Espacement généreux */
+  /* Dégradé de bleu foncé à bleu normal (135deg = diagonale) */
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
+}
+
+/* Conteneur interne avec grille responsive */
+.stats__container {
+  max-width: var(--container-width); /* Largeur max 1200px */
+  margin: 0 auto; /* Centre horizontalement */
+  display: grid; /* Utilise CSS Grid */
+  /* Crée autant de colonnes que possible, chacune de 250px minimum */
+  /* auto-fit = ajuste automatiquement le nombre de colonnes selon la largeur */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px; /* Espace entre les items */
+}
+
+/* Chaque carte de statistique (ex: "3500+ Étudiants inscrits") */
+.stats__item {
+  text-align: center; /* Centre le texte */
+  padding: 20px; /* Espacement interne */
+  transition: var(--transition); /* Animation douce */
+}
+
+/* Effet au survol d'une carte */
+.stats__item:hover {
+  transform: translateY(-10px); /* Monte de 10px pour effet "flottant" */
+}
+
+/* Conteneur du chiffre (3500+) */
+.stats__number {
+  display: flex; /* Flexbox pour aligner chiffre et suffixe */
+  align-items: center; /* Aligne verticalement */
+  justify-content: center; /* Centre horizontalement */
+  margin-bottom: 15px; /* Espace avant le label */
+  color: var(--color-white); /* Texte blanc */
+}
+
+/* Le chiffre animé (3500, 2200, etc.) */
+.stats__value {
+  font-size: 3.5rem; /* Très grand (56px) */
+  font-weight: 700; /* Gras */
+  line-height: 1; /* Pas d'espace entre lignes */
+}
+
+/* Le suffixe (+ ou %) en jaune */
+.stats__suffix {
+  font-size: 2.5rem; /* Grand mais moins que le chiffre (40px) */
+  font-weight: 700; /* Gras */
+  margin-left: 5px; /* Petit espace après le chiffre */
+  color: var(--color-secondary); /* Jaune accent pour contraste */
+}
+
+/* Le texte descriptif ("Étudiants inscrits", "Loueurs", etc.) */
+.stats__label {
+  font-size: 1.1rem; /* Légèrement plus grand que normal */
+  font-weight: 400; /* Poids normal */
+  color: var(--color-white); /* Blanc */
+  opacity: 0.95; /* Légèrement transparent (95%) pour contraste subtil */
+}
+
+/**
+ * ============================================
+ * RESPONSIVE STATS - TABLETTES
+ * ============================================
+ * Ajuste la section stats pour les tablettes et petits écrans
+ */
+@media (max-width: 768px) {
+  .stats {
+    padding: 60px 20px; /* Réduit le padding */
+  }
+
+  .stats__container {
+    /* Force 2 colonnes au lieu du auto-fit (2x2 = 4 stats) */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px; /* Espace réduit */
+  }
+
+  /* Réduit la taille des chiffres pour tablette */
+  .stats__value {
+    font-size: 2.5rem; /* 40px au lieu de 56px */
+  }
+
+  .stats__suffix {
+    font-size: 2rem; /* 32px au lieu de 40px */
+  }
+
+  .stats__label {
+    font-size: 1rem; /* Taille normale */
+  }
+}
+
+/**
+ * ============================================
+ * RESPONSIVE STATS - MOBILE
+ * ============================================
+ * Sur smartphone, une seule colonne (stats empilées verticalement)
+ */
+@media (max-width: 480px) {
+  .stats__container {
+    /* Une seule colonne : les 4 stats s'empilent verticalement */
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
 }
