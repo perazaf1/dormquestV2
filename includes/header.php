@@ -15,7 +15,7 @@
         <nav class="main-nav" id="mainNav">
             <ul class="nav-links">
                 <li><a href="index.php" class="nav-link">Accueil</a></li>
-                <li><a href="annonces.php" class="nav-link">Annonces</a></li>
+                <li><a href="#annonces" class="nav-link">Annonces</a></li>
                 <li><a href="contact.php" class="nav-link">Contact</a></li>
 
                 <?php if ($isLoggedIn): ?>

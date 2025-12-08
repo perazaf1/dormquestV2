@@ -5,7 +5,10 @@
       "Bash(dir \"C:\\xampp\\htdocs\\dormQuestV2\\index.php\")",
       "Bash(dir \"c:\\xampp\\htdocs\\dormQuestV2\\index.php\")",
       "Bash(ls:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(dir:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []
