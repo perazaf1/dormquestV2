@@ -1,3 +1,6 @@
+
+
+
 /**
  * ============================================
  * ANIMATION DES COMPTEURS DE STATISTIQUES
@@ -51,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const target = parseInt(counter.dataset.count);
 
     // Durée totale de l'animation en millisecondes (1000ms = 1 seconde)
-    const duration = 1000;
+    const duration = 3500;
 
     // Calculer l'incrément à chaque frame
     // requestAnimationFrame tourne à ~60fps, donc une frame toutes les ~16ms
@@ -152,4 +155,45 @@ document.addEventListener("DOMContentLoaded", function() {
   // Vérifier immédiatement au chargement de la page
   // Utile si la section stats est déjà visible sans avoir besoin de scroller
   handleScroll();
+
+  // ====================
+  // 7. ANIMATION DES CARTES D'AVANTAGES AU SCROLL
+  // ====================
+
+  /**
+   * Anime les cartes d'avantages lorsqu'elles deviennent visibles
+   */
+  const cards = document.querySelectorAll(".avantages__card");
+
+  if (cards.length > 0) {
+    // Variable pour compter les cartes déjà animées
+    let cardIndex = 0;
+
+    // Observer pour détecter quand les cartes entrent dans la vue
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !entry.target.classList.contains('visible')) {
+          // Ajouter un délai progressif pour chaque carte
+          const delay = cardIndex * 100; // 100ms de délai entre chaque carte
+
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, delay);
+
+          cardIndex++;
+
+          // Arrêter d'observer cette carte une fois animée
+          cardObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.05, // La carte doit être visible à 10% pour déclencher l'animation
+      rootMargin: "0px 0px -50px 0px" // Déclencher un peu avant que la carte soit complètement visible
+    });
+
+    // Observer chaque carte
+    cards.forEach((card) => {
+      cardObserver.observe(card);
+    });
+  }
 });
