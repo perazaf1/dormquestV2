@@ -23,8 +23,9 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 <body>
     <?php include 'includes/header.php'; ?>
 
-    <!-- Contenu de la page à ajouter ici -->
+    
 
     <?php include 'includes/footer.php'; ?>
+    <script src="js/main.js"></script>
 </body>
 </html>

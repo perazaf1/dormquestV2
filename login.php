@@ -82,122 +82,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
     <title>Connexion - DormQuest</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .login-box {
-            background: white;
-            width: 360px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-box h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .login-box input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .login-box button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            background: #007bff;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .login-box button:hover {
-            background: #005fcc;
-        }
-
-        .login-box .footer {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .login-box .footer a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .login-box .footer a:hover {
-            text-decoration: underline;
-        }
-
-        .alert {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #842029;
-        }
-
-        .alert-success {
-            background: #d1e7dd;
-            color: #0f5132;
-        }
-    </style>
 </head>
 
 <body>
-    <?php include 'includes/header.php'; ?>
-
-    <div class="login-box">
-        <h2>Connexion DormQuest</h2>
-
-        <?php if (!empty($errors)): ?>
-            <div class="alert alert-error">
-                <?php foreach ($errors as $e)
-                    echo "<div>" . htmlspecialchars($e) . "</div>"; ?>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h2>Connexion DormQuest</h2>
+                <p>Accédez à votre compte</p>
             </div>
-        <?php endif; ?>
 
-        <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
-        <?php endif; ?>
+            <?php if (!empty($errors)): ?>
+                <div class="alert alert-error">
+                    <?php foreach ($errors as $e): ?>
+                        <div><?php echo htmlspecialchars($e); ?></div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
-        <form method="POST" action="login.php">
-            <input type="email" name="email" placeholder="Email" required
-                value="<?php echo htmlspecialchars($email); ?>">
-            <input type="password" name="password" placeholder="Mot de passe" required>
-            <label><input type="checkbox" name="remember_me" <?php echo $remember_me ? 'checked' : ''; ?>> Se souvenir
-                de moi</label>
-            <button type="submit">Se connecter</button>
-        </form>
+            <?php if ($success): ?>
+                <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
+            <?php endif; ?>
 
-        <div class="footer">
-            Pas de compte ? <a href="register.php">Créer un compte</a>
+            <form method="POST" action="login.php" class="login-form">
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="votre.email@exemple.com"
+                           required
+                           value="<?php echo htmlspecialchars($email); ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Entrez votre mot de passe"
+                           required>
+                    <span class="password-toggle">👁️‍🗨️</span>
+                </div>
+
+                <label class="remember-me">
+                    <input type="checkbox"
+                           name="remember_me"
+                           <?php echo $remember_me ? 'checked' : ''; ?>>
+                    <span>Se souvenir de moi</span>
+                </label>
+                <div class="forget-password">
+                    <a href="reinitialiser-mdp.php">Mot de passe oublié ?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">Se connecter</button>
+            </form>
+
+            <div class="login-footer">
+                <p>Pas de compte ? <a href="register.php">Créer un compte</a></p>
+            </div>
         </div>
     </div>
 
-    <?php include 'includes/footer.php'; ?>
+    <script src="js/login.js"></script>
 </body>
 
 </html>
