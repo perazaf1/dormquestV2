@@ -3,11 +3,7 @@
     <div class="header-container">
         <div class="logo-section">
             <a href="index.php" class="logo">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="4" y="8" width="24" height="20" rx="2" fill="currentColor" opacity="0.2"/>
-                    <path d="M8 14h16M8 18h12M8 22h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M16 4L28 10V12H4V10L16 4Z" fill="currentColor"/>
-                </svg>
+                <img src="img/logo-dormquest.png" alt="DormQuest Logo" class="logo-img">
                 <span class="logo-text">DormQuest</span>
             </a>
         </div>
@@ -15,7 +11,7 @@
         <nav class="main-nav" id="mainNav">
             <ul class="nav-links">
                 <li><a href="index.php" class="nav-link">Accueil</a></li>
-                <li><a href="#annonces" class="nav-link">Annonces</a></li>
+                <li><a href="annonces.php" class="nav-link">Annonces</a></li>
                 <li><a href="contact.php" class="nav-link">Contact</a></li>
 
                 <?php if ($isLoggedIn): ?>
@@ -64,6 +60,11 @@
     top: 0;
     z-index: 1000;
     padding: 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+.main-header.header-hidden {
+    transform: translateY(-100%);
 }
 
 .header-container {
@@ -96,9 +97,10 @@
     transform: scale(1.02);
 }
 
-.logo svg {
+.logo-img {
     width: 32px;
     height: 32px;
+    object-fit: contain;
 }
 
 .logo-text {
@@ -296,7 +298,7 @@
         font-size: 1.25rem;
     }
 
-    .logo svg {
+    .logo-img {
         width: 28px;
         height: 28px;
     }
@@ -308,6 +310,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const mainNav = document.getElementById('mainNav');
+    const header = document.querySelector('.main-header');
+    let lastScrollTop = 0;
+    let scrollThreshold = 100; // Commence à masquer après 100px de scroll
 
     if (mobileMenuToggle && mainNav) {
         mobileMenuToggle.addEventListener('click', function() {
@@ -339,5 +344,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Hide/Show header on scroll
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > scrollThreshold) {
+            if (scrollTop > lastScrollTop) {
+                // Scroll vers le bas - masquer le header
+                header.classList.add('header-hidden');
+            } else {
+                // Scroll vers le haut - afficher le header
+                header.classList.remove('header-hidden');
+            }
+        } else {
+            // En haut de la page - toujours afficher
+            header.classList.remove('header-hidden');
+        }
+
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    }, false);
 });
 </script>

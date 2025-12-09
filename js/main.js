@@ -1,3 +1,6 @@
+
+
+
 /**
  * ============================================
  * ANIMATION DES COMPTEURS DE STATISTIQUES
@@ -51,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const target = parseInt(counter.dataset.count);
 
     // Durée totale de l'animation en millisecondes (1000ms = 1 seconde)
-    const duration = 1000;
+    const duration = 3500;
 
     // Calculer l'incrément à chaque frame
     // requestAnimationFrame tourne à ~60fps, donc une frame toutes les ~16ms
@@ -152,4 +155,112 @@ document.addEventListener("DOMContentLoaded", function() {
   // Vérifier immédiatement au chargement de la page
   // Utile si la section stats est déjà visible sans avoir besoin de scroller
   handleScroll();
+
+  // ====================
+  // 7. ANIMATION DES CARTES D'AVANTAGES AU SCROLL
+  // ====================
+
+  /**
+   * Anime les cartes d'avantages lorsqu'elles deviennent visibles
+   */
+  const cards = document.querySelectorAll(".avantages__card");
+
+  if (cards.length > 0) {
+    // Variable pour compter les cartes déjà animées
+    let cardIndex = 0;
+
+    // Observer pour détecter quand les cartes entrent dans la vue
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !entry.target.classList.contains('visible')) {
+          // Ajouter un délai progressif pour chaque carte
+          const delay = cardIndex * 100; // 100ms de délai entre chaque carte
+
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, delay);
+
+          cardIndex++;
+
+          // Arrêter d'observer cette carte une fois animée
+          cardObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.05, // La carte doit être visible à 10% pour déclencher l'animation
+      rootMargin: "0px 0px -50px 0px" // Déclencher un peu avant que la carte soit complètement visible
+    });
+
+    // Observer chaque carte
+    cards.forEach((card) => {
+      cardObserver.observe(card);
+    });
+  }
+
+  // ====================
+  // 8. ANIMATION TYPEWRITER
+  // ====================
+
+  /**
+   * Effet machine à écrire qui affiche les mots un par un
+   * Les mots changent de couleur à chaque cycle
+   */
+  const typewriterElement = document.getElementById("typewriter");
+
+  // Vérifier que l'élément existe
+  if (typewriterElement) {
+    // Tableau des mots à afficher
+    const words = [
+      { text: "Simple", color: "#60a5fa" },      // Bleu clair
+      { text: "Gratuit", color: "#2563eb" },     // Bleu principal
+      { text: "Sécurisé", color: "#fbbf24" }     // Jaune accent
+    ];
+
+    let wordIndex = 0;        // Index du mot actuel
+    let charIndex = 0;        // Index du caractère actuel
+    let isDeleting = false;   // true = on efface, false = on écrit
+    let typingSpeed = 150;    // Vitesse d'écriture en ms
+
+    /**
+     * Fonction principale qui gère l'animation typewriter
+     */
+    function typeWriter() {
+      const currentWord = words[wordIndex];
+      const currentText = currentWord.text;
+
+      if (isDeleting) {
+        // Mode effacement : retirer un caractère
+        charIndex--;
+        typewriterElement.textContent = currentText.substring(0, charIndex);
+        typingSpeed = 75; // Effacer plus vite qu'écrire
+      } else {
+        // Mode écriture : ajouter un caractère
+        charIndex++;
+        typewriterElement.textContent = currentText.substring(0, charIndex);
+        typingSpeed = 100; // Vitesse normale d'écriture
+      }
+
+      // Changer la couleur du texte selon le mot actuel
+      typewriterElement.style.color = currentWord.color;
+
+      // Vérifier si on a fini d'écrire le mot
+      if (!isDeleting && charIndex === currentText.length) {
+        // Pause après avoir écrit le mot complet
+        typingSpeed = 1500; // Attendre 1,5 secondes
+        isDeleting = true;  // Passer en mode effacement
+      }
+      // Vérifier si on a fini d'effacer le mot
+      else if (isDeleting && charIndex === 0) {
+        isDeleting = false;        // Repasser en mode écriture
+        wordIndex = (wordIndex + 1) % words.length; // Passer au mot suivant (boucle infinie)
+        typingSpeed = 500;         // Petite pause avant le prochain mot
+      }
+
+      // Appeler récursivement la fonction après le délai
+      setTimeout(typeWriter, typingSpeed);
+    }
+
+    // Démarrer l'animation au chargement de la page
+    typeWriter();
+  }
 });

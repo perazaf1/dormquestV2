@@ -26,16 +26,32 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             <h1 class="hero__title">
                 Trouvez le logement parfait pour vos études !
             </h1>
-            <P class="hero__subtitle">
-                DormQuest relie les étudiants aux meilleurs logements.
-                Simple, gratuit et sécurisé.
-            </P>
+            <div class="hero__animation">
+                <span class="hero__animation-word" id="typewriter"></span>
+                <span class="hero__animation-cursor">|</span>
+            </div>
             <div class="hero__button">
                 <a href="register.php" class="hero__btn hero__btn--primary">
                     Je cherche un logement
                 </a>
                 <a href="register.php" class="hero__btn hero__btn--secondary">
                     Je propose un logement
+                </a>
+                <a href="#avantages" class="hero__btn hero__btn--icon" style="--i:#fbbf24;--j:#ffa700">
+                    <span class="hero__btn-icon">
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </span>
+                    <span class="hero__btn-text">
+                        Avantages
+                    </span>
+                </a>
+                <a href="#faq" class="hero__btn hero__btn--icon" style="--i:#2563eb;--j:#60a5fa">
+                    <span class="hero__btn-icon">
+                        <ion-icon name="help-circle-outline"></ion-icon>
+                    </span>
+                    <span class="hero__btn-text">
+                        FAQ
+                    </span>
                 </a>
             </div>
             <div class="hero__img">
@@ -44,8 +60,114 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
         </div>
     </section>
 
+    <section class="avantages" id="avantages">
+        <div class="avantages__container">
+            <h1 class="avantages__title">
+                Pour les étudiants
+            </h1>
+            <div class="avantages__card" data-color="blue">
+                <div class="avantages__card-icon">🔍</div>
+                <h3 class="avantages__card-title">
+                    Recherche simplifiée
+                </h3>
+                <p class="avantages__card-description">
+                    Trouvez rapidement des logements adaptés à vos critères et votre budget.
+                </p>
+            </div>
+            <div class="avantages__card" data-color="green">
+                <div class="avantages__card-icon">💬</div>
+                <h3 class="avantages__card-title">
+                    Contact direct
+                </h3>
+                <p class="avantages__card-description">
+                    Candidatez en un clic et communiquez directement avec les loueurs.
+                </p>
+            </div>
+            <div class="avantages__card" data-color="purple">
+                <div class="avantages__card-icon">⭐</div>
+                <h3 class="avantages__card-title">
+                    Liste de favoris
+                </h3>
+                <p class="avantages__card-description">
+                    Sauvegardez vos annonces préférées et comparez-les facilement.
+                </p>
+            </div>
+            <a href="https://www.dossierfacile.logement.gouv.fr/" target="_blank" rel="noopener noreferrer" class="avantages__card avantages__card--link" data-color="orange">
+                <div class="avantages__card-icon">📋</div>
+                <h3 class="avantages__card-title">
+                    Dossier facile
+                </h3>
+                <p class="avantages__card-description">
+                    Créez facilement votre dossier grâce à des formulaires du gouvernement.
+                </p>
+            </a>
+            <a href="https://wwwd.caf.fr/wps/portal/caffr/aidesetdemarches/mesdemarches/faireunesimulation/lelogement#/preparation" target="_blank" rel="noopener noreferrer" class="avantages__card avantages__card--link" data-color="pink">
+                <div class="avantages__card-icon">💰</div>
+                <h3 class="avantages__card-title">
+                    Calculateur d'APL
+                </h3>
+                <p class="avantages__card-description">
+                    Calculez rapidement vos aides au logement avec l'outil officiel de la CAF.
+                </p>
+            </a>
+            <a href="https://www.visale.fr/" target="_blank" rel="noopener noreferrer" class="avantages__card avantages__card--link" data-color="teal">
+                <div class="avantages__card-icon">🤝</div>
+                <h3 class="avantages__card-title">
+                    Obtenez un garant
+                </h3>
+                <p class="avantages__card-description">
+                    Testez votre éligibilité d'un garant locatif via le dispositif Visale.
+                </p>
+            </a>
 
-    <!-- Section Statistiques -->
+            <h1 class="avantages__title">
+                Pour les loueurs
+            </h1>
+            <div class="avantages__card" data-color="indigo">
+                <div class="avantages__card-icon">⚙️</div>
+                <h3 class="avantages__card-title">
+                    Gestion facile
+                </h3>
+                <p class="avantages__card-description">
+                    Créez, gérez et modifiez vos annonces en quelques clics.
+                </p>
+            </div>
+            <div class="avantages__card" data-color="emerald">
+                <div class="avantages__card-icon">🔒</div>
+                <h3 class="avantages__card-title">
+                    Sécurisé
+                </h3>
+                <p class="avantages__card-description">
+                    Profils sécurisés et vérifiés
+                </p>
+            </div>
+            <div class="avantages__card" data-color="amber">
+                <div class="avantages__card-icon">📢</div>
+                <h3 class="avantages__card-title">
+                    Large audience
+                </h3>
+                <p class="avantages__card-description">
+                    Touchez des milliers d'étudiants en recherche de logement.
+                </p>
+            </div>
+
+
+        </div>
+    </section>
+
+
+    <section class="faq" id="faq">
+    <div class="faq__container">
+        <h1 class="faq__title">
+            FAQ
+        </h1>
+    </div>
+    </section>
+
+
+
+
+    <!-- Section Statistiques qui s'incrémentent -->
     <section class="stats">
         <div class="stats__container">
             <div class="stats__item">
@@ -57,21 +179,21 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             </div>
             <div class="stats__item">
                 <div class="stats__number">
-                    <span class="stats__value" data-count="2200">0</span>
+                    <span class="stats__value" data-count="800">0</span>
                     <span class="stats__suffix">+</span>
                 </div>
                 <h3 class="stats__label">Loueurs</h3>
             </div>
             <div class="stats__item">
                 <div class="stats__number">
-                    <span class="stats__value" data-count="1500">0</span>
+                    <span class="stats__value" data-count="1000">0</span>
                     <span class="stats__suffix">+</span>
                 </div>
                 <h3 class="stats__label">Logements disponibles</h3>
             </div>
             <div class="stats__item">
                 <div class="stats__number">
-                    <span class="stats__value" data-count="99">0</span>
+                    <span class="stats__value" data-count="96">0</span>
                     <span class="stats__suffix">%</span>
                 </div>
                 <h3 class="stats__label">Taux de satisfaction</h3>
@@ -81,5 +203,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 
     <?php include 'includes/footer.php'; ?>
     <script src="js/main.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

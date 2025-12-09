@@ -12,6 +12,7 @@
   --color-primary-dark: #1e40af; /* Bleu foncé - pour les dégradés et survols */
   --color-primary-light: #60a5fa; /* Bleu clair - pour les dégradés */
   --color-secondary: #fbbf24; /* Jaune accent - pour attirer l'attention */
+  --color-tertiary: #ffa700; /* Jaune accent 2 - pour attirer l'attention */
 
   /* Couleurs neutres */
   --color-white: #ffffff; /* Blanc pur */
@@ -42,6 +43,7 @@
 * {
   margin: 0; /* Supprime toutes les marges extérieures par défaut */
   padding: 0; /* Supprime tous les espacements intérieurs par défaut */
+  scroll-behavior: smooth;
   box-sizing: border-box; /* La largeur/hauteur inclut padding et border (facilite les calculs) */
 }
 
@@ -52,6 +54,7 @@ body {
   line-height: 1.6; /* Espacement entre les lignes (160% de la hauteur du texte) */
   background-color: var(--color-white); /* Fond blanc */
   overflow-x: hidden; /* Empêche le scroll horizontal */
+  
 }
 
 /* Toutes les images du site */
@@ -132,6 +135,51 @@ ul {
   margin-bottom: 40px; /* Espace avant les boutons */
 }
 
+/* ============================================
+ * ANIMATION TYPEWRITER - Effet machine à écrire (BEM)
+ * ============================================
+ * Block: hero__animation
+ * Element: hero__animation-word, hero__animation-cursor
+ */
+
+/* Conteneur principal de l'animation */
+.hero__animation {
+  text-transform: uppercase;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: block;
+  min-height: 70px;
+}
+
+/* Le mot animé avec la couleur du texte qui change */
+.hero__animation-word {
+  display: inline-block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+/* Le curseur clignotant - couleur neutre */
+.hero__animation-cursor {
+  color: var(--color-gray);
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-left: 2px;
+  animation: blink 0.8s infinite;
+}
+
+/* Animation du curseur clignotant */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
 /* Conteneur des boutons d'action */
 .hero__button {
   display: flex; /* Flexbox pour aligner les boutons horizontalement */
@@ -168,7 +216,7 @@ ul {
 /* Effet au survol du bouton primaire */
 .hero__btn--primary:hover {
   transform: translateY(-3px); /* Monte de 3px */
-  box-shadow: 0 6px 25px rgba(37, 99, 235, 0.4); /* Ombre plus prononcée */
+  box-shadow: 0 6px 25px rgba(37, 99, 235, 0.6); /* Ombre plus prononcée */
 }
 
 /* Bouton secondaire (bordure bleue, fond blanc) - "Je propose un logement" */
@@ -186,6 +234,116 @@ ul {
   transform: translateY(-3px); /* Monte de 3px */
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2); /* Ombre bleue */
 }
+
+/* ============================================
+ * BOUTONS AVEC ICÔNES - Effet hover animé
+ * ============================================
+ * Inspiré du tutoriel: https://www.youtube.com/watch?v=yE_CKgG9gcQ
+ * Effet: expansion du bouton au hover avec gradient et glow effect
+ */
+
+/* Bouton avec icône - style de base */
+.hero__btn--icon {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background: var(--color-white);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 60px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  transition: 0.5s;
+  overflow: hidden;
+}
+
+/* Pseudo-élément ::before - Gradient overlay (invisible par défaut) */
+.hero__btn--icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 60px;
+  background: linear-gradient(45deg, var(--i), var(--j));
+  opacity: 0;
+  transition: 0.5s;
+}
+
+/* Pseudo-élément ::after - Glow effect (ombre colorée floutée) */
+.hero__btn--icon::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  height: 100%;
+  border-radius: 60px;
+  background: linear-gradient(45deg, var(--i), var(--j));
+  transition: 0.5s;
+  filter: blur(15px);
+  z-index: -1;
+  opacity: 0;
+}
+
+/* Hover - Expansion du bouton */
+.hero__btn--icon:hover {
+  width: 180px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0);
+}
+
+/* Hover - Affiche le gradient overlay */
+.hero__btn--icon:hover::before {
+  opacity: 1;
+}
+
+/* Hover - Affiche le glow effect */
+.hero__btn--icon:hover::after {
+  opacity: 0.5;
+}
+
+/* Icône - style de base */
+.hero__btn-icon {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.hero__btn-icon ion-icon {
+  color: #777;
+  font-size: 1.75em;
+  transition: 0.5s;
+  transition-delay: 0.25s;
+}
+
+/* Hover - L'icône disparaît avec un scale(0) */
+.hero__btn--icon:hover .hero__btn-icon ion-icon {
+  transform: scale(0);
+  transition-delay: 0s;
+}
+
+/* Texte - style de base (invisible par défaut avec scale(0)) */
+.hero__btn-text {
+  position: absolute;
+  color: var(--color-white);
+  font-size: 1.1em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: scale(0);
+  transition: 0.5s;
+  transition-delay: 0s;
+  z-index: 1;
+}
+
+/* Hover - Le texte apparaît avec un scale(1) */
+.hero__btn--icon:hover .hero__btn-text {
+  transform: scale(1);
+  transition-delay: 0.25s;
+}
+
+
 
 /* Conteneur de l'image Hero */
 .hero__img {
@@ -221,23 +379,50 @@ ul {
     padding: 80px 20px 60px; /* Réduit le padding pour tablette */
     min-height: auto; /* Supprime la hauteur minimale */
   }
-
   .hero__container {
     grid-template-columns: 1fr; /* Passe de 2 colonnes à 1 colonne */
     gap: 40px; /* Réduit l'espace entre éléments */
   }
-
   .hero__img {
     grid-column: 1; /* Image prend la 1ère colonne */
     grid-row: auto; /* Ligne automatique (en dessous du texte) */
+    order: 2; /* L'image apparaît après le contenu texte */
   }
-
   .hero__title {
     font-size: 2.5rem; /* Titre plus petit (40px au lieu de 56px) */
+    margin-bottom: 20px; /* Réduit l'espace en dessous */
   }
-
   .hero__subtitle {
     font-size: 1.1rem; /* Sous-titre plus petit */
+    margin-bottom: 30px; /* Réduit l'espace avant les boutons */
+  }
+  .hero__button {
+    gap: 15px; /* Réduit légèrement l'espace entre boutons */
+  }
+  /* Boutons avec icônes adaptés pour tablette */
+  .hero__btn--icon {
+    width: 55px;
+    height: 55px;
+  }
+  .hero__btn--icon:hover {
+    width: 160px; /* Légèrement plus petit au hover */
+  }
+  .hero__btn-icon ion-icon {
+    font-size: 1.5em; /* Icône légèrement plus petite */
+  }
+  .hero__btn-text {
+    font-size: 1em; /* Texte légèrement plus petit */
+  }
+  /* Animation typewriter responsive pour tablette */
+  .hero__animation {
+    font-size: 2rem;
+    min-height: 60px;
+  }
+  .hero__animation-word {
+    font-size: 2rem;
+  }
+  .hero__animation-cursor {
+    font-size: 2rem;
   }
 }
 
@@ -250,24 +435,86 @@ ul {
   .hero {
     padding: 60px 15px 40px; /* Encore moins de padding sur mobile */
   }
-
-  .hero__title {
-    font-size: 2rem; /* Titre encore plus petit (32px) pour mobile */
+  .hero__container {
+    gap: 30px; /* Réduit encore l'espace entre éléments */
   }
-
+  .hero__title {
+    font-size: 1.85rem; /* Titre encore plus petit (30px) pour mobile */
+    margin-bottom: 16px; /* Espace réduit */
+    line-height: 1.3; /* Améliore la lisibilité sur mobile */
+  }
   .hero__subtitle {
     font-size: 1rem; /* Taille normale pour sous-titre */
-    margin-bottom: 30px; /* Moins d'espace */
+    margin-bottom: 25px; /* Moins d'espace */
+    line-height: 1.6; /* Meilleure lisibilité */
   }
-
   .hero__button {
-    flex-direction: column; /* Boutons empilés verticalement au lieu d'horizontalement */
-    gap: 15px; /* Espace réduit entre boutons */
+    flex-direction: column; /* Boutons empilés verticalement */
+    gap: 12px; /* Espace réduit entre boutons */
+    align-items: stretch; /* Les boutons prennent toute la largeur */
   }
-
-  .hero__btn {
+  /* Boutons principaux et secondaires en pleine largeur */
+  .hero__btn--primary,
+  .hero__btn--secondary {
     width: 100%; /* Boutons prennent toute la largeur */
     padding: 14px 24px; /* Padding légèrement réduit */
+    font-size: 0.95rem; /* Légèrement plus petit */
+  }
+  /* Boutons avec icônes adaptés pour mobile */
+  .hero__btn--icon {
+    width: 100%; /* Prend toute la largeur */
+    height: 50px; /* Hauteur réduite */
+    border-radius: 12px; /* Moins arrondi pour mieux s'adapter */
+    justify-content: flex-start; /* Aligne le contenu à gauche */
+    padding-left: 20px; /* Espace à gauche */
+  }
+  /* Désactive l'animation d'expansion sur mobile */
+  .hero__btn--icon:hover {
+    width: 100%; /* Garde la largeur complète */
+  }
+  /* Affiche toujours le texte sur mobile (pas d'animation) */
+  .hero__btn-text {
+    transform: scale(1); /* Toujours visible */
+    opacity: 1; /* Visible */
+    position: relative; /* Retour au flux normal */
+    margin-left: 12px; /* Espace après l'icône */
+    transition-delay: 0s; /* Pas de délai */
+  }
+  /* Icône toujours visible sur mobile */
+  .hero__btn-icon {
+    position: relative; /* Retour au flux normal */
+  }
+  .hero__btn-icon ion-icon {
+    transform: scale(1); /* Toujours à taille normale */
+    font-size: 1.4em; /* Taille adaptée */
+    transition-delay: 0s; /* Pas de délai */
+  }
+  /* Garde le hover simple sur mobile */
+  .hero__btn--icon:hover .hero__btn-icon ion-icon {
+    transform: scale(1); /* Pas de disparition */
+  }
+  /* Supprime l'effet de glow sur mobile */
+  .hero__btn--icon::after {
+    display: none; /* Pas de glow effect sur mobile */
+  }
+  /* Image responsive */
+  .hero__img {
+    margin-top: 20px; /* Espace au-dessus de l'image */
+  }
+  .hero__img img {
+    border-radius: 8px; /* Coins moins arrondis sur mobile */
+  }
+  /* Animation typewriter responsive pour mobile */
+  .hero__animation {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    min-height: 50px;
+  }
+  .hero__animation-word {
+    font-size: 1.5rem;
+  }
+  .hero__animation-cursor {
+    font-size: 1.5rem;
   }
 }
 
@@ -345,47 +592,316 @@ ul {
   opacity: 0.95; /* Légèrement transparent (95%) pour contraste subtil */
 }
 
-/**
- * ============================================
- * RESPONSIVE STATS - TABLETTES
- * ============================================
- * Ajuste la section stats pour les tablettes et petits écrans
- */
 @media (max-width: 768px) {
   .stats {
     padding: 60px 20px; /* Réduit le padding */
   }
-
   .stats__container {
     /* Force 2 colonnes au lieu du auto-fit (2x2 = 4 stats) */
     grid-template-columns: repeat(2, 1fr);
     gap: 30px; /* Espace réduit */
   }
-
   /* Réduit la taille des chiffres pour tablette */
   .stats__value {
     font-size: 2.5rem; /* 40px au lieu de 56px */
   }
-
   .stats__suffix {
     font-size: 2rem; /* 32px au lieu de 40px */
   }
-
   .stats__label {
     font-size: 1rem; /* Taille normale */
   }
 }
 
-/**
- * ============================================
- * RESPONSIVE STATS - MOBILE
- * ============================================
- * Sur smartphone, une seule colonne (stats empilées verticalement)
- */
 @media (max-width: 480px) {
   .stats__container {
     /* Une seule colonne : les 4 stats s'empilent verticalement */
     grid-template-columns: 1fr;
     gap: 30px;
+  }
+}
+
+/**
+ * ============================================
+ * SECTION AVANTAGES
+ * ============================================
+ * Affiche les avantages pour les étudiants sous forme de cartes
+ * Certaines cartes sont cliquables et redirigent vers des sites externes
+ */
+
+/* Conteneur principal de la section Avantages */
+.avantages {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Motifs décoratifs en arrière-plan */
+.avantages::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 20s ease-in-out infinite;
+}
+
+.avantages::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 15s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-30px) translateX(30px);
+  }
+}
+
+/* Conteneur interne avec grille responsive */
+.avantages__container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Titre de la section */
+.avantages__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: 50px;
+  grid-column: 1 / -1;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Chaque carte d'avantage */
+.avantages__card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Carte visible après animation */
+.avantages__card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Icône de la carte */
+.avantages__card-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+/* Couleurs des cartes selon l'attribut data-color */
+.avantages__card[data-color="blue"]::after {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+}
+
+.avantages__card[data-color="green"]::after {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+}
+
+.avantages__card[data-color="purple"]::after {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+}
+
+.avantages__card[data-color="orange"]::after {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+}
+
+.avantages__card[data-color="pink"]::after {
+  background: linear-gradient(135deg, #f472b6, #ec4899);
+}
+
+.avantages__card[data-color="teal"]::after {
+  background: linear-gradient(135deg, #2dd4bf, #14b8a6);
+}
+
+.avantages__card[data-color="indigo"]::after {
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+}
+
+.avantages__card[data-color="emerald"]::after {
+  background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.avantages__card[data-color="amber"]::after {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+/* Bande de couleur en haut de chaque carte */
+.avantages__card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  transition: height 0.3s ease;
+}
+
+/* Effet au survol des cartes */
+.avantages__card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.avantages__card:hover::after {
+  height: 8px;
+}
+
+.avantages__card:hover .avantages__card-icon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+/* Carte cliquable (lien) - effet visuel supplémentaire */
+.avantages__card--link {
+  cursor: pointer;
+  position: relative;
+}
+
+.avantages__card--link::before {
+  content: '→';
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: var(--color-primary);
+}
+
+.avantages__card--link:hover::before {
+  opacity: 1;
+  right: 20px;
+}
+
+/* Effet supplémentaire au survol des cartes cliquables */
+.avantages__card--link:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 15px 45px rgba(37, 99, 235, 0.25);
+  border-color: var(--color-primary-light);
+}
+
+/* Titre de chaque carte */
+.avantages__card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.avantages__card:hover .avantages__card-title {
+  color: var(--color-primary);
+}
+
+/* Description de chaque carte */
+.avantages__card-description {
+  font-size: 1rem;
+  color: var(--color-gray);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/**
+ * ============================================
+ * RESPONSIVE AVANTAGES - TABLETTES
+ * ============================================
+ */
+@media (max-width: 768px) {
+  .avantages {
+    padding: 60px 20px;
+  }
+  .avantages__title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+  .avantages__container {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+  }
+  .avantages__card {
+    padding: 25px;
+  }
+  .avantages__card-title {
+    font-size: 1.2rem;
+  }
+  .avantages__card-description {
+    font-size: 0.95rem;
+  }
+}
+
+/**
+ * ============================================
+ * RESPONSIVE AVANTAGES - MOBILE
+ * ============================================
+ */
+@media (max-width: 480px) {
+  .avantages {
+    padding: 40px 15px;
+  }
+  .avantages__title {
+    font-size: 1.75rem;
+    margin-bottom: 30px;
+  }
+  .avantages__container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .avantages__card {
+    padding: 20px;
   }
 }
