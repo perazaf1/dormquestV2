@@ -157,45 +157,6 @@ document.addEventListener("DOMContentLoaded", function() {
   handleScroll();
 
   // ====================
-  // 7. ANIMATION DES CARTES D'AVANTAGES AU SCROLL
-  // ====================
-
-  /**
-   * Anime les cartes d'avantages lorsqu'elles deviennent visibles
-   */
-  const cards = document.querySelectorAll(".avantages__card");
-
-  if (cards.length > 0) {
-    // Variable pour compter les cartes déjà animées
-    let cardIndex = 0;
-
-    // Observer pour détecter quand les cartes entrent dans la vue
-    const cardObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !entry.target.classList.contains('visible')) {
-          // Ajouter un délai progressif pour chaque carte
-          const delay = cardIndex * 100; // 100ms de délai entre chaque carte
-
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, delay);
-
-          cardIndex++;
-
-          // Arrêter d'observer cette carte une fois animée
-          cardObserver.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.05, // La carte doit être visible à 10% pour déclencher l'animation
-      rootMargin: "0px 0px -50px 0px" // Déclencher un peu avant que la carte soit complètement visible
-    });
-
-    // Observer chaque carte
-    cards.forEach((card) => {
-      cardObserver.observe(card);
-    });
-  }
 
   // ====================
   // 8. ANIMATION TYPEWRITER
