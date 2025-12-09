@@ -713,6 +713,20 @@ ul {
   }
 }
 
+
+
+/* Animation au scroll pour les cartes */
+@keyframes appear{
+  from{
+    opacity: 0;
+    clip-path: inset(100% 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
 /* Chaque carte d'avantage */
 .avantages__card {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -726,14 +740,9 @@ ul {
   position: relative;
   overflow: hidden;
   border: 2px solid transparent;
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-/* Carte visible après animation */
-.avantages__card.visible {
-  opacity: 1;
-  transform: translateY(0);
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
 }
 
 /* Icône de la carte */
