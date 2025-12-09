@@ -94,8 +94,12 @@
         <!-- Footer Bottom -->
         <div class="footer-bottom">
             <div class="footer-divider"></div>
+            <div class="footer-powered-by">
+                <span class="powered-text">Powered by</span>
+                <img src="img/logo-nyzer.png" alt="NYZER" class="powered-logo">
+            </div>
             <div class="footer-copyright">
-                <p>&copy; <?php echo date('Y'); ?> DormQuest. Tous droits réservés.</p>
+                <p>&copy; <?php echo date('Y'); ?> DormQuest par Nyzer. Tous droits réservés.</p>
                 <p class="footer-tagline">Trouvez le logement parfait pour vos études !</p>
             </div>
         </div>
@@ -234,6 +238,32 @@
     text-align: center;
 }
 
+.footer-powered-by {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.powered-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.powered-logo {
+    height: 32px;
+    width: auto;
+    opacity: 0.9;
+    transition: var(--transition);
+}
+
+.powered-logo:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
 .footer-copyright {
     display: flex;
     flex-direction: column;
@@ -342,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show/hide scroll button
     window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
+        if (window.pageYOffset > 600) {
             scrollButton.classList.add('visible');
         } else {
             scrollButton.classList.remove('visible');
