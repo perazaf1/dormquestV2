@@ -26,10 +26,10 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             <h1 class="hero__title">
                 Trouvez le logement parfait pour vos études !
             </h1>
-            <P class="hero__subtitle">
-                DormQuest relie les étudiants aux meilleurs logements.
-                Simple, gratuit et sécurisé.
-            </P>
+            <div class="hero__animation">
+                <span class="hero__animation-word" id="typewriter"></span>
+                <span class="hero__animation-cursor">|</span>
+            </div>
             <div class="hero__button">
                 <a href="register.php" class="hero__btn hero__btn--primary">
                     Je cherche un logement
@@ -37,11 +37,21 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 <a href="register.php" class="hero__btn hero__btn--secondary">
                     Je propose un logement
                 </a>
-                <a href="#avantages" class="hero__btn hero__btn--cta">
-                    Avantages
+                <a href="#avantages" class="hero__btn hero__btn--icon" style="--i:#fbbf24;--j:#ffa700">
+                    <span class="hero__btn-icon">
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </span>
+                    <span class="hero__btn-text">
+                        Avantages
+                    </span>
                 </a>
-                <a href="#faq" class="hero__btn hero__btn--faq">
-                    FAQ
+                <a href="#faq" class="hero__btn hero__btn--icon" style="--i:#2563eb;--j:#60a5fa">
+                    <span class="hero__btn-icon">
+                        <ion-icon name="help-circle-outline"></ion-icon>
+                    </span>
+                    <span class="hero__btn-text">
+                        FAQ
+                    </span>
                 </a>
             </div>
             <div class="hero__img">
@@ -193,5 +203,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 
     <?php include 'includes/footer.php'; ?>
     <script src="js/main.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
