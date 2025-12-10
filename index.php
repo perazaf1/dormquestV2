@@ -157,11 +157,63 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 
 
     <section class="faq" id="faq">
-    <div class="faq__container">
-        <h1 class="faq__title">
-            FAQ
-        </h1>
-    </div>
+        <div class="faq__container">
+            <h1 class="faq__title">
+                Questions fréquentes
+            </h1>
+            <div class="faq__card">
+                <div class="faq__card-title">
+                    Comment créer un compte ?
+                </div>
+                <div class="faq__card-text">
+                    Cliquez sur "Inscription" et choisissez votre profil (étudiant ou loueur). Remplissez le formulaire et validez votre email.
+                </div>
+            </div>
+            <div class="faq__card">
+                <div class="faq__card-title">
+                    Est-ce que le service est gratuit ?
+                </div>
+                <div class="faq__card-text">
+                    Oui ! DormQuest est entièrement gratuit pour les étudiants. Les loueurs peuvent publier leurs annonces gratuitement.
+                </div>
+            </div>
+            <div class="faq__card">
+                <div class="faq__card-title">
+                    Comment candidater à une annonce ?
+                </div>
+                <div class="faq__card-text">
+                    Connectez-vous à votre compte étudiant, consultez une annonce et cliquez sur "Candidater". Vous pouvez ajouter un message personnalisé.
+                </div>
+            </div>
+            <div class="faq__card">
+                <div class="faq__card-title">
+                    Puis-je modifier mon annonce après publication ?
+                </div>
+                <div class="faq__card-text">
+                    Oui ! Depuis votre espace loueur, vous pouvez modifier ou supprimer vos annonces à tout moment.
+                </div>
+            </div>
+            <div class="faq__card">
+                <div class="faq__card-title">
+                    Combien de temps pour obtenir une réponse ?
+                </div>
+                <div class="faq__card-text">
+                   Les propriétaires s'engagent à répondre sous 48 heures. Cependant, le délai peut varier en fonction de la demande.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about">
+        <div class="about__container">
+            <h1 class="about__title">
+                A propos de DormQuest
+            </h1>
+            <p class="about__description">
+                DormQuest est une initiative de Nyzer, une startup innovante dédiée à faciliter la vie des étudiants. Notre mission est de rendre la recherche de logement simple, rapide et accessible à tous.
+            </p>
+            <img src="img/logo-nyzer.png" alt="Logo Nyzer" class="about__logo">
+        </div>
     </section>
 
 

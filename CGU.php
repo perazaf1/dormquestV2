@@ -271,7 +271,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </p>
                 <p>
                     En cas de litige, les parties s'efforceront de trouver une solution amiable. 
-                    À défaut, le litige sera soumis aux tribunaux compétents de <strong>Paris</strong>.
+                    À défaut, le litige sera soumis aux tribunaux compétents de <strong>Issy-Les-Moulineaux</strong>.
                 </p>
             </section>
 
@@ -283,7 +283,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     du litige.
                 </p>
                 <p>
-                    Coordonnées du médiateur : [À COMPLÉTER]
+                    Coordonnées du médiateur : mediation@dormquest.com
                 </p>
             </section>
 
@@ -295,8 +295,8 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </p>
                 <div class="contact-info">
                     <p><strong>Email :</strong> <a href="mailto:[VOTRE EMAIL]">contact@dormquest.com</a></p>
-                    <p><strong>Adresse :</strong> Paris, France</p>
-                    <p><strong>Téléphone :</strong> +33 1 23 45 67 89</p>
+                    <p><strong>Adresse :</strong> 10 rue de Vanves, 92130 Issy-Les-moulineaux</p>
+                    <p><strong>Téléphone :</strong> 01 49 54 52 00</p>
                 </div>
             </section>
 
