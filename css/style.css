@@ -914,3 +914,195 @@ ul {
     padding: 20px;
   }
 }
+
+/**
+ * ============================================
+ * SECTION FAQ
+ * ============================================
+ */
+.faq {
+  padding: 80px 20px;
+  background-color: var(--color-white);
+}
+
+.faq__container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+}
+
+.faq__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: 50px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.faq__card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 25px 30px;
+  margin-bottom: 20px;
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--color-primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+.faq__card:hover {
+  transform: translateX(8px);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+  border-left-color: var(--color-secondary);
+}
+
+.faq__card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 12px;
+}
+
+.faq__card-text {
+  font-size: 1rem;
+  color: var(--color-gray);
+  line-height: 1.6;
+}
+
+/**
+ * ============================================
+ * SECTION ABOUT
+ * ============================================
+ */
+.about {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+}
+
+.about__container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+.about__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 30px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about__description {
+  font-size: 1.1rem;
+  color: var(--color-gray);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+.about__logo {
+  max-width: 200px;
+  margin: 0 auto;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.about__logo:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/**
+ * ============================================
+ * RESPONSIVE FAQ & ABOUT - TABLETTES
+ * ============================================
+ */
+@media (max-width: 768px) {
+  .faq {
+    padding: 60px 20px;
+  }
+  .faq__title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+  .faq__card {
+    padding: 20px 25px;
+  }
+  .faq__card-title {
+    font-size: 1.1rem;
+  }
+  .faq__card-text {
+    font-size: 0.95rem;
+  }
+  .about {
+    padding: 60px 20px;
+  }
+  .about__title {
+    font-size: 2rem;
+    margin-bottom: 25px;
+  }
+  .about__description {
+    font-size: 1rem;
+  }
+  .about__logo {
+    max-width: 180px;
+  }
+}
+
+/**
+ * ============================================
+ * RESPONSIVE FAQ & ABOUT - MOBILE
+ * ============================================
+ */
+@media (max-width: 480px) {
+  .faq {
+    padding: 40px 15px;
+  }
+  .faq__title {
+    font-size: 1.75rem;
+    margin-bottom: 30px;
+  }
+  .faq__card {
+    padding: 18px 20px;
+    margin-bottom: 15px;
+  }
+  .faq__card-title {
+    font-size: 1rem;
+  }
+  .faq__card-text {
+    font-size: 0.9rem;
+  }
+  .about {
+    padding: 40px 15px;
+  }
+  .about__title {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+  }
+  .about__description {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .about__logo {
+    max-width: 150px;
+  }
+}
