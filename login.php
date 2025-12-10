@@ -135,9 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            <?php echo $remember_me ? 'checked' : ''; ?>>
                     <span>Se souvenir de moi</span>
                 </label>
-                <div class="forget-password">
-                    <a href="reinitialiser-mdp.php">Mot de passe oublié ?</a>
-                </div>
 
                 <button type="submit" class="btn-submit">Se connecter</button>
             </form>
