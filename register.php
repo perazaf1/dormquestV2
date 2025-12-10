@@ -10,7 +10,7 @@ if (isset($_SESSION['user_id'])) {
 
 // Connexion à la base de données (chemin absolu basé sur ce fichier)
 require_once __DIR__ . '/includes/db.php';
-
+require_once 'includes/auth.php';
 // Variables pour pré-remplir le formulaire en cas d'erreur
 $errors = [];
 $success = '';
@@ -212,8 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - DormQuest</title>
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
     <div class="login-container">

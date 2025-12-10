@@ -1,6 +1,7 @@
 <?php
 // index.php - Landing Page DormQuest
 session_start();
+require_once 'includes/auth.php';
 
 // Vérifier si l'utilisateur est connecté
 $isLoggedIn = isset($_SESSION['user_id']);
@@ -224,7 +225,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
         <div class="stats__container">
             <div class="stats__item">
                 <div class="stats__number">
-                    <span class="stats__value" data-count="3500">0</span>
+                    <span class="stats__value" data-count="2500">0</span>
                     <span class="stats__suffix">+</span>
                 </div>
                 <h3 class="stats__label">Étudiants inscrits</h3>

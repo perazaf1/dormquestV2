@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const target = parseInt(counter.dataset.count);
 
     // Durée totale de l'animation en millisecondes (1000ms = 1 seconde)
-    const duration = 3500;
+    const duration = 2500;
 
     // Calculer l'incrément à chaque frame
     // requestAnimationFrame tourne à ~60fps, donc une frame toutes les ~16ms

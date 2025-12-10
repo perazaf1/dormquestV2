@@ -1,7 +1,8 @@
 <?php
 // logout.php - Déconnexion et redirection vers la page d'accueil
 session_start();
-
+require_once __DIR__ . '/includes/db.php';
+require_once 'includes/auth.php';
 // Si un utilisateur est connecté, on peut mettre à jour éventuellement la BDD
 if (isset($_SESSION['user_id'])) {
 	// Mettre à jour la dernière déconnexion est optionnel. Si la BDD est disponible,
