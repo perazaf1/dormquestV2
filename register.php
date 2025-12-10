@@ -122,41 +122,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 // Hash du mot de passe
                 $password_hash = password_hash($password, PASSWORD_DEFAULT);
-                
-                // Insertion dans la table utilisateurs (adaptée à ta structure)
-                if ($role === 'etudiant') {
-                    $stmt = $pdo->prepare("
-                        INSERT INTO utilisateurs 
-                        (prenom, nom, email, motDePasse, role, photoDeProfil, villeRecherche, budget, dateInscription) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
-                    ");
-                    $stmt->execute([
-                        $prenom, 
-                        $nom, 
-                        $email, 
-                        $password_hash, 
-                        $role, 
-                        $photo_path,
-                        $ville_recherche,
-                        $budget
-                    ]);
-                } elseif ($role === 'loueur') {
-                    $stmt = $pdo->prepare("
-                        INSERT INTO utilisateurs 
-                        (prenom, nom, email, motDePasse, role, photoDeProfil, telephone, typeLoueur, dateInscription) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
-                    ");
-                    $stmt->execute([
-                        $prenom, 
-                        $nom, 
-                        $email, 
-                        $password_hash, 
-                        $role, 
-                        $photo_path,
-                        $telephone,
-                        $type_loueur
-                    ]);
+
+                // Helper: check if a column exists in `utilisateurs`
+                $columnExists = function($col) use ($pdo) {
+                    $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'utilisateurs' AND COLUMN_NAME = ?");
+                    $stmt->execute([$col]);
+                    return (bool) $stmt->fetchColumn();
+                };
+
+                // Build insert dynamically depending on existing columns
+                $cols = ['prenom', 'nom', 'email', 'motDePasse', 'role'];
+                $placeholders = ['?', '?', '?', '?', '?'];
+                $values = [$prenom, $nom, $email, $password_hash, $role];
+
+                // photo column (camelCase or snake_case)
+                if ($photo_path) {
+                    if ($columnExists('photoDeProfil')) {
+                        $cols[] = 'photoDeProfil';
+                    } elseif ($columnExists('photo_de_profil')) {
+                        $cols[] = 'photo_de_profil';
+                    }
+                    $placeholders[] = '?';
+                    $values[] = $photo_path;
                 }
+
+                if ($role === 'etudiant') {
+                    // ville column could be 'villeRecherche' or 'ville_recherche'
+                    if ($columnExists('villeRecherche')) {
+                        $cols[] = 'villeRecherche';
+                        $placeholders[] = '?';
+                        $values[] = $ville_recherche;
+                    } elseif ($columnExists('ville_recherche')) {
+                        $cols[] = 'ville_recherche';
+                        $placeholders[] = '?';
+                        $values[] = $ville_recherche;
+                    }
+
+                    if ($columnExists('budget')) {
+                        $cols[] = 'budget';
+                        $placeholders[] = '?';
+                        $values[] = $budget;
+                    }
+                } elseif ($role === 'loueur') {
+                    if ($columnExists('telephone')) {
+                        $cols[] = 'telephone';
+                        $placeholders[] = '?';
+                        $values[] = $telephone;
+                    }
+
+                    if ($columnExists('typeLoueur')) {
+                        $cols[] = 'typeLoueur';
+                        $placeholders[] = '?';
+                        $values[] = $type_loueur;
+                    } elseif ($columnExists('type_loueur')) {
+                        $cols[] = 'type_loueur';
+                        $placeholders[] = '?';
+                        $values[] = $type_loueur;
+                    }
+                }
+
+                // Always set dateInscription if column exists (use DB default otherwise)
+                if ($columnExists('dateInscription')) {
+                    $cols[] = 'dateInscription';
+                    $placeholders[] = 'NOW()';
+                    // no value to push for NOW()
+                }
+
+                // Build final SQL (handle placeholders that are functions like NOW())
+                $placeholders_sql = [];
+                foreach ($placeholders as $ph) {
+                    $placeholders_sql[] = ($ph === 'NOW()') ? 'NOW()' : '?';
+                }
+
+                $sql = "INSERT INTO utilisateurs (" . implode(', ', $cols) . ") VALUES (" . implode(', ', $placeholders_sql) . ")";
+                $stmt = $pdo->prepare($sql);
+
+                // Filter values to match number of ? placeholders (skip values for NOW())
+                $execValues = $values;
+                $stmt->execute($execValues);
                 
                 // Redirection vers la page de connexion avec message de succès
                 header('Location: login.php?success=registered');
@@ -175,145 +218,91 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - DormQuest</title>
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    <?php include 'includes/header.php'; ?>
-
-    <!-- Formulaire d'inscription -->
-    <main class="form-page">
-        <div class="form-container">
-            <div class="form-header">
-                <h1 class="form-header__title">Créer un compte</h1>
-                <p class="form-header__subtitle">Rejoignez DormQuest et trouvez votre logement idéal</p>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h2>Créer un compte</h2>
+                <p>Rejoignez DormQuest et trouvez votre logement idéal</p>
             </div>
 
-            <!-- Messages d'erreur -->
             <?php if (!empty($errors)): ?>
-                <div class="alert alert--error">
-                    <strong>⚠️ Erreurs :</strong>
-                    <ul class="alert__list">
-                        <?php foreach ($errors as $error): ?>
-                            <li><?php echo htmlspecialchars($error); ?></li>
-                        <?php endforeach; ?>
-                    </ul>
+                <div class="alert alert-error">
+                    <?php foreach ($errors as $e): ?>
+                        <div><?php echo htmlspecialchars($e); ?></div>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
-            <!-- Message de succès -->
             <?php if ($success): ?>
-                <div class="alert alert--success">
-                    <strong>✅ <?php echo htmlspecialchars($success); ?></strong>
-                </div>
+                <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
             <?php endif; ?>
 
-            <form method="POST" action="register.php" class="form" enctype="multipart/form-data">
-                
-                <!-- Choix du rôle -->
-                <div class="form-group form-group--role">
+            <form method="POST" action="register.php" class="login-form" enctype="multipart/form-data">
+
+                <div class="form-group">
                     <label class="form-label">Je suis :</label>
-                    <div class="form-role">
-                        <label class="form-role__option">
-                            <input type="radio" name="role" value="etudiant" 
-                                   <?php echo ($role === 'etudiant') ? 'checked' : ''; ?> 
-                                   class="form-role__input" required>
-                            <span class="form-role__card">
-                                <span class="form-role__icon">🎓</span>
-                                <span class="form-role__text">Étudiant</span>
-                                <span class="form-role__desc">Je cherche un logement</span>
-                            </span>
+                    <div style="display:flex;gap:10px;">
+                        <label style="display:flex;align-items:center;gap:6px;">
+                            <input type="radio" name="role" value="etudiant" <?php echo ($role === 'etudiant') ? 'checked' : ''; ?>>
+                            <span>Étudiant</span>
                         </label>
-                        <label class="form-role__option">
-                            <input type="radio" name="role" value="loueur" 
-                                   <?php echo ($role === 'loueur') ? 'checked' : ''; ?> 
-                                   class="form-role__input" required>
-                            <span class="form-role__card">
-                                <span class="form-role__icon">🏠</span>
-                                <span class="form-role__text">Loueur</span>
-                                <span class="form-role__desc">Je propose un logement</span>
-                            </span>
+                        <label style="display:flex;align-items:center;gap:6px;">
+                            <input type="radio" name="role" value="loueur" <?php echo ($role === 'loueur') ? 'checked' : ''; ?>>
+                            <span>Loueur</span>
                         </label>
                     </div>
                 </div>
 
-                <!-- Informations générales -->
-                <div class="form-section">
-                    <h2 class="form-section__title">Informations personnelles</h2>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="prenom" class="form-label">Prénom *</label>
-                            <input type="text" id="prenom" name="prenom" 
-                                   value="<?php echo htmlspecialchars($prenom); ?>" 
-                                   class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="nom" class="form-label">Nom *</label>
-                            <input type="text" id="nom" name="nom" 
-                                   value="<?php echo htmlspecialchars($nom); ?>" 
-                                   class="form-input" required>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom *</label>
+                    <input type="text" id="prenom" name="prenom" required value="<?php echo htmlspecialchars($prenom); ?>">
+                </div>
 
+                <div class="form-group">
+                    <label for="nom">Nom *</label>
+                    <input type="text" id="nom" name="nom" required value="<?php echo htmlspecialchars($nom); ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($email); ?>" placeholder="votre.email@exemple.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe *</label>
+                    <input type="password" id="password" name="password" required minlength="8">
+                    <span class="password-toggle">👁️‍🗨️</span>
+                    <small>Minimum 8 caractères</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password_confirm">Confirmer le mot de passe *</label>
+                    <input type="password" id="password_confirm" name="password_confirm" required minlength="8">
+                </div>
+
+                <div class="form-group">
+                    <label for="photo">Photo de profil (facultatif)</label>
+                    <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/jpg">
+                </div>
+
+                <div id="etudiant-fields" style="display: <?php echo ($role === 'etudiant') ? 'block' : 'none'; ?>;">
                     <div class="form-group">
-                        <label for="email" class="form-label">Email *</label>
-                        <input type="email" id="email" name="email" 
-                               value="<?php echo htmlspecialchars($email); ?>" 
-                               class="form-input" required>
+                        <label for="ville_recherche">Ville de recherche *</label>
+                        <input type="text" id="ville_recherche" name="ville_recherche" value="<?php echo isset($_POST['ville_recherche']) ? htmlspecialchars($_POST['ville_recherche']) : ''; ?>" placeholder="Ex: Paris, Lyon">
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="password" class="form-label">Mot de passe *</label>
-                            <input type="password" id="password" name="password" 
-                                   class="form-input" required minlength="8">
-                            <small class="form-hint">Minimum 8 caractères</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="password_confirm" class="form-label">Confirmer le mot de passe *</label>
-                            <input type="password" id="password_confirm" name="password_confirm" 
-                                   class="form-input" required minlength="8">
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label for="photo" class="form-label">Photo de profil (facultatif)</label>
-                        <input type="file" id="photo" name="photo" 
-                               class="form-input form-input--file" 
-                               accept="image/jpeg,image/png,image/jpg">
-                        <small class="form-hint">Formats acceptés : JPG, PNG (Max 2MB)</small>
+                        <label for="budget">Budget mensuel (€) *</label>
+                        <input type="number" id="budget" name="budget" value="<?php echo isset($_POST['budget']) ? htmlspecialchars($_POST['budget']) : ''; ?>" min="0" step="50">
                     </div>
                 </div>
 
-                <!-- Champs spécifiques étudiant -->
-                <div class="form-section form-section--etudiant" id="etudiant-fields" 
-                     style="display: <?php echo ($role === 'etudiant') ? 'block' : 'none'; ?>;">
-                    <h2 class="form-section__title">Informations de recherche</h2>
-                    
+                <div id="loueur-fields" style="display: <?php echo ($role === 'loueur') ? 'block' : 'none'; ?>;">
                     <div class="form-group">
-                        <label for="ville_recherche" class="form-label">Ville de recherche *</label>
-                        <input type="text" id="ville_recherche" name="ville_recherche" 
-                               value="<?php echo isset($_POST['ville_recherche']) ? htmlspecialchars($_POST['ville_recherche']) : ''; ?>" 
-                               class="form-input" placeholder="Ex: Paris, Lyon, Toulouse...">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="budget" class="form-label">Budget mensuel (€) *</label>
-                        <input type="number" id="budget" name="budget" 
-                               value="<?php echo isset($_POST['budget']) ? htmlspecialchars($_POST['budget']) : ''; ?>" 
-                               class="form-input" min="0" step="50" placeholder="Ex: 500">
-                    </div>
-                </div>
-
-                <!-- Champs spécifiques loueur -->
-                <div class="form-section form-section--loueur" id="loueur-fields" 
-                     style="display: <?php echo ($role === 'loueur') ? 'block' : 'none'; ?>;">
-                    <h2 class="form-section__title">Informations professionnelles</h2>
-                    
-                    <div class="form-group">
-                        <label for="type_loueur" class="form-label">Type de loueur *</label>
-                        <select id="type_loueur" name="type_loueur" class="form-input">
+                        <label for="type_loueur">Type de loueur *</label>
+                        <select id="type_loueur" name="type_loueur">
                             <option value="">-- Sélectionner --</option>
                             <option value="particulier" <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'particulier') ? 'selected' : ''; ?>>Particulier</option>
                             <option value="agence" <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'agence') ? 'selected' : ''; ?>>Agence immobilière</option>
@@ -321,32 +310,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="crous" <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'crous') ? 'selected' : ''; ?>>CROUS</option>
                         </select>
                     </div>
-
                     <div class="form-group">
-                        <label for="telephone" class="form-label">Téléphone *</label>
-                        <input type="tel" id="telephone" name="telephone" 
-                               value="<?php echo isset($_POST['telephone']) ? htmlspecialchars($_POST['telephone']) : ''; ?>" 
-                               class="form-input" placeholder="Ex: 0612345678">
-                        <small class="form-hint">10 chiffres sans espaces</small>
+                        <label for="telephone">Téléphone *</label>
+                        <input type="tel" id="telephone" name="telephone" value="<?php echo isset($_POST['telephone']) ? htmlspecialchars($_POST['telephone']) : ''; ?>" placeholder="0612345678">
                     </div>
                 </div>
 
-                <!-- Bouton de soumission -->
-                <div class="form-actions">
-                    <button type="submit" class="form-btn form-btn--primary">
-                        Créer mon compte
-                    </button>
-                </div>
+                <button type="submit" class="btn-submit">Créer mon compte</button>
 
-                <p class="form-footer">
-                    Vous avez déjà un compte ? 
-                    <a href="login.php" class="form-link">Se connecter</a>
-                </p>
+                <div class="login-footer">
+                    <p>Vous avez déjà un compte ? <a href="login.php">Se connecter</a></p>
+                </div>
             </form>
         </div>
-    </main>
-
-    <?php include 'includes/footer.php'; ?>
+    </div>
 
     <script src="js/register.js"></script>
 </body>
