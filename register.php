@@ -2,15 +2,10 @@
 // register.php - Page d'inscription DormQuest
 session_start();
 
-// Si déjà connecté, redirection selon le rôle
-if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
-    if ($_SESSION['user_role'] === 'etudiant') {
-        header('Location: dashboard-etudiant.php');
-        exit();
-    } elseif ($_SESSION['user_role'] === 'loueur') {
-        header('Location: dashboard-loueur.php');
-        exit();
-    }
+// Si déjà connecté, redirection vers la page d'accueil
+if (isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit();
 }
 
 // Connexion à la base de données (chemin absolu basé sur ce fichier)

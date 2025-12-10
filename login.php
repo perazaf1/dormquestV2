@@ -4,9 +4,9 @@ error_reporting(E_ALL);
 
 session_start();
 
-// Redirection si déjà connecté
+// Redirection si déjà connecté -> vers la page d'accueil
 if (isset($_SESSION['user_id'])) {
-    header('Location: ' . ($_SESSION['user_role'] === 'etudiant' ? 'dashboard-etudiant.php' : 'dashboard-loueur.php'));
+    header('Location: index.php');
     exit();
 }
 
@@ -65,7 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Stockage token à implémenter
                 }
 
-                header('Location: ' . ($user['role'] === 'etudiant' ? 'dashboard-etudiant.php' : 'dashboard-loueur.php'));
+                // Rediriger vers la page d'accueil après connexion
+                header('Location: index.php');
                 exit();
             } else {
                 $errors[] = "❌ Identifiants invalides.";
