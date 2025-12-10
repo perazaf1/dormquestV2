@@ -255,11 +255,15 @@ try {
                     <!-- Photo de profil -->
                     <div class="profile-card">
                         <div class="profile-card__photo-container">
-                            <img src="<?php echo htmlspecialchars($user['photoDeProfil'] ?? 'images/default-avatar.png' ); ?>" 
+                            <img src="<?php 
+                                $photoPath = $user['photoDeProfil'] ?? '';
+                                echo htmlspecialchars(!empty($photoPath) ? $photoPath : 'img/default-avatar.png');
+                            ?>" 
                                  alt="Photo de profil" 
                                  class="profile-card__photo"
                                  id="preview-photo"
-                                 onerror="this.src='images/default-avatar.png'"
+                                 onerror="this.src='img/default-avatar.png'; this.style.opacity='0.8';"
+                                 loading="lazy"
                                  >
                         </div>
                         <h2 class="profile-card__name">
@@ -426,17 +430,17 @@ try {
                                 <div class="form-group">
                                     <label for="type_loueur" class="form-label">Type de loueur *</label>
                                     <select id="type_loueur" name="type_loueur" class="form-input" required>
-                                        <option value="particulier" <?php echo $user['typeLoueur'] === 'particulier' ? 'selected' : ''; ?>>Particulier</option>
-                                        <option value="agence" <?php echo $user['typeLoueur'] === 'agence' ? 'selected' : ''; ?>>Agence immobilière</option>
-                                        <option value="organisme" <?php echo $user['typeLoueur'] === 'organisme' ? 'selected' : ''; ?>>Organisme</option>
-                                        <option value="crous" <?php echo $user['typeLoueur'] === 'crous' ? 'selected' : ''; ?>>CROUS</option>
+                                        <option value="particulier" <?php echo ($user['typeLoueur'] ?? null) === 'particulier' ? 'selected' : ''; ?>>Particulier</option>
+                                        <option value="agence" <?php echo ($user['typeLoueur'] ?? null) === 'agence' ? 'selected' : ''; ?>>Agence immobilière</option>
+                                        <option value="organisme" <?php echo ($user['typeLoueur'] ?? null) === 'organisme' ? 'selected' : ''; ?>>Organisme</option>
+                                        <option value="crous" <?php echo ($user['typeLoueur'] ?? null) === 'crous' ? 'selected' : ''; ?>>CROUS</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="telephone" class="form-label">Téléphone</label>
                                     <input type="tel" id="telephone" name="telephone" 
-                                           value="<?php echo htmlspecialchars($user['telephone']); ?>" 
+                                           value="<?php echo htmlspecialchars($user['telephone'] ?? ''); ?>" 
                                            class="form-input" placeholder="0612345678">
                                 </div>
                             </div>

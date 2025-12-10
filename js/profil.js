@@ -41,11 +41,29 @@ document.addEventListener('DOMContentLoaded', function() {
         photoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
+                // Vérifier la taille
+                const maxSize = 2 * 1024 * 1024; // 2MB
+                if (file.size > maxSize) {
+                    alert('La photo ne doit pas dépasser 2MB');
+                    this.value = '';
+                    return;
+                }
+
+                // Vérifier le type
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Format non autorisé. Utilisez JPG ou PNG.');
+                    this.value = '';
+                    return;
+                }
+
+                // Afficher la preview
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const previewImg = document.getElementById('preview-photo');
                     if (previewImg) {
                         previewImg.src = event.target.result;
+                        previewImg.style.opacity = '1';
                     }
                 };
                 reader.readAsDataURL(file);
