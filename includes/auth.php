@@ -256,6 +256,7 @@ function redirect_by_role() {
     exit();
 }
 
-// Vérifier automatiquement l'expiration de session
-check_session_timeout();
+// Note: check_session_timeout() n'est plus appelée automatiquement
+// Les pages peuvent l'appeler manuellement si besoin
+// check_session_timeout();
 ?>

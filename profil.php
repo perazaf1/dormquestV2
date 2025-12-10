@@ -2,6 +2,8 @@
 // profil.php - Page de profil utilisateur (étudiant ou loueur)
 session_start();
 require_once 'includes/db.php';
+
+// Importer uniquement les fonctions nécessaires, pas la vérification de timeout automatique
 require_once 'includes/auth.php';
 
 // Vérifier que l'utilisateur est connecté
@@ -13,6 +15,11 @@ $success = '';
 
 // Traitement du formulaire de modification
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Vérifier le token CSRF
+    if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
+        $errors[] = "Token CSRF invalide. Veuillez réessayer.";
+    }
+
     $prenom = trim($_POST['prenom'] ?? '');
     $nom = trim($_POST['nom'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -131,13 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute($params);
                 
-                // Mettre à jour la session
-                $_SESSION['user_prenom'] = $prenom;
-                $_SESSION['user_nom'] = $nom;
-                $_SESSION['user_email'] = $email;
-                if ($photo_path) {
-                    $_SESSION['user_photo'] = $photo_path;
-                }
+                // Refresh session data from DB
+                refresh_session($pdo);
                 
                 $success = "Profil mis à jour avec succès !";
             }
@@ -148,6 +150,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Récupérer les informations de l'utilisateur
+$user = array();
+$nb_favoris = 0;
+$nb_candidatures = 0;
+$nb_acceptees = 0;
+$nb_annonces = 0;
+$nb_actives = 0;
+$nb_candidatures_recues = 0;
+
 try {
     $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE id = ?");
     $stmt->execute([$user_id]);
@@ -158,43 +168,50 @@ try {
         exit();
     }
     
-    // Statistiques pour l'utilisateur
+    // Statistiques pour l'utilisateur - utiliser des requêtes simples sans joins
     if (is_etudiant()) {
-        // Nombre de favoris
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM favoris WHERE idEtudiant = ?");
-        $stmt->execute([$user_id]);
-        $nb_favoris = $stmt->fetchColumn();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM favoris WHERE idEtudiant = ?");
+            $stmt->execute([$user_id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nb_favoris = (int)($result['count'] ?? 0);
+        } catch (Exception $e) { $nb_favoris = 0; }
         
-        // Nombre de candidatures
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM candidatures WHERE idEtudiant = ?");
-        $stmt->execute([$user_id]);
-        $nb_candidatures = $stmt->fetchColumn();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM candidatures WHERE idEtudiant = ?");
+            $stmt->execute([$user_id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nb_candidatures = (int)($result['count'] ?? 0);
+        } catch (Exception $e) { $nb_candidatures = 0; }
         
-        // Candidatures acceptées
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM candidatures WHERE idEtudiant = ? AND statut = 'acceptee'");
-        $stmt->execute([$user_id]);
-        $nb_acceptees = $stmt->fetchColumn();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM candidatures WHERE idEtudiant = ? AND statut = 'acceptee'");
+            $stmt->execute([$user_id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nb_acceptees = (int)($result['count'] ?? 0);
+        } catch (Exception $e) { $nb_acceptees = 0; }
         
     } else {
-        // Nombre d'annonces
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM annonces WHERE idLoueur = ?");
-        $stmt->execute([$user_id]);
-        $nb_annonces = $stmt->fetchColumn();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM annonces WHERE idLoueur = ?");
+            $stmt->execute([$user_id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nb_annonces = (int)($result['count'] ?? 0);
+        } catch (Exception $e) { $nb_annonces = 0; }
         
-        // Nombre d'annonces actives
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM annonces WHERE idLoueur = ? AND statut = 'active'");
-        $stmt->execute([$user_id]);
-        $nb_actives = $stmt->fetchColumn();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM annonces WHERE idLoueur = ? AND statut = 'active'");
+            $stmt->execute([$user_id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nb_actives = (int)($result['count'] ?? 0);
+        } catch (Exception $e) { $nb_actives = 0; }
         
-        // Nombre de candidatures reçues
-        $stmt = $pdo->prepare("
-            SELECT COUNT(DISTINCT c.id) 
-            FROM candidatures c
-            JOIN annonces a ON c.idAnnonce = a.id
-            WHERE a.idLoueur = ?
-        ");
-        $stmt->execute([$user_id]);
-        $nb_candidatures_recues = $stmt->fetchColumn();
+        try {
+            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM candidatures WHERE id IN (SELECT id FROM candidatures c JOIN annonces a ON c.idAnnonce = a.id WHERE a.idLoueur = ?)");
+            $stmt->execute([$user_id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nb_candidatures_recues = (int)($result['count'] ?? 0);
+        } catch (Exception $e) { $nb_candidatures_recues = 0; }
     }
     
 } catch (PDOException $e) {
@@ -252,7 +269,10 @@ try {
                             <?php echo is_etudiant() ? '🎓 Étudiant' : '🏠 Loueur'; ?>
                         </p>
                         <div class="profile-card__date">
-                            Membre depuis le <?php echo date('d/m/Y', strtotime($user['dateInscription'])); ?>
+                            Membre depuis le <?php 
+                                $dateInscription = $user['dateInscription'] ?? null;
+                                echo $dateInscription ? date('d/m/Y', strtotime($dateInscription)) : 'N/A'; 
+                            ?>
                         </div>
                     </div>
 
@@ -343,6 +363,7 @@ try {
 
                     <!-- Formulaire de modification -->
                     <form method="POST" action="profil.php" class="profil-form" enctype="multipart/form-data">
+                        <?php csrf_field(); ?>
                         
                         <!-- Section Informations personnelles -->
                         <div class="form-section">
