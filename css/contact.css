@@ -1,0 +1,968 @@
+/**
+ * ============================================
+ * PAGE CONTACT - DORMQUEST
+ * ============================================
+ * Style moderne avec glassmorphism, animations fluides
+ * et micro-interactions pour une exp�rience utilisateur premium
+ */
+
+/**
+ * ============================================
+ * SECTION HERO CONTACT
+ * ============================================
+ * Block: hero__contact
+ * Elements: hero__contact__container, hero__contact--form, hero__contact__img
+ */
+
+.hero__contact {
+  min-height: 90vh;
+  padding: 120px 20px 80px;
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.03) 0%,
+    rgba(251, 191, 36, 0.05) 50%,
+    rgba(96, 165, 250, 0.03) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de particules flottantes en arri�re-plan */
+.hero__contact::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(
+    circle,
+    rgba(37, 99, 235, 0.1) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: float-slow 25s ease-in-out infinite;
+}
+
+.hero__contact::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -15%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(
+    circle,
+    rgba(251, 191, 36, 0.08) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: float-slow 20s ease-in-out infinite reverse;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -40px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
+}
+
+/* Conteneur principal avec disposition flex */
+.hero__contact__container {
+  max-width: 600px;
+  width: 100%;
+  z-index: 2;
+  position: relative;
+}
+
+/* Titre principal de la section contact */
+.hero__contact__container--title {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 40px;
+  color: var(--color-primary);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/**
+ * ============================================
+ * FORMULAIRE DE CONTACT - Style Glassmorphism
+ * ============================================
+ */
+
+.hero__contact--form {
+  animation: fadeInUp 0.8s ease-out 0.2s backwards;
+}
+
+#contact {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+              0 2px 8px rgba(37, 99, 235, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#contact:hover {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12),
+              0 4px 16px rgba(37, 99, 235, 0.1);
+  transform: translateY(-4px);
+}
+
+/* Sous-titre du formulaire */
+#contact h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-gray);
+  margin-bottom: 30px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+#contact h3:first-child {
+  display: none; /* Cache le premier h3 vide */
+}
+
+/* Conteneurs de champs (fieldset) */
+#contact fieldset {
+  border: none;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Style commun pour inputs et textarea */
+#contact input,
+#contact textarea {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(37, 99, 235, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+#contact input::placeholder,
+#contact textarea::placeholder {
+  color: var(--color-gray);
+  opacity: 0.7;
+}
+
+/* �tat focus des champs */
+#contact input:focus,
+#contact textarea:focus {
+  background: rgba(255, 255, 255, 1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1),
+              0 4px 12px rgba(37, 99, 235, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Animation au focus */
+#contact input:focus::placeholder,
+#contact textarea:focus::placeholder {
+  opacity: 0.4;
+  transform: translateX(5px);
+}
+
+/* Textarea sp�cifique */
+#contact textarea {
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/**
+ * ============================================
+ * BOUTON D'ENVOI - Style moderne avec effet loading
+ * ============================================
+ */
+
+#contact button[type="submit"] {
+  width: 100%;
+  padding: 18px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-white);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-light) 100%
+  );
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+/* Effet de brillance au survol */
+#contact button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+#contact button[type="submit"]:hover::before {
+  left: 100%;
+}
+
+#contact button[type="submit"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+#contact button[type="submit"]:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+/* �tat disabled (lors de l'envoi) */
+#contact button[type="submit"]:disabled {
+  background: linear-gradient(135deg, var(--color-gray) 0%, var(--color-gray-dark) 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/**
+ * ============================================
+ * IMAGE HERO CONTACT
+ * ============================================
+ */
+
+.hero__contact__img {
+  max-width: 500px;
+  width: 100%;
+  z-index: 2;
+  position: relative;
+  animation: fadeInRight 0.8s ease-out 0.4s backwards;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero__contact__img img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero__contact__img img:hover {
+  transform: scale(1.03) rotate(-1deg);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+}
+
+/**
+ * ============================================
+ * SECTION COORDONN�ES
+ * ============================================
+ * Block: coordonnees
+ * Elements: coordonnees__container, coordonnees__title, etc.
+ */
+
+.coordonnees {
+  padding: 100px 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(245, 247, 250, 1) 100%
+  );
+  position: relative;
+}
+
+.coordonnees__container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  display: grid;
+  gap: 60px;
+}
+
+/**
+ * ============================================
+ * TITRE DE LA SECTION COORDONN�ES
+ * ============================================
+ */
+
+.coordonnees__title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.coordonnees__title h2 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  position: relative;
+  display: inline-block;
+}
+
+/* Soulignement d�coratif */
+.coordonnees__title h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+/**
+ * ============================================
+ * DESCRIPTION - Horaires et informations
+ * ============================================
+ */
+
+.coordonnees__description {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.coordonnees__description:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+
+.coordonnees__description--title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 24px;
+  position: relative;
+  padding-left: 20px;
+}
+
+/* Accent color� � gauche du titre */
+.coordonnees__description--title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+/* Liste des horaires */
+.coordonnees__description--list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.coordonnees__description--list ul {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.05) 0%,
+    rgba(96, 165, 250, 0.05) 100%
+  );
+  padding: 16px 24px;
+  border-radius: 12px;
+  border-left: 3px solid var(--color-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de brillance au survol */
+.coordonnees__description--list ul::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.coordonnees__description--list ul:hover::before {
+  left: 100%;
+}
+
+.coordonnees__description--list ul:hover {
+  transform: translateX(8px);
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.1) 0%,
+    rgba(96, 165, 250, 0.1) 100%
+  );
+  border-left-color: var(--color-secondary);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+/**
+ * ============================================
+ * NUM�ROS ET CONTACTS
+ * ============================================
+ */
+
+.coordonnees__description--numbers {
+  margin-top: 40px;
+  padding: 30px;
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.1) 0%,
+    rgba(255, 167, 0, 0.1) 100%
+  );
+  border-radius: 16px;
+  border: 2px dashed rgba(251, 191, 36, 0.3);
+  font-size: 1.1rem;
+  color: var(--color-gray);
+  text-align: center;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/**
+ * ============================================
+ * INFORMATIONS DE CONTACT - Téléphone, Email, Adresse
+ * ============================================
+ */
+
+.coordonnees__info {
+  margin-top: 50px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.coordonnees__info:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+
+.coordonnees__info--title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative;
+}
+
+/* Soulignement décoratif sous le titre */
+.coordonnees__info--title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+/* Grille des items de contact */
+.coordonnees__info--items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+/* Chaque item de contact (téléphone, email, adresse) */
+.coordonnees__info--item {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.03) 0%,
+    rgba(96, 165, 250, 0.05) 100%
+  );
+  padding: 24px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de brillance au survol */
+.coordonnees__info--item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.coordonnees__info--item:hover::before {
+  left: 100%;
+}
+
+.coordonnees__info--item:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.08) 0%,
+    rgba(96, 165, 250, 0.1) 100%
+  );
+  border-color: rgba(37, 99, 235, 0.2);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+}
+
+/* Icône emoji */
+.coordonnees__info--icon {
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-light) 100%
+  );
+  border-radius: 14px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.coordonnees__info--item:hover .coordonnees__info--icon {
+  transform: rotate(5deg) scale(1.1);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+/* Contenu texte */
+.coordonnees__info--content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+/* Label (Téléphone, Email, Adresse) */
+.coordonnees__info--label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Valeur (numéro, email, adresse) */
+.coordonnees__info--value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.5;
+  transition: color 0.3s ease;
+}
+
+/* Style pour les liens (tel: et mailto:) */
+a.coordonnees__info--value {
+  color: var(--color-primary);
+  text-decoration: none;
+  position: relative;
+}
+
+a.coordonnees__info--value::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+a.coordonnees__info--value:hover {
+  color: var(--color-primary-dark);
+}
+
+a.coordonnees__info--value:hover::after {
+  width: 100%;
+}
+
+/**
+ * ============================================
+ * CARTE GOOGLE MAPS
+ * ============================================
+ */
+
+.cooordonnees__map--title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: center;
+  margin: 60px 0 30px;
+}
+
+.coordonees__map {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.coordonees__map:hover {
+  box-shadow: 0 15px 60px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.coordonees__map iframe {
+  width: 100%;
+  height: 500px;
+  border: none;
+  display: block;
+}
+
+/* Bordure d�corative autour de la carte */
+.coordonees__map::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: var(--color-primary);
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.coordonees__map:hover::before {
+  opacity: 1;
+}
+
+/**
+ * ============================================
+ * RESPONSIVE - TABLETTES (max-width: 968px)
+ * ============================================
+ */
+
+@media (max-width: 968px) {
+  .hero__contact {
+    flex-direction: column;
+    padding: 100px 20px 60px;
+    min-height: auto;
+  }
+
+  .hero__contact__container--title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
+
+  #contact {
+    padding: 35px;
+  }
+
+  .hero__contact__img {
+    max-width: 100%;
+    margin-top: 40px;
+  }
+
+  .coordonnees {
+    padding: 80px 20px;
+  }
+
+  .coordonnees__title h2 {
+    font-size: 2.3rem;
+  }
+
+  .coordonnees__description {
+    padding: 30px;
+  }
+
+  .coordonnees__description--list {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .coordonnees__info {
+    padding: 30px;
+    margin-top: 40px;
+  }
+
+  .coordonnees__info--title {
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+  }
+
+  .coordonnees__info--items {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .coordonnees__info--item {
+    padding: 20px;
+  }
+
+  .coordonnees__info--icon {
+    width: 55px;
+    height: 55px;
+    font-size: 2.2rem;
+  }
+
+  .coordonees__map iframe {
+    height: 400px;
+  }
+
+  .cooordonnees__map--title {
+    font-size: 1.9rem;
+    margin: 50px 0 25px;
+  }
+}
+
+/**
+ * ============================================
+ * RESPONSIVE - MOBILE (max-width: 480px)
+ * ============================================
+ */
+
+@media (max-width: 480px) {
+  .hero__contact {
+    padding: 80px 15px 40px;
+  }
+
+  .hero__contact__container--title {
+    font-size: 1.9rem;
+    margin-bottom: 25px;
+    line-height: 1.3;
+  }
+
+  #contact {
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  #contact h3 {
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+
+  #contact input,
+  #contact textarea {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+
+  #contact fieldset {
+    margin-bottom: 16px;
+  }
+
+  #contact textarea {
+    min-height: 120px;
+  }
+
+  #contact button[type="submit"] {
+    padding: 16px 28px;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
+  .hero__contact__img {
+    margin-top: 30px;
+  }
+
+  .hero__contact__img img {
+    border-radius: 16px;
+  }
+
+  .coordonnees {
+    padding: 60px 15px;
+  }
+
+  .coordonnees__container {
+    gap: 40px;
+  }
+
+  .coordonnees__title h2 {
+    font-size: 1.9rem;
+  }
+
+  .coordonnees__title h2::after {
+    width: 60px;
+    height: 3px;
+  }
+
+  .coordonnees__description {
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  .coordonnees__description--title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    padding-left: 16px;
+  }
+
+  .coordonnees__description--list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .coordonnees__description--list ul {
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+
+  .coordonnees__info {
+    padding: 25px 20px;
+    margin-top: 30px;
+  }
+
+  .coordonnees__info--title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+
+  .coordonnees__info--items {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .coordonnees__info--item {
+    padding: 18px;
+  }
+
+  .coordonnees__info--icon {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+  }
+
+  .coordonnees__info--label {
+    font-size: 0.8rem;
+  }
+
+  .coordonnees__info--value {
+    font-size: 1rem;
+  }
+
+  .cooordonnees__map--title {
+    font-size: 1.6rem;
+    margin: 40px 0 20px;
+  }
+
+  .coordonees__map {
+    border-radius: 16px;
+  }
+
+  .coordonees__map iframe {
+    height: 300px;
+  }
+
+  .coordonees__map::before {
+    border-radius: 16px;
+  }
+}
+
+/**
+ * ============================================
+ * ANIMATIONS D'ENTR�E - Scroll reveal
+ * ============================================
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .coordonnees__description,
+  .coordonnees__info,
+  .coordonees__map {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
+/* D�sactive les animations si l'utilisateur pr�f�re r�duire les mouvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

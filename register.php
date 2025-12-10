@@ -208,6 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -215,6 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/register.css">
 </head>
+
 <body>
     <div class="login-container">
         <div class="login-box">
@@ -224,15 +226,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <?php if (!empty($errors)): ?>
-                <div class="alert alert-error">
-                    <?php foreach ($errors as $e): ?>
-                        <div><?php echo htmlspecialchars($e); ?></div>
-                    <?php endforeach; ?>
-                </div>
+            <div class="alert alert-error">
+                <?php foreach ($errors as $e): ?>
+                <div><?php echo htmlspecialchars($e); ?></div>
+                <?php endforeach; ?>
+            </div>
             <?php endif; ?>
 
             <?php if ($success): ?>
-                <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
+            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
             <?php endif; ?>
 
             <form method="POST" action="register.php" class="login-form" enctype="multipart/form-data">
@@ -241,11 +243,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="form-label">Je suis :</label>
                     <div style="display:flex;gap:10px;">
                         <label style="display:flex;align-items:center;gap:6px;">
-                            <input type="radio" name="role" value="etudiant" <?php echo ($role === 'etudiant') ? 'checked' : ''; ?>>
+                            <input type="radio" name="role" value="etudiant"
+                                <?php echo ($role === 'etudiant') ? 'checked' : ''; ?>>
                             <span>Étudiant</span>
                         </label>
                         <label style="display:flex;align-items:center;gap:6px;">
-                            <input type="radio" name="role" value="loueur" <?php echo ($role === 'loueur') ? 'checked' : ''; ?>>
+                            <input type="radio" name="role" value="loueur"
+                                <?php echo ($role === 'loueur') ? 'checked' : ''; ?>>
                             <span>Loueur</span>
                         </label>
                     </div>
@@ -253,7 +257,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="prenom">Prénom *</label>
-                    <input type="text" id="prenom" name="prenom" required value="<?php echo htmlspecialchars($prenom); ?>">
+                    <input type="text" id="prenom" name="prenom" required
+                        value="<?php echo htmlspecialchars($prenom); ?>">
                 </div>
 
                 <div class="form-group">
@@ -263,7 +268,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="email">Email *</label>
-                    <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($email); ?>" placeholder="votre.email@exemple.com">
+                    <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($email); ?>"
+                        placeholder="votre.email@exemple.com">
                 </div>
 
                 <div class="form-group">
@@ -286,11 +292,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div id="etudiant-fields" style="display: <?php echo ($role === 'etudiant') ? 'block' : 'none'; ?>;">
                     <div class="form-group">
                         <label for="ville_recherche">Ville de recherche *</label>
-                        <input type="text" id="ville_recherche" name="ville_recherche" value="<?php echo isset($_POST['ville_recherche']) ? htmlspecialchars($_POST['ville_recherche']) : ''; ?>" placeholder="Ex: Paris, Lyon">
+                        <input type="text" id="ville_recherche" name="ville_recherche"
+                            value="<?php echo isset($_POST['ville_recherche']) ? htmlspecialchars($_POST['ville_recherche']) : ''; ?>"
+                            placeholder="Ex: Paris, Lyon">
                     </div>
                     <div class="form-group">
                         <label for="budget">Budget mensuel (€) *</label>
-                        <input type="number" id="budget" name="budget" value="<?php echo isset($_POST['budget']) ? htmlspecialchars($_POST['budget']) : ''; ?>" min="0" step="50">
+                        <input type="number" id="budget" name="budget"
+                            value="<?php echo isset($_POST['budget']) ? htmlspecialchars($_POST['budget']) : ''; ?>"
+                            min="0" step="50">
                     </div>
                 </div>
 
@@ -299,15 +309,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="type_loueur">Type de loueur *</label>
                         <select id="type_loueur" name="type_loueur">
                             <option value="">-- Sélectionner --</option>
-                            <option value="particulier" <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'particulier') ? 'selected' : ''; ?>>Particulier</option>
-                            <option value="agence" <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'agence') ? 'selected' : ''; ?>>Agence immobilière</option>
-                            <option value="organisme" <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'organisme') ? 'selected' : ''; ?>>Organisme</option>
-                            <option value="crous" <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'crous') ? 'selected' : ''; ?>>CROUS</option>
+                            <option value="particulier"
+                                <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'particulier') ? 'selected' : ''; ?>>
+                                Particulier</option>
+                            <option value="agence"
+                                <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'agence') ? 'selected' : ''; ?>>
+                                Agence immobilière</option>
+                            <option value="organisme"
+                                <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'organisme') ? 'selected' : ''; ?>>
+                                Organisme</option>
+                            <option value="crous"
+                                <?php echo (isset($_POST['type_loueur']) && $_POST['type_loueur'] === 'crous') ? 'selected' : ''; ?>>
+                                CROUS</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="telephone">Téléphone *</label>
-                        <input type="tel" id="telephone" name="telephone" value="<?php echo isset($_POST['telephone']) ? htmlspecialchars($_POST['telephone']) : ''; ?>" placeholder="0612345678">
+                        <input type="tel" id="telephone" name="telephone"
+                            value="<?php echo isset($_POST['telephone']) ? htmlspecialchars($_POST['telephone']) : ''; ?>"
+                            placeholder="0612345678">
                     </div>
                 </div>
 
@@ -322,4 +342,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="js/register.js"></script>
 </body>
+
 </html>

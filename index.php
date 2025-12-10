@@ -10,18 +10,21 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DormQuest - Trouvez le logement parfait pour vos études ! Plateforme de mise en relation entre étudiants et loueurs.">
+    <meta name="description"
+        content="DormQuest - Trouvez le logement parfait pour vos études ! Plateforme de mise en relation entre étudiants et loueurs.">
     <title>DormQuest - Trouvez le logement parfait pour vos études !</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
     <?php include 'includes/header.php'; ?>
 
-<!-- Section Hero - section de présentation de l'outil -->
+    <!-- Section Hero - section de présentation de l'outil -->
     <section class="hero">
         <div class="hero__container">
             <h1 class="hero__title">
@@ -93,7 +96,8 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     Sauvegardez vos annonces préférées et comparez-les facilement.
                 </p>
             </div>
-            <a href="https://www.dossierfacile.logement.gouv.fr/" target="_blank" rel="noopener noreferrer" class="avantages__card avantages__card--link" data-color="orange">
+            <a href="https://www.dossierfacile.logement.gouv.fr/" target="_blank" rel="noopener noreferrer"
+                class="avantages__card avantages__card--link" data-color="orange">
                 <div class="avantages__card-icon">📋</div>
                 <h3 class="avantages__card-title">
                     Dossier facile
@@ -102,7 +106,9 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     Créez facilement votre dossier grâce à des formulaires du gouvernement.
                 </p>
             </a>
-            <a href="https://wwwd.caf.fr/wps/portal/caffr/aidesetdemarches/mesdemarches/faireunesimulation/lelogement#/preparation" target="_blank" rel="noopener noreferrer" class="avantages__card avantages__card--link" data-color="pink">
+            <a href="https://wwwd.caf.fr/wps/portal/caffr/aidesetdemarches/mesdemarches/faireunesimulation/lelogement#/preparation"
+                target="_blank" rel="noopener noreferrer" class="avantages__card avantages__card--link"
+                data-color="pink">
                 <div class="avantages__card-icon">💰</div>
                 <h3 class="avantages__card-title">
                     Calculateur d'APL
@@ -111,7 +117,8 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     Calculez rapidement vos aides au logement avec l'outil officiel de la CAF.
                 </p>
             </a>
-            <a href="https://www.visale.fr/" target="_blank" rel="noopener noreferrer" class="avantages__card avantages__card--link" data-color="teal">
+            <a href="https://www.visale.fr/" target="_blank" rel="noopener noreferrer"
+                class="avantages__card avantages__card--link" data-color="teal">
                 <div class="avantages__card-icon">🤝</div>
                 <h3 class="avantages__card-title">
                     Obtenez un garant
@@ -202,7 +209,8 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     Comment créer un compte ?
                 </div>
                 <div class="faq__card-text">
-                    Cliquez sur "Inscription" et choisissez votre profil (étudiant ou loueur). Remplissez le formulaire et validez votre email.
+                    Cliquez sur "Inscription" et choisissez votre profil (étudiant ou loueur). Remplissez le formulaire
+                    et validez votre email.
                 </div>
             </div>
             <div class="faq__card">
@@ -210,7 +218,8 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     Est-ce que le service est gratuit ?
                 </div>
                 <div class="faq__card-text">
-                    Oui ! DormQuest est entièrement gratuit pour les étudiants. Les loueurs peuvent publier leurs annonces gratuitement.
+                    Oui ! DormQuest est entièrement gratuit pour les étudiants. Les loueurs peuvent publier leurs
+                    annonces gratuitement.
                 </div>
             </div>
             <div class="faq__card">
@@ -218,7 +227,8 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     Comment candidater à une annonce ?
                 </div>
                 <div class="faq__card-text">
-                    Connectez-vous à votre compte étudiant, consultez une annonce et cliquez sur "Candidater". Vous pouvez ajouter un message personnalisé.
+                    Connectez-vous à votre compte étudiant, consultez une annonce et cliquez sur "Candidater". Vous
+                    pouvez ajouter un message personnalisé.
                 </div>
             </div>
             <div class="faq__card">
@@ -234,14 +244,15 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     Combien de temps pour obtenir une réponse ?
                 </div>
                 <div class="faq__card-text">
-                   Les propriétaires s'engagent à répondre sous 48 heures. Cependant, le délai peut varier en fonction de la demande.
+                    Les propriétaires s'engagent à répondre sous 48 heures. Cependant, le délai peut varier en fonction
+                    de la demande.
                 </div>
             </div>
         </div>
     </section>
 
 
-    
+
 
     <section class="about">
         <div class="about__container">
@@ -249,7 +260,8 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 A propos de DormQuest
             </h1>
             <p class="about__description">
-                DormQuest est une initiative de Nyzer, une startup innovante dédiée à faciliter la vie des étudiants. Notre mission est de rendre la recherche de logement simple, rapide et accessible à tous.
+                DormQuest est une initiative de Nyzer, une startup innovante dédiée à faciliter la vie des étudiants.
+                Notre mission est de rendre la recherche de logement simple, rapide et accessible à tous.
             </p>
             <img src="img/logo-nyzer.png" alt="Logo Nyzer" class="about__logo">
         </div>
@@ -258,11 +270,12 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 
 
 
-    
+
 
     <?php include 'includes/footer.php'; ?>
     <script src="js/main.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
+
 </html>

@@ -19,35 +19,35 @@ if (!isset($userType)) {
 
         <nav class="main-nav" id="mainNav">
             <ul class="nav-links">
-                <li><a href="index.php" class="nav-link">Accueil</a></li>
                 <li><a href="annonces.php" class="nav-link">Annonces</a></li>
                 <li><a href="contact.php" class="nav-link">Contact</a></li>
 
                 <?php if ($isLoggedIn): ?>
-                    <?php if ($userType === 'loueur'): ?>
-                        <li><a href="dashboard-loueur.php" class="nav-link">Mon Tableau de bord</a></li>
-                        <li><a href="create-annonce.php" class="nav-link">Créer une annonce</a></li>
-                    <?php else: ?>
-                        <li><a href="dashboard-etudiant.php" class="nav-link">Mon Tableau de bord</a></li>
-                        <li><a href="favoris.php" class="nav-link">Mes favoris</a></li>
-                        <li><a href="candidatures.php" class="nav-link">Mes candidatures</a></li>
-                    <?php endif; ?>
+                <?php if ($userType === 'loueur'): ?>
+                <li><a href="dashboard-loueur.php" class="nav-link">Mon Tableau de bord</a></li>
+                <li><a href="create-annonce.php" class="nav-link">Créer une annonce</a></li>
+                <?php else: ?>
+                <li><a href="dashboard-etudiant.php" class="nav-link">Tableau de bord</a></li>
+                <li><a href="favoris.php" class="nav-link">Favoris</a></li>
+                <li><a href="candidatures.php" class="nav-link">Candidatures</a></li>
+                <?php endif; ?>
                 <?php endif; ?>
             </ul>
 
             <div class="nav-actions">
                 <?php if ($isLoggedIn): ?>
-                    <a href="profil.php" class="btn-profile">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="10" cy="6" r="3" stroke="currentColor" stroke-width="2"/>
-                            <path d="M4 16c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        Mon profil
-                    </a>
-                    <a href="logout.php" class="btn-logout">Déconnexion</a>
+                <a href="profil.php" class="btn-profile">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="6" r="3" stroke="currentColor" stroke-width="2" />
+                        <path d="M4 16c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                    Mon profil
+                </a>
+                <a href="logout.php" class="btn-logout">Déconnexion</a>
                 <?php else: ?>
-                    <a href="login.php" class="btn-login">Connexion</a>
-                    <a href="register.php" class="btn-register">Inscription</a>
+                <a href="login.php" class="btn-login">Connexion</a>
+                <a href="register.php" class="btn-register">Inscription</a>
                 <?php endif; ?>
             </div>
         </nav>

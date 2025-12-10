@@ -220,6 +220,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -230,12 +231,13 @@ try {
     <link rel="stylesheet" href="css/profil.css">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
     <?php include 'includes/header.php'; ?>
 
     <main class="profil-page">
         <div class="profil-page__container">
-            
+
             <!-- En-tête -->
             <div class="profil-header">
                 <div class="profil-header__content">
@@ -248,23 +250,18 @@ try {
             </div>
 
             <div class="profil-content">
-                
+
                 <!-- Colonne gauche : Statistiques -->
                 <aside class="profil-sidebar">
-                    
+
                     <!-- Photo de profil -->
                     <div class="profile-card">
                         <div class="profile-card__photo-container">
                             <img src="<?php 
                                 $photoPath = $user['photoDeProfil'] ?? '';
                                 echo htmlspecialchars(!empty($photoPath) ? $photoPath : 'img/default-avatar.png');
-                            ?>" 
-                                 alt="Photo de profil" 
-                                 class="profile-card__photo"
-                                 id="preview-photo"
-                                 onerror="this.src='img/default-avatar.png'; this.style.opacity='0.8';"
-                                 loading="lazy"
-                                 >
+                            ?>" alt="Photo de profil" class="profile-card__photo" id="preview-photo"
+                                onerror="this.src='img/default-avatar.png'; this.style.opacity='0.8';" loading="lazy">
                         </div>
                         <h2 class="profile-card__name">
                             <?php echo htmlspecialchars($user['prenom'] . ' ' . $user['nom']); ?>
@@ -285,49 +282,50 @@ try {
                         <h3 class="stats-card__title">📊 Mes statistiques</h3>
                         <div class="stats-card__items">
                             <?php if (is_etudiant()): ?>
-                                <div class="stats-card__item">
-                                    <span class="stats-card__icon">⭐</span>
-                                    <div class="stats-card__content">
-                                        <strong><?php echo $nb_favoris; ?></strong>
-                                        <span>Favori<?php echo $nb_favoris > 1 ? 's' : ''; ?></span>
-                                    </div>
+                            <div class="stats-card__item">
+                                <span class="stats-card__icon">⭐</span>
+                                <div class="stats-card__content">
+                                    <strong><?php echo $nb_favoris; ?></strong>
+                                    <span>Favori<?php echo $nb_favoris > 1 ? 's' : ''; ?></span>
                                 </div>
-                                <div class="stats-card__item">
-                                    <span class="stats-card__icon">📨</span>
-                                    <div class="stats-card__content">
-                                        <strong><?php echo $nb_candidatures; ?></strong>
-                                        <span>Candidature<?php echo $nb_candidatures > 1 ? 's' : ''; ?></span>
-                                    </div>
+                            </div>
+                            <div class="stats-card__item">
+                                <span class="stats-card__icon">📨</span>
+                                <div class="stats-card__content">
+                                    <strong><?php echo $nb_candidatures; ?></strong>
+                                    <span>Candidature<?php echo $nb_candidatures > 1 ? 's' : ''; ?></span>
                                 </div>
-                                <div class="stats-card__item">
-                                    <span class="stats-card__icon">✅</span>
-                                    <div class="stats-card__content">
-                                        <strong><?php echo $nb_acceptees; ?></strong>
-                                        <span>Acceptée<?php echo $nb_acceptees > 1 ? 's' : ''; ?></span>
-                                    </div>
+                            </div>
+                            <div class="stats-card__item">
+                                <span class="stats-card__icon">✅</span>
+                                <div class="stats-card__content">
+                                    <strong><?php echo $nb_acceptees; ?></strong>
+                                    <span>Acceptée<?php echo $nb_acceptees > 1 ? 's' : ''; ?></span>
                                 </div>
+                            </div>
                             <?php else: ?>
-                                <div class="stats-card__item">
-                                    <span class="stats-card__icon">📋</span>
-                                    <div class="stats-card__content">
-                                        <strong><?php echo $nb_annonces; ?></strong>
-                                        <span>Annonce<?php echo $nb_annonces > 1 ? 's' : ''; ?></span>
-                                    </div>
+                            <div class="stats-card__item">
+                                <span class="stats-card__icon">📋</span>
+                                <div class="stats-card__content">
+                                    <strong><?php echo $nb_annonces; ?></strong>
+                                    <span>Annonce<?php echo $nb_annonces > 1 ? 's' : ''; ?></span>
                                 </div>
-                                <div class="stats-card__item">
-                                    <span class="stats-card__icon">✅</span>
-                                    <div class="stats-card__content">
-                                        <strong><?php echo $nb_actives; ?></strong>
-                                        <span>Active<?php echo $nb_actives > 1 ? 's' : ''; ?></span>
-                                    </div>
+                            </div>
+                            <div class="stats-card__item">
+                                <span class="stats-card__icon">✅</span>
+                                <div class="stats-card__content">
+                                    <strong><?php echo $nb_actives; ?></strong>
+                                    <span>Active<?php echo $nb_actives > 1 ? 's' : ''; ?></span>
                                 </div>
-                                <div class="stats-card__item">
-                                    <span class="stats-card__icon">📬</span>
-                                    <div class="stats-card__content">
-                                        <strong><?php echo $nb_candidatures_recues; ?></strong>
-                                        <span>Candidature<?php echo $nb_candidatures_recues > 1 ? 's' : ''; ?> reçue<?php echo $nb_candidatures_recues > 1 ? 's' : ''; ?></span>
-                                    </div>
+                            </div>
+                            <div class="stats-card__item">
+                                <span class="stats-card__icon">📬</span>
+                                <div class="stats-card__content">
+                                    <strong><?php echo $nb_candidatures_recues; ?></strong>
+                                    <span>Candidature<?php echo $nb_candidatures_recues > 1 ? 's' : ''; ?>
+                                        reçue<?php echo $nb_candidatures_recues > 1 ? 's' : ''; ?></span>
                                 </div>
+                            </div>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -346,130 +344,137 @@ try {
 
                 <!-- Colonne droite : Formulaire -->
                 <div class="profil-main">
-                    
+
                     <!-- Messages -->
                     <?php if ($success): ?>
-                        <div class="alert alert--success">
-                            <strong>✅ <?php echo htmlspecialchars($success); ?></strong>
-                        </div>
+                    <div class="alert alert--success">
+                        <strong>✅ <?php echo htmlspecialchars($success); ?></strong>
+                    </div>
                     <?php endif; ?>
 
                     <?php if (!empty($errors)): ?>
-                        <div class="alert alert--error">
-                            <strong>⚠️ Erreurs :</strong>
-                            <ul class="alert__list">
-                                <?php foreach ($errors as $error): ?>
-                                    <li><?php echo htmlspecialchars($error); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
+                    <div class="alert alert--error">
+                        <strong>⚠️ Erreurs :</strong>
+                        <ul class="alert__list">
+                            <?php foreach ($errors as $error): ?>
+                            <li><?php echo htmlspecialchars($error); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
                     <?php endif; ?>
 
                     <!-- Formulaire de modification -->
                     <form method="POST" action="profil.php" class="profil-form" enctype="multipart/form-data">
                         <?php csrf_field(); ?>
-                        
+
                         <!-- Section Informations personnelles -->
                         <div class="form-section">
                             <h2 class="form-section__title">👤 Informations personnelles</h2>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="prenom" class="form-label">Prénom *</label>
-                                    <input type="text" id="prenom" name="prenom" 
-                                           value="<?php echo htmlspecialchars($user['prenom']); ?>" 
-                                           class="form-input" required>
+                                    <input type="text" id="prenom" name="prenom"
+                                        value="<?php echo htmlspecialchars($user['prenom']); ?>" class="form-input"
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <label for="nom" class="form-label">Nom *</label>
-                                    <input type="text" id="nom" name="nom" 
-                                           value="<?php echo htmlspecialchars($user['nom']); ?>" 
-                                           class="form-input" required>
+                                    <input type="text" id="nom" name="nom"
+                                        value="<?php echo htmlspecialchars($user['nom']); ?>" class="form-input"
+                                        required>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="email" class="form-label">Email *</label>
-                                <input type="email" id="email" name="email" 
-                                       value="<?php echo htmlspecialchars($user['email']); ?>" 
-                                       class="form-input" required>
+                                <input type="email" id="email" name="email"
+                                    value="<?php echo htmlspecialchars($user['email']); ?>" class="form-input" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="photo" class="form-label">Photo de profil</label>
-                                <input type="file" id="photo" name="photo" 
-                                       class="form-input form-input--file" 
-                                       accept="image/jpeg,image/png,image/jpg">
+                                <input type="file" id="photo" name="photo" class="form-input form-input--file"
+                                    accept="image/jpeg,image/png,image/jpg">
                                 <small class="form-hint">JPG, PNG (Max 2MB)</small>
                             </div>
                         </div>
 
                         <!-- Section spécifique selon le rôle -->
                         <?php if (is_etudiant()): ?>
-                            <div class="form-section">
-                                <h2 class="form-section__title">🎓 Informations étudiant</h2>
-                                
-                                <div class="form-group">
-                                    <label for="ville_recherche" class="form-label">Ville de recherche *</label>
-                                    <input type="text" id="ville_recherche" name="ville_recherche" 
-                                           value="<?php echo htmlspecialchars($user['villeRecherche']); ?>" 
-                                           class="form-input" required>
-                                </div>
+                        <div class="form-section">
+                            <h2 class="form-section__title">🎓 Informations étudiant</h2>
 
-                                <div class="form-group">
-                                    <label for="budget" class="form-label">Budget mensuel (€) *</label>
-                                    <input type="number" id="budget" name="budget" 
-                                           value="<?php echo htmlspecialchars($user['budget']); ?>" 
-                                           class="form-input" required min="0" step="50">
-                                </div>
+                            <div class="form-group">
+                                <label for="ville_recherche" class="form-label">Ville de recherche *</label>
+                                <input type="text" id="ville_recherche" name="ville_recherche"
+                                    value="<?php echo htmlspecialchars($user['villeRecherche']); ?>" class="form-input"
+                                    required>
                             </div>
+
+                            <div class="form-group">
+                                <label for="budget" class="form-label">Budget mensuel (€) *</label>
+                                <input type="number" id="budget" name="budget"
+                                    value="<?php echo htmlspecialchars($user['budget']); ?>" class="form-input" required
+                                    min="0" step="50">
+                            </div>
+                        </div>
                         <?php else: ?>
-                            <div class="form-section">
-                                <h2 class="form-section__title">🏠 Informations loueur</h2>
-                                
-                                <div class="form-group">
-                                    <label for="type_loueur" class="form-label">Type de loueur *</label>
-                                    <select id="type_loueur" name="type_loueur" class="form-input" required>
-                                        <option value="particulier" <?php echo ($user['typeLoueur'] ?? null) === 'particulier' ? 'selected' : ''; ?>>Particulier</option>
-                                        <option value="agence" <?php echo ($user['typeLoueur'] ?? null) === 'agence' ? 'selected' : ''; ?>>Agence immobilière</option>
-                                        <option value="organisme" <?php echo ($user['typeLoueur'] ?? null) === 'organisme' ? 'selected' : ''; ?>>Organisme</option>
-                                        <option value="crous" <?php echo ($user['typeLoueur'] ?? null) === 'crous' ? 'selected' : ''; ?>>CROUS</option>
-                                    </select>
-                                </div>
+                        <div class="form-section">
+                            <h2 class="form-section__title">🏠 Informations loueur</h2>
 
-                                <div class="form-group">
-                                    <label for="telephone" class="form-label">Téléphone</label>
-                                    <input type="tel" id="telephone" name="telephone" 
-                                           value="<?php echo htmlspecialchars($user['telephone'] ?? ''); ?>" 
-                                           class="form-input" placeholder="0612345678">
-                                </div>
+                            <div class="form-group">
+                                <label for="type_loueur" class="form-label">Type de loueur *</label>
+                                <select id="type_loueur" name="type_loueur" class="form-input" required>
+                                    <option value="particulier"
+                                        <?php echo ($user['typeLoueur'] ?? null) === 'particulier' ? 'selected' : ''; ?>>
+                                        Particulier</option>
+                                    <option value="agence"
+                                        <?php echo ($user['typeLoueur'] ?? null) === 'agence' ? 'selected' : ''; ?>>
+                                        Agence immobilière</option>
+                                    <option value="organisme"
+                                        <?php echo ($user['typeLoueur'] ?? null) === 'organisme' ? 'selected' : ''; ?>>
+                                        Organisme</option>
+                                    <option value="crous"
+                                        <?php echo ($user['typeLoueur'] ?? null) === 'crous' ? 'selected' : ''; ?>>CROUS
+                                    </option>
+                                </select>
                             </div>
+
+                            <div class="form-group">
+                                <label for="telephone" class="form-label">Téléphone</label>
+                                <input type="tel" id="telephone" name="telephone"
+                                    value="<?php echo htmlspecialchars($user['telephone'] ?? ''); ?>" class="form-input"
+                                    placeholder="0612345678">
+                            </div>
+                        </div>
                         <?php endif; ?>
 
                         <!-- Section Sécurité -->
                         <div class="form-section">
                             <h2 class="form-section__title">🔒 Modifier le mot de passe</h2>
-                            <p class="form-section__desc">Laissez vide si vous ne souhaitez pas changer votre mot de passe.</p>
-                            
+                            <p class="form-section__desc">Laissez vide si vous ne souhaitez pas changer votre mot de
+                                passe.</p>
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="new_password" class="form-label">Nouveau mot de passe</label>
-                                    <input type="password" id="new_password" name="new_password" 
-                                           class="form-input" minlength="8">
+                                    <input type="password" id="new_password" name="new_password" class="form-input"
+                                        minlength="8">
                                     <small class="form-hint">Minimum 8 caractères</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="confirm_password" class="form-label">Confirmer le mot de passe</label>
-                                    <input type="password" id="confirm_password" name="confirm_password" 
-                                           class="form-input" minlength="8">
+                                    <input type="password" id="confirm_password" name="confirm_password"
+                                        class="form-input" minlength="8">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Boutons d'action -->
                         <div class="form-actions form-actions--multiple">
-                            <a href="<?php echo is_etudiant() ? 'dashboard-etudiant.php' : 'dashboard-loueur.php'; ?>" 
-                               class="form-btn form-btn--secondary">
+                            <a href="<?php echo is_etudiant() ? 'dashboard-etudiant.php' : 'dashboard-loueur.php'; ?>"
+                                class="form-btn form-btn--secondary">
                                 Annuler
                             </a>
                             <button type="submit" class="form-btn form-btn--primary">
@@ -486,4 +491,5 @@ try {
 
     <script src="js/profil.js"></script>
 </body>
+
 </html>

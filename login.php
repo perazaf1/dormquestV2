@@ -97,42 +97,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <?php if (!empty($errors)): ?>
-                <div class="alert alert-error">
-                    <?php foreach ($errors as $e): ?>
-                        <div><?php echo htmlspecialchars($e); ?></div>
-                    <?php endforeach; ?>
-                </div>
+            <div class="alert alert-error">
+                <?php foreach ($errors as $e): ?>
+                <div><?php echo htmlspecialchars($e); ?></div>
+                <?php endforeach; ?>
+            </div>
             <?php endif; ?>
 
             <?php if ($success): ?>
-                <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
+            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
             <?php endif; ?>
 
             <form method="POST" action="login.php" class="login-form">
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email"
-                           id="email"
-                           name="email"
-                           placeholder="votre.email@exemple.com"
-                           required
-                           value="<?php echo htmlspecialchars($email); ?>">
+                    <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required
+                        value="<?php echo htmlspecialchars($email); ?>">
                 </div>
 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password"
-                           id="password"
-                           name="password"
-                           placeholder="Entrez votre mot de passe"
-                           required>
+                    <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe"
+                        required>
                     <span class="password-toggle">👁️‍🗨️</span>
                 </div>
 
                 <label class="remember-me">
-                    <input type="checkbox"
-                           name="remember_me"
-                           <?php echo $remember_me ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="remember_me" <?php echo $remember_me ? 'checked' : ''; ?>>
                     <span>Se souvenir de moi</span>
                 </label>
 
