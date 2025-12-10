@@ -7,7 +7,6 @@
                 <h3 class="footer-title">DormQuest</h3>
                 <p class="footer-description">
                     La plateforme de référence pour trouver le logement étudiant parfait.
-                    Connectez-vous avec des propriétaires de confiance et trouvez votre prochain chez-vous.
                 </p>
                 <div class="footer-social">
                     <a href="#" class="social-link" aria-label="Facebook">
@@ -59,8 +58,7 @@
                 <ul class="footer-links">
                     <li><a href="CGU.php" class="footer-link">Conditions générales d'utilisation</a></li>
                     <li><a href="mentions-legales.php" class="footer-link">Mentions légales</a></li>
-                    <li><a href="#" class="footer-link">Politique de confidentialité</a></li>
-                    <li><a href="#" class="footer-link">Aide & FAQ</a></li>
+                    <li><a href="index.php #faq" class="footer-link">Aide & FAQ</a></li>
                 </ul>
             </div>
 
@@ -85,7 +83,7 @@
                         <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                         </svg>
-                        <span>Paris, France</span>
+                        <span>Issy-Les-Moulineaux, France</span>
                     </li>
                 </ul>
             </div>
