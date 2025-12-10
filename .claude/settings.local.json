@@ -8,7 +8,11 @@
       "Bash(done)",
       "Bash(dir:*)",
       "Bash(tasklist:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(if [ -f \"c:/xampp/htdocs/dormQuestV2/reset-password.php\" ])",
+      "Bash(then rm \"c:/xampp/htdocs/dormQuestV2/reset-password.php\")",
+      "Bash(else echo \"Fichier n''existe pas\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []

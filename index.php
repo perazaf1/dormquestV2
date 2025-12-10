@@ -157,6 +157,41 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     </section>
 
 
+    <!-- Section Statistiques qui s'incrémentent -->
+    <section class="stats">
+        <div class="stats__container">
+            <div class="stats__item">
+                <div class="stats__number">
+                    <span class="stats__value" data-count="2500">0</span>
+                    <span class="stats__suffix">+</span>
+                </div>
+                <h3 class="stats__label">Étudiants inscrits</h3>
+            </div>
+            <div class="stats__item">
+                <div class="stats__number">
+                    <span class="stats__value" data-count="800">0</span>
+                    <span class="stats__suffix">+</span>
+                </div>
+                <h3 class="stats__label">Loueurs</h3>
+            </div>
+            <div class="stats__item">
+                <div class="stats__number">
+                    <span class="stats__value" data-count="1000">0</span>
+                    <span class="stats__suffix">+</span>
+                </div>
+                <h3 class="stats__label">Logements disponibles</h3>
+            </div>
+            <div class="stats__item">
+                <div class="stats__number">
+                    <span class="stats__value" data-count="96">0</span>
+                    <span class="stats__suffix">%</span>
+                </div>
+                <h3 class="stats__label">Taux de satisfaction</h3>
+            </div>
+        </div>
+    </section>
+
+
     <section class="faq" id="faq">
         <div class="faq__container">
             <h1 class="faq__title">
@@ -205,6 +240,9 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
         </div>
     </section>
 
+
+    
+
     <section class="about">
         <div class="about__container">
             <h1 class="about__title">
@@ -220,39 +258,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 
 
 
-    <!-- Section Statistiques qui s'incrémentent -->
-    <section class="stats">
-        <div class="stats__container">
-            <div class="stats__item">
-                <div class="stats__number">
-                    <span class="stats__value" data-count="2500">0</span>
-                    <span class="stats__suffix">+</span>
-                </div>
-                <h3 class="stats__label">Étudiants inscrits</h3>
-            </div>
-            <div class="stats__item">
-                <div class="stats__number">
-                    <span class="stats__value" data-count="800">0</span>
-                    <span class="stats__suffix">+</span>
-                </div>
-                <h3 class="stats__label">Loueurs</h3>
-            </div>
-            <div class="stats__item">
-                <div class="stats__number">
-                    <span class="stats__value" data-count="1000">0</span>
-                    <span class="stats__suffix">+</span>
-                </div>
-                <h3 class="stats__label">Logements disponibles</h3>
-            </div>
-            <div class="stats__item">
-                <div class="stats__number">
-                    <span class="stats__value" data-count="96">0</span>
-                    <span class="stats__suffix">%</span>
-                </div>
-                <h3 class="stats__label">Taux de satisfaction</h3>
-            </div>
-        </div>
-    </section>
+    
 
     <?php include 'includes/footer.php'; ?>
     <script src="js/main.js"></script>
