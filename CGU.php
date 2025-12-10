@@ -291,240 +291,90 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     <li>De la perte de données</li>
                 </ul>
 
-                <h3>10.2 Force majeure</h3>
-                <p>
-                    DormQuest ne saurait être tenu responsable en cas de force majeure ou d'événements indépendants 
-                    de sa volonté (catastrophe naturelle, grève, panne d'infrastructure, etc.).
-                </p>
+                <h3 class="legal__section-subtitle">10.2 Force majeure</h3>
+                <p>DormQuest ne saurait être tenu responsable en cas de force majeure ou d'événements indépendants
+                de sa volonté (catastrophe naturelle, grève, panne d'infrastructure, etc.).</p>
+                </div>
             </section>
 
-            <section class="cgu-section">
-                <h2>11. Signalement et modération</h2>
-                <p>
-                    Tout utilisateur peut signaler un contenu ou un comportement inapproprié via les outils 
-                    de signalement mis à disposition sur la plateforme.
-                </p>
-                <p>
-                    DormQuest s'engage à examiner les signalements dans les meilleurs délais et à prendre 
-                    les mesures appropriées si nécessaire.
-                </p>
+            <section id="signalement" class="legal__section">
+                <h2 class="legal__section-title">11. Signalement et modération</h2>
+                <div class="legal__text">
+                    <p>Tout utilisateur peut signaler un contenu ou un comportement inapproprié via les outils
+                    de signalement mis à disposition sur la plateforme.</p>
+                    <p>DormQuest s'engage à examiner les signalements dans les meilleurs délais et à prendre
+                    les mesures appropriées si nécessaire.</p>
+                </div>
             </section>
 
-            <section class="cgu-section">
-                <h2>12. Liens hypertextes</h2>
-                <p>
-                    La plateforme peut contenir des liens vers d'autres sites web. DormQuest n'exerce aucun contrôle 
-                    sur ces sites et décline toute responsabilité quant à leur contenu, leur disponibilité ou 
-                    leur politique de confidentialité.
-                </p>
+            <section id="liens" class="legal__section">
+                <h2 class="legal__section-title">12. Liens hypertextes</h2>
+                <div class="legal__text">
+                    <p>La plateforme peut contenir des liens vers d'autres sites web. DormQuest n'exerce aucun contrôle
+                    sur ces sites et décline toute responsabilité quant à leur contenu, leur disponibilité ou
+                    leur politique de confidentialité.</p>
+                </div>
             </section>
 
-            <section class="cgu-section">
-                <h2>13. Modification des CGU</h2>
-                <p>
-                    DormQuest se réserve le droit de modifier les présentes CGU à tout moment. 
-                    Les modifications prennent effet dès leur publication sur la plateforme.
-                </p>
-                <p>
-                    Les utilisateurs seront informés des modifications importantes par email ou notification sur la plateforme. 
-                    Il leur est conseillé de consulter régulièrement cette page.
-                </p>
-                <p>
-                    La poursuite de l'utilisation de la plateforme après modification vaut acceptation des nouvelles CGU.
-                </p>
+            <section id="modification" class="legal__section">
+                <h2 class="legal__section-title">13. Modification des CGU</h2>
+                <div class="legal__text">
+                    <p>DormQuest se réserve le droit de modifier les présentes CGU à tout moment.
+                    Les modifications prennent effet dès leur publication sur la plateforme.</p>
+                    <p>Les utilisateurs seront informés des modifications importantes par email ou notification sur la plateforme.
+                    Il leur est conseillé de consulter régulièrement cette page.</p>
+                    <p>La poursuite de l'utilisation de la plateforme après modification vaut acceptation des nouvelles CGU.</p>
+                </div>
             </section>
 
-            <section class="cgu-section">
-                <h2>14. Résiliation</h2>
-                <p>
-                    L'utilisateur peut supprimer son compte à tout moment depuis son espace personnel 
-                    ou en contactant le support.
-                </p>
-                <p>
-                    DormQuest peut résilier l'accès d'un utilisateur en cas de violation des présentes CGU, 
-                    avec ou sans préavis selon la gravité du manquement.
-                </p>
+            <section id="resiliation" class="legal__section">
+                <h2 class="legal__section-title">14. Résiliation</h2>
+                <div class="legal__text">
+                    <p>L'utilisateur peut supprimer son compte à tout moment depuis son espace personnel
+                    ou en contactant le support.</p>
+                    <p>DormQuest peut résilier l'accès d'un utilisateur en cas de violation des présentes CGU,
+                    avec ou sans préavis selon la gravité du manquement.</p>
+                </div>
             </section>
 
-            <section class="cgu-section">
-                <h2>15. Droit applicable et juridiction</h2>
-                <p>
-                    Les présentes CGU sont régies par le droit français.
-                </p>
-                <p>
-                    En cas de litige, les parties s'efforceront de trouver une solution amiable. 
-                    À défaut, le litige sera soumis aux tribunaux compétents de <strong>Issy-Les-Moulineaux</strong>.
-                </p>
+            <section id="droit" class="legal__section">
+                <h2 class="legal__section-title">15. Droit applicable et juridiction</h2>
+                <div class="legal__text">
+                    <p>Les présentes CGU sont régies par le droit français.</p>
+                    <p>En cas de litige, les parties s'efforceront de trouver une solution amiable.
+                    À défaut, le litige sera soumis aux tribunaux compétents de <strong>Issy-Les-Moulineaux</strong>.</p>
+                </div>
             </section>
 
-            <section class="cgu-section">
-                <h2>16. Médiation</h2>
-                <p>
-                    Conformément aux dispositions du Code de la consommation, en cas de litige, l'utilisateur 
-                    peut recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable 
-                    du litige.
-                </p>
-                <p>
-                    Coordonnées du médiateur : mediation@dormquest.com
-                </p>
+            <section id="mediation" class="legal__section">
+                <h2 class="legal__section-title">16. Médiation</h2>
+                <div class="legal__text">
+                    <p>Conformément aux dispositions du Code de la consommation, en cas de litige, l'utilisateur
+                    peut recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable
+                    du litige.</p>
+                    <p>Coordonnées du médiateur : <a href="mailto:mediation@dormquest.com">mediation@dormquest.com</a></p>
+                </div>
             </section>
 
-            <section class="cgu-section">
-                <h2>17. Contact</h2>
-                <p>
-                    Pour toute question concernant les présentes CGU ou l'utilisation de la plateforme, 
-                    vous pouvez nous contacter :
-                </p>
+            <section id="contact" class="legal__section">
+                <h2 class="legal__section-title">17. Contact</h2>
+                <div class="legal__text">
+                    <p>Pour toute question concernant les présentes CGU ou l'utilisation de la plateforme,
+                    vous pouvez nous contacter :</p>
                 <div class="contact-info">
-                    <p><strong>Email :</strong> <a href="mailto:[VOTRE EMAIL]">contact@dormquest.com</a></p>
+                    <p><strong>Email :</strong> <a href="mailto:contact@dormquest.com">contact@dormquest.com</a></p>
                     <p><strong>Adresse :</strong> 10 rue de Vanves, 92130 Issy-Les-moulineaux</p>
                     <p><strong>Téléphone :</strong> 01 49 54 52 00</p>
+                </div>
                 </div>
             </section>
 
             <div class="cgu-acceptance">
-                <p>
-                    <strong>En utilisant la plateforme DormQuest, vous reconnaissez avoir lu, compris et accepté 
-                    les présentes Conditions Générales d'Utilisation.</strong>
-                </p>
+                <p><strong>En utilisant la plateforme DormQuest, vous reconnaissez avoir lu, compris et accepté
+                les présentes Conditions Générales d'Utilisation.</strong></p>
             </div>
         </div>
-    </div>
-</main>
-
-<style>
-.cgu-container {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 40px 20px;
-}
-
-.cgu-wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-}
-
-.cgu-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 40px;
-    text-align: center;
-}
-
-.cgu-header h1 {
-    margin: 0;
-    font-size: 36px;
-    font-weight: 700;
-}
-
-.update-date {
-    margin: 10px 0 0 0;
-    font-size: 14px;
-    opacity: 0.9;
-}
-
-.cgu-content {
-    padding: 40px;
-}
-
-.cgu-section {
-    margin-bottom: 40px;
-}
-
-.cgu-section h2 {
-    color: #667eea;
-    font-size: 24px;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f0f0f0;
-}
-
-.cgu-section h3 {
-    color: #333;
-    font-size: 18px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-.cgu-section p {
-    line-height: 1.8;
-    color: #555;
-    margin-bottom: 15px;
-    text-align: justify;
-}
-
-.cgu-section ul {
-    margin: 15px 0;
-    padding-left: 30px;
-}
-
-.cgu-section li {
-    line-height: 1.8;
-    color: #555;
-    margin-bottom: 10px;
-}
-
-.contact-info {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    border-left: 4px solid #667eea;
-}
-
-.contact-info p {
-    margin: 8px 0;
-}
-
-.contact-info a {
-    color: #667eea;
-    text-decoration: none;
-}
-
-.contact-info a:hover {
-    text-decoration: underline;
-}
-
-.cgu-acceptance {
-    background: #fff9e6;
-    border: 2px solid #ffeb3b;
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 30px;
-    text-align: center;
-}
-
-.cgu-acceptance p {
-    margin: 0;
-    color: #333;
-    font-size: 16px;
-}
-
-@media (max-width: 768px) {
-    .cgu-container {
-        padding: 20px 10px;
-    }
-
-    .cgu-header {
-        padding: 30px 20px;
-    }
-
-    .cgu-header h1 {
-        font-size: 28px;
-    }
-
-    .cgu-content {
-        padding: 20px;
-    }
-
-    .cgu-section h2 {
-        font-size: 20px;
-    }
-}
-</style>
+    </main>
 
     <?php include 'includes/footer.php'; ?>
 </body>

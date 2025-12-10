@@ -110,7 +110,7 @@
     background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
     color: var(--color-white);
     padding: 3rem 0 1.5rem;
-    margin-top: 4rem;
+    margin-top: 0rem;
 }
 
 .footer-container {

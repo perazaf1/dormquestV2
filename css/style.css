@@ -702,6 +702,11 @@ ul {
   animation: fadeInUp 0.8s ease forwards;
 }
 
+/* Espacement pour le second titre */
+.avantages__title:not(:first-child) {
+  margin-top: 60px;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -713,10 +718,8 @@ ul {
   }
 }
 
-
-
 /* Animation au scroll pour les cartes */
-@keyframes appear{
+/* @keyframes appear{
   from{
     opacity: 0;
     clip-path: inset(100% 100% 0 0);
@@ -725,8 +728,19 @@ ul {
     opacity: 1;
     clip-path: inset(0 0 0 0);
   }
-}
+} */
 
+
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 /* Chaque carte d'avantage */
 .avantages__card {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -740,10 +754,10 @@ ul {
   position: relative;
   overflow: hidden;
   border: 2px solid transparent;
-  animation: appear linear;
-  animation-timeline: view();
-  animation-range: entry 0% cover 40%;
+  opacity: 0;
+  animation: fadeInCard 0.6s ease forwards;
 }
+
 
 /* Icône de la carte */
 .avantages__card-icon {
