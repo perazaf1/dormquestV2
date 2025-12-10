@@ -1,4 +1,13 @@
 <!-- Header DormQuest -->
+<?php
+// Initialiser les variables si elles ne sont pas déjà définies
+if (!isset($isLoggedIn)) {
+    $isLoggedIn = is_logged_in();
+}
+if (!isset($userType)) {
+    $userType = get_user_role();
+}
+?>
 <header class="main-header">
     <div class="header-container">
         <div class="logo-section">
