@@ -192,7 +192,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     et de portabilité concernant leurs données personnelles.
                 </p>
                 <p>
-                    Pour exercer ces droits, contactez-nous à : <strong>[VOTRE EMAIL]</strong>
+                    Pour exercer ces droits, contactez-nous à : <strong>contact@dormquest.com</strong>
                 </p>
             </section>
 
@@ -271,7 +271,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </p>
                 <p>
                     En cas de litige, les parties s'efforceront de trouver une solution amiable. 
-                    À défaut, le litige sera soumis aux tribunaux compétents de <strong>[VILLE]</strong>.
+                    À défaut, le litige sera soumis aux tribunaux compétents de <strong>Paris</strong>.
                 </p>
             </section>
 
@@ -294,9 +294,9 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     vous pouvez nous contacter :
                 </p>
                 <div class="contact-info">
-                    <p><strong>Email :</strong> <a href="mailto:[VOTRE EMAIL]">[VOTRE EMAIL]</a></p>
-                    <p><strong>Adresse :</strong> [VOTRE ADRESSE]</p>
-                    <p><strong>Téléphone :</strong> [VOTRE TÉLÉPHONE]</p>
+                    <p><strong>Email :</strong> <a href="mailto:[VOTRE EMAIL]">contact@dormquest.com</a></p>
+                    <p><strong>Adresse :</strong> Paris, France</p>
+                    <p><strong>Téléphone :</strong> +33 1 23 45 67 89</p>
                 </div>
             </section>
 
