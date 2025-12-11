@@ -12,6 +12,7 @@ if (isset($_SESSION['user_id'])) {
 
 // Connexion BDD
 require_once __DIR__ . '/includes/db.php';
+require_once 'includes/auth.php';
 
 // Initialisation
 $errors = [];
