@@ -100,7 +100,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     <main class="legal" id="mentions">
         <div class="legal__container">
             <h1 class="legal__title">Mentions légales</h1>
-            <p class="legal__intro">Dernière mise à jour : <strong>09/11/2025</strong><br>
+            <p class="legal__intro">Dernière mise à jour : <strong>12/12/2025</strong><br>
                 Conformément à la loi n°2004-575 du 21 juin 2004 pour la confiance dans l’économie numérique (LCEN), il
                 est précisé aux utilisateurs du site DormQuest l’identité des différents intervenants dans le cadre de
                 sa réalisation et de son suivi.</p>

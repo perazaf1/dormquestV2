@@ -137,7 +137,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 <div class="legal__text">
                     <p>Les présentes Conditions Générales d'Utilisation (CGU) ont pour objet de définir les modalités
                     et conditions dans lesquelles les utilisateurs peuvent accéder et utiliser la plateforme
-                    <strong>DormQuest</strong>, accessible à l'adresse <strong>[URL DU SITE]</strong>.</p>
+                    <strong>DormQuest</strong>, accessible à l'adresse <strong>dormquest.com</strong>.</p>
                     <p>L'utilisation de la plateforme implique l'acceptation pleine et entière des présentes CGU.</p>
                 </div>
             </section>
