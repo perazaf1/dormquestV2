@@ -19,7 +19,111 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     <title>Dormquest - Politique de confidentialité</title>
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
-</head>
+    <style>
+    .legal {
+        padding: 4rem 0;
+        background: var(--color-white);
+        color: var(--color-text);
+    }
+    .legal__container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+    .legal__title {
+        font-size: 2rem;
+        color: var(--color-primary);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    .legal__intro {
+        color: var(--color-gray-dark);
+        margin-bottom: 1.5rem;
+    }
+    .legal__section {
+        margin-bottom: 2rem;
+    }
+    .legal__section-title {
+        font-size: 1.25rem;
+        color: var(--color-primary);
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+    .legal__section-subtitle {
+        font-size: 1.1rem;
+        color: var(--color-primary);
+        margin: 1rem 0 0.5rem 0;
+        font-weight: 600;
+    }
+    .legal__text {
+        color: var(--color-gray-dark);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+    .legal__text ul {
+        margin: 1rem 0;
+        padding-left: 2rem;
+    }
+    .legal__text li {
+        margin-bottom: 0.5rem;
+        line-height: 1.7;
+    }
+    .legal__text a {
+        color: var(--color-primary);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+        transition: border-color 0.2s;
+    }
+    .legal__text a:hover {
+        border-bottom-color: var(--color-primary);
+    }
+    .contact-info {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--color-primary);
+    }
+    .contact-info p {
+        margin: 0.5rem 0;
+        color: var(--color-gray-dark);
+    }
+    .cgu-acceptance {
+        background: #fff9e6;
+        border: 2px solid #ffd700;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+    .cgu-acceptance p {
+        margin: 0;
+        color: var(--color-text);
+        font-weight: 500;
+    }
+    .legal__actions {
+        margin-top: 2rem;
+        display:flex;
+        gap: 0.5rem;
+        flex-wrap:wrap;
+    }
+    .btn--ghost {
+        background: transparent;
+        color: var(--color-primary);
+        border:1px solid rgba(0,0,0,0.06);
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        text-decoration:none;
+        display:inline-block;
+    }
+    .legal__small {
+        color: var(--color-gray);
+        font-size: 0.95rem;
+    }
+    @media (max-width:768px) {
+        .legal__container { padding: 0 1rem; }
+        .legal__title { font-size: 1.6rem; }
+        .legal__section-title { font-size: 1.1rem; }
+    }
+    </style>
 
 <body>
     <?php include 'includes/header.php'; ?>
@@ -134,7 +238,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 <h2 class="legal__section-title">
                     Pourquoi et comment nous utilisons vos données personnelles ?
                 </h2>
-                <p class="legal_intro">
+                <p class="legal__intro">
                     Nous utilisons vos données personnelles aux fins suivantes :
                     <br>
                     Nous vous enverrons des communications marketing et des nouvelles à propos des offres de logement, services susceptibles de vous intéresser.  Vous pouvez vous désinscrire à tout moment après avoir donné votre consentement. 
@@ -143,7 +247,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 
                 </p>
                 <div class="legal__text">
-                    <h3 class="legal__text-title">
+                    <h3 class="legal__section-subtitle">
                         Pour fournir les fonctionnalités de la Plateforme et des Services que vous sollicitez
                     </h3>
                     <p>
@@ -151,10 +255,10 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                         Si vous contactez notre service, nous utiliserons les informations vous concernant, telles que les informations de contact, afin de vous aider à résoudre votre problème ou répondre à votre question.
                         Dans de nombreux cas, l’utilisation de certaines fonctionnalités de notre Plateforme nécessitent de fournir à DormQuest des données complémentaires ou un consentement additionnel, et ce pour l’utilisation de vos données à certaines fins.
                     </p>
-                    <h3 class="legal__text_title">
+                    <h3 class="legal__section-subtitle">
                         Pour faire fonctionner, améliorer et maintenir nos activités, produits et servicesx
                     </h3>
-                    <p class="legal_intro">
+                    <p class="legal__intro">
                         Nous utilisons les données personnelles que vous nous communiquez pour faire fonctionner nos activités.  Par exemple, lorsque vous effectuez un payement pour un logement, nous utilisons cette information à des fins comptables, d’audit et d’autres finalités internes. Nous pouvons utiliser les données personnelles relatives à la façon dont vous utilisez nos propositions et services pour améliorer votre expérience d’utilisateur et nous permettre de détecter des problèmes techniques ou de service et administrer notre Plateforme.
                     </p>
 
