@@ -273,6 +273,10 @@ try {
                             Membre depuis le <?php 
                                 $dateInscription = $user['dateInscription'] ?? null;
                                 echo $dateInscription ? date('d/m/Y', strtotime($dateInscription)) : 'N/A'; 
+                            ?><br>
+                            Dernière connexion le <?php 
+                                $derniereConnexion = $user['derniereConnexion'] ?? null;
+                                echo $derniereConnexion ? date('d/m/Y', strtotime($derniereConnexion)) : 'N/A'; 
                             ?>
                         </div>
                     </div>
@@ -395,14 +399,15 @@ try {
                             <div class="form-group">
                                 <label for="photo">Photo de profil</label>
                                 <input type="file" id="photo" name="photo" accept="image/*" class="form-input">
-                                <small class="form-hint">JPG, PNG (Max 2MB)</small>
-                                
-                                <!-- Bouton de suppression (visible seulement si photo existe) -->
-                                <?php if (!empty($user['photoDeProfil'])): ?>
-                                <button type="button" id="deletePhotoBtn" class="btn-delete-photo">
-                                    🗑️ Supprimer la photo
-                                </button>
-                                <?php endif; ?>
+                                <div class="form-hint-wrapper">
+                                    <small class="form-hint">JPG, PNG (Max 2MB)</small>
+                                    <!-- Bouton de suppression (visible seulement si photo existe) -->
+                                    <?php if (!empty($user['photoDeProfil'])): ?>
+                                    <button type="button" id="deletePhotoBtn" class="btn-delete-photo">
+                                        Supprimer la photo actuelle
+                                    </button>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
 

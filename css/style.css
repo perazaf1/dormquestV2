@@ -1128,26 +1128,37 @@ ul {
  * Styles pour les boutons de suppression de photo (ex: dans le profil utilisateur)
  */
 
+/* Wrapper pour aligner le hint et le bouton sur la même ligne */
+.form-hint-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Bouton supprimer photo - style de base */
 .btn-delete-photo {
-  margin-left: 5px;
-  padding: 1px 3px;
-  background-color: #ff4444;
-  color: white;
+  padding: 4px 8px;
+  background-color: transparent;
+  color: #ff6b6b;
   border: none;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 10px;
-  transition: background-color 0.3s ease;
-  display: inline;
-  width: auto;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-block;
+  width: fit-content;
   white-space: nowrap;
-  vertical-align: middle;
+  text-align: center;
+  height: fit-content;
+  line-height: 1.2;
 }
 
 /* Effet au survol du bouton supprimer photo */
 .btn-delete-photo:hover {
-  background-color: #cc0000;
+  background-color: rgba(255, 107, 107, 0.1);
+  color: #ff4444;
 }
 
 /* Effet au clic du bouton supprimer photo */
