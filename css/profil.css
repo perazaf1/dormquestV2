@@ -353,6 +353,13 @@
   gap: 12px;
 }
 
+.form-actions--single {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
 .form-btn {
   padding: 10px 20px;
   border: none;
