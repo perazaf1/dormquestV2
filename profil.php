@@ -393,10 +393,16 @@ try {
                             </div>
 
                             <div class="form-group">
-                                <label for="photo" class="form-label">Photo de profil</label>
-                                <input type="file" id="photo" name="photo" class="form-input form-input--file"
-                                    accept="image/jpeg,image/png,image/jpg">
+                                <label for="photo">Photo de profil</label>
+                                <input type="file" id="photo" name="photo" accept="image/*" class="form-input">
                                 <small class="form-hint">JPG, PNG (Max 2MB)</small>
+                                
+                                <!-- Bouton de suppression (visible seulement si photo existe) -->
+                                <?php if (!empty($user['photoDeProfil'])): ?>
+                                <button type="button" id="deletePhotoBtn" class="btn-delete-photo">
+                                    🗑️ Supprimer la photo
+                                </button>
+                                <?php endif; ?>
                             </div>
                         </div>
 

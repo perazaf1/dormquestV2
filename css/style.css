@@ -1120,3 +1120,33 @@ ul {
     max-width: 150px;
   }
 }
+
+/**
+ * ============================================
+ * BOUTONS SUPPRIMER PHOTO
+ * ============================================
+ * Styles pour les boutons de suppression de photo (ex: dans le profil utilisateur)
+ */
+
+/* Bouton supprimer photo - style de base */
+.btn-delete-photo {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+/* Effet au survol du bouton supprimer photo */
+.btn-delete-photo:hover {
+  background-color: #cc0000;
+}
+
+/* Effet au clic du bouton supprimer photo */
+.btn-delete-photo:active {
+  transform: scale(0.98);
+}
