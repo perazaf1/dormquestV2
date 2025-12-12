@@ -334,15 +334,14 @@ try {
                         </div>
                     </div>
 
-                    <!-- Danger Zone -->
-                    <div class="danger-zone">
-                        <h3 class="danger-zone__title">⚠️ Action sensible ⚠️</h3>
-                        <p class="danger-zone__text">
-                            La suppression de votre compte est irréversible.
-                        </p>
-                        <button class="danger-zone__btn" id="delete-account-btn">
+                    <!-- Danger Zone - Delete Account -->
+                    <div class="delete-account-section">
+                        <button class="delete-account__btn" id="delete-account-btn">
                             Supprimer mon compte
                         </button>
+                        <p class="delete-account__warning">
+                            Action irréversible
+                        </p>
                     </div>
                 </aside>
 
