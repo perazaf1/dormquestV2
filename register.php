@@ -176,25 +176,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
-                // Always set dateInscription if column exists (use DB default otherwise)
-                if ($columnExists('dateInscription')) {
-                    $cols[] = 'dateInscription';
-                    $placeholders[] = 'NOW()';
-                    // no value to push for NOW()
-                }
+                // dateInscription will use DB default CURRENT_TIMESTAMP
 
-                // Build final SQL (handle placeholders that are functions like NOW())
+                // Build final SQL
                 $placeholders_sql = [];
                 foreach ($placeholders as $ph) {
-                    $placeholders_sql[] = ($ph === 'NOW()') ? 'NOW()' : '?';
+                    $placeholders_sql[] = '?';
                 }
 
                 $sql = "INSERT INTO utilisateurs (" . implode(', ', $cols) . ") VALUES (" . implode(', ', $placeholders_sql) . ")";
                 $stmt = $pdo->prepare($sql);
-
-                // Filter values to match number of ? placeholders (skip values for NOW())
-                $execValues = $values;
-                $stmt->execute($execValues);
+                $stmt->execute($values);
                 
                 // Redirection vers la page de connexion avec message de succès
                 header('Location: login.php?success=registered');
