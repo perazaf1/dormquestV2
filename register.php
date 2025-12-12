@@ -176,10 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
-                // Always set dateInscription
-                $cols[] = 'dateInscription';
-                $placeholders[] = '?';
-                $values[] = date('Y-m-d H:i:s');
+                // dateInscription will use DB default CURRENT_TIMESTAMP
 
                 // Build final SQL
                 $placeholders_sql = [];

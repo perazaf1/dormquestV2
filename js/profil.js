@@ -28,8 +28,25 @@ document.addEventListener('DOMContentLoaded', function() {
             if (confirmed) {
                 const input = prompt('Confirmez en tapant: SUPPRIMER');
                 if (input === 'SUPPRIMER') {
-                    // TODO: Implémenter suppression de compte
-                    alert('Fonction de suppression à implémenter');
+                    // Appeler l'API de suppression
+                    fetch('./api/delete-account.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Votre compte a été supprimé avec succès.');
+                            window.location.href = './index.php';
+                        } else {
+                            alert('Erreur: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert('Erreur lors de la suppression: ' + error.message);
+                    });
                 }
             }
         });
