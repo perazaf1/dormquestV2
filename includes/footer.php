@@ -59,7 +59,6 @@
                     <li><a href="CGU.php" class="footer-link">Conditions générales d'utilisation</a></li>
                     <li><a href="mentions-legales.php" class="footer-link">Mentions légales</a></li>
                     <li><a href="confidentialite.php" class="footer-link">Politique de confidentialité</a></li>
-                    <li><a href="privacy.php" class="footer-link">Privacy</a></li>
                     <li><a href="index.php #faq" class="footer-link">Aide & FAQ</a></li>
                 </ul>
             </div>

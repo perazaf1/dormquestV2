@@ -158,8 +158,6 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     Touchez des milliers d'étudiants en recherche de logement.
                 </p>
             </div>
-
-
         </div>
     </section>
 
@@ -197,7 +195,6 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             </div>
         </div>
     </section>
-
 
     <section class="faq" id="faq">
         <div class="faq__container">
@@ -266,10 +263,6 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             <img src="img/logo-nyzer.png" alt="Logo Nyzer" class="about__logo">
         </div>
     </section>
-
-
-
-
 
 
     <?php include 'includes/footer.php'; ?>
