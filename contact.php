@@ -84,21 +84,21 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     </h3>
                     <div class="coordonnees__info--items">
                         <div class="coordonnees__info--item">
-                            <div class="coordonnees__info--icon">📞</div>
+                            <div class="coordonnees__info--icon"><i class="fa-solid fa-phone-volume"></i></div>
                             <div class="coordonnees__info--content">
                                 <span class="coordonnees__info--label">Téléphone</span>
                                 <a href="tel:+33123456789" class="coordonnees__info--value">+33 1 23 45 67 89</a>
                             </div>
                         </div>
                         <div class="coordonnees__info--item">
-                            <div class="coordonnees__info--icon">✉️</div>
+                            <div class="coordonnees__info--icon"><i class="fa-regular fa-message"></i></div>
                             <div class="coordonnees__info--content">
                                 <span class="coordonnees__info--label">Email</span>
                                 <a href="mailto:contact@dormquest.com" class="coordonnees__info--value">contact@dormquest.com</a>
                             </div>
                         </div>
                         <div class="coordonnees__info--item">
-                            <div class="coordonnees__info--icon">📍</div>
+                            <div class="coordonnees__info--icon"><i class="fa-solid fa-location-dot"></i></div>
                             <div class="coordonnees__info--content">
                                 <span class="coordonnees__info--label">Adresse</span>
                                 <span class="coordonnees__info--value">10 Rue de Vanves<br>92130 Issy-les-Moulineaux, France</span>
@@ -119,6 +119,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     </section>
 
     <?php include 'includes/footer.php'; ?>
+    <script src="https://kit.fontawesome.com/794b85b760.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
