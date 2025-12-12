@@ -95,6 +95,25 @@ document.addEventListener('DOMContentLoaded', function() {
                             previewImg.style.opacity = '1';
                         }
                         console.log('Photo uploadée :', data.path);
+
+                        // Créer le bouton de suppression s'il n'existe pas
+                        let deleteBtn = document.getElementById('deletePhotoBtn');
+                        if (!deleteBtn) {
+                            deleteBtn = document.createElement('button');
+                            deleteBtn.type = 'button';
+                            deleteBtn.id = 'deletePhotoBtn';
+                            deleteBtn.className = 'btn-delete-photo';
+                            deleteBtn.textContent = '🗑️ Supprimer la photo';
+                            
+                            // Insérer après le champ photo
+                            const photoGroup = photoInput.parentElement;
+                            if (photoGroup) {
+                                photoGroup.appendChild(deleteBtn);
+                            }
+
+                            // Ajouter l'event listener au nouveau bouton
+                            attachDeletePhotoListener(deleteBtn);
+                        }
                     } else if (data && data.error) {
                         alert('Erreur upload: ' + data.error);
                         photoInput.value = '';
@@ -240,6 +259,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mainContent) {
         mainContent.style.animation = 'slideIn 0.5s ease';
     }
+
+    // Gestion de la suppression de photo de profil
+    const deletePhotoBtn = document.getElementById('deletePhotoBtn');
+    if (deletePhotoBtn) {
+        attachDeletePhotoListener(deletePhotoBtn);
+    }
 });
 
 // Animation fadeOut
@@ -324,4 +349,66 @@ function removeBudgetError() {
         if (existing) existing.remove();
         budgetInput.style.borderColor = '';
     } catch (e) { console.warn('removeBudgetError', e); }
+}
+// Fonction réutilisable pour attacher l'event listener de suppression de photo
+function attachDeletePhotoListener(deleteBtn) {
+    deleteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        if (!confirm('Êtes-vous sûr de vouloir supprimer votre photo de profil ?')) {
+            return;
+        }
+
+        try {
+            const tokenInput = document.querySelector('input[name="csrf_token"]');
+            const csrf = tokenInput ? tokenInput.value : '';
+            const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+            const url = baseUrl + '/api/delete-profile-photo.php';
+
+            const form = new URLSearchParams();
+            form.append('csrf_token', csrf);
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: form.toString(),
+                credentials: 'same-origin'
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data && data.success) {
+                    // Remplacer l'aperçu avec l'image par défaut
+                    const previewImg = document.getElementById('preview-photo');
+                    if (previewImg) {
+                        previewImg.src = 'img/default-avatar.png';
+                        previewImg.style.opacity = '0.8';
+                    }
+
+                    // Vider le champ file input
+                    const photoInput = document.getElementById('photo');
+                    if (photoInput) {
+                        photoInput.value = '';
+                    }
+
+                    // Supprimer le bouton de suppression
+                    deleteBtn.remove();
+
+                    // Message de succès
+                    alert('Photo supprimée avec succès');
+                    console.log('Photo supprimée');
+                } else if (data && data.error) {
+                    alert('Erreur: ' + data.error);
+                    console.error('Erreur suppression photo:', data.error);
+                } else {
+                    alert('Erreur inconnue lors de la suppression');
+                }
+            })
+            .catch(err => {
+                console.error('Erreur suppression photo:', err);
+                alert('Erreur lors de la suppression de la photo');
+            });
+        } catch (e) {
+            console.error('delete photo error', e);
+        }
+    });
 }
