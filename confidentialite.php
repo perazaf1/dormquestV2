@@ -136,19 +136,29 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </h2>
                 <p class="legal_intro">
                     Nous utilisons vos données personnelles aux fins suivantes :
+                    <br>
+                    Nous vous enverrons des communications marketing et des nouvelles à propos des offres de logement, services susceptibles de vous intéresser.  Vous pouvez vous désinscrire à tout moment après avoir donné votre consentement. 
+                    <br>
+                    Si vous avez déjà un compte chez Dormquest, nous pouvons utiliser les informations de contact que vous avez fournies pour vous envoyer des communications marketing à propos de notre site, lorsque la loi applicable le permet (à moins que vous les ayez refusées). Dans d’autres cas, nous vous demandons votre consentement pour vous envoyer des communications marketing.
+
                 </p>
                 <div class="legal__text">
                     <h3 class="legal__text-title">
                         Pour fournir les fonctionnalités de la Plateforme et des Services que vous sollicitez
                     </h3>
                     <p>
-                        Si vous utilisez notre Plateforme, nous utiliserons vos données personnelles pour vous fournir le produit ou service demandé.
+                        Si vous utilisez notre Plateforme, nous utiliserons vos données personnelles pour vous fournir le logement ou service demandé.
                         Si vous contactez notre service, nous utiliserons les informations vous concernant, telles que les informations de contact, afin de vous aider à résoudre votre problème ou répondre à votre question.
                         Dans de nombreux cas, l’utilisation de certaines fonctionnalités de notre Plateforme nécessitent de fournir à DormQuest des données complémentaires ou un consentement additionnel, et ce pour l’utilisation de vos données à certaines fins.
                     </p>
                     <h3 class="legal__text_title">
                         Pour faire fonctionner, améliorer et maintenir nos activités, produits et servicesx
                     </h3>
+                    <p class="legal_intro">
+                        Nous utilisons les données personnelles que vous nous communiquez pour faire fonctionner nos activités.  Par exemple, lorsque vous effectuez un payement pour un logement, nous utilisons cette information à des fins comptables, d’audit et d’autres finalités internes. Nous pouvons utiliser les données personnelles relatives à la façon dont vous utilisez nos propositions et services pour améliorer votre expérience d’utilisateur et nous permettre de détecter des problèmes techniques ou de service et administrer notre Plateforme.
+                    </p>
+
+
                     
                 </div>
             </section>
