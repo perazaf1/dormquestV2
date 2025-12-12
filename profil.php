@@ -405,17 +405,18 @@ try {
                         <div class="form-section">
                             <h2 class="form-section__title">🎓 Informations étudiant</h2>
 
-                            <div class="form-group">
+                            <div class="form-group form-group--autocomplete">
                                 <label for="ville_recherche" class="form-label">Ville de recherche *</label>
                                 <input type="text" id="ville_recherche" name="ville_recherche"
-                                    value="<?php echo htmlspecialchars($user['villeRecherche']); ?>" class="form-input"
-                                    required>
+                                    value="<?php echo htmlspecialchars($user['villeRecherche'] ?? ''); ?>" class="form-input"
+                                    required autocomplete="off">
+                                <div id="ville-suggestions"></div>
                             </div>
 
                             <div class="form-group">
                                 <label for="budget" class="form-label">Budget mensuel (€) *</label>
                                 <input type="number" id="budget" name="budget"
-                                    value="<?php echo htmlspecialchars($user['budget']); ?>" class="form-input" required
+                                    value="<?php echo htmlspecialchars($user['budget'] ?? ''); ?>" class="form-input" required
                                     min="0" step="50">
                             </div>
                         </div>
@@ -490,6 +491,7 @@ try {
     <?php include 'includes/footer.php'; ?>
 
     <script src="js/profil.js"></script>
+    <script src="js/autocomplete-ville.js"></script>
 </body>
 
 </html>

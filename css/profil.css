@@ -428,3 +428,115 @@
     text-align: center;
   }
 }
+
+/* === AUTOCOMPLÉTION VILLE === */
+.form-group--autocomplete {
+  position: relative;
+}
+
+#ville_recherche {
+  position: relative;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+#ville-suggestions {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: slideDown 0.2s ease-out;
+  padding: 8px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.autocomplete-item {
+  padding: 14px 16px;
+  margin: 6px 0;
+  cursor: pointer !important;
+  transition: all 0.15s ease;
+  color: #374151;
+  background-color: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  user-select: none;
+  font-weight: 500;
+}
+
+.autocomplete-item:last-child {
+  border: 2px solid #e5e7eb;
+  margin-bottom: 0;
+}
+
+.autocomplete-item:hover {
+  background-color: #e0f2fe;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  padding-left: 20px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  transform: translateX(4px);
+}
+
+.autocomplete-item.autocomplete-focused {
+  background-color: #dbeafe;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  font-weight: 600;
+  padding-left: 20px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  transform: translateX(4px);
+}
+
+.autocomplete-item::before {
+  content: '📍';
+  margin-right: 10px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.autocomplete-item:hover::before,
+.autocomplete-item.autocomplete-focused::before {
+  opacity: 1;
+}
+
+/* Scrollbar personnalisée */
+#ville-suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+
+#ville-suggestions::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+#ville-suggestions::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+#ville-suggestions::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
