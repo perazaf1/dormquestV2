@@ -20,131 +20,150 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Token CSRF invalide. Veuillez réessayer.";
     }
 
-    $prenom = trim($_POST['prenom'] ?? '');
-    $nom = trim($_POST['nom'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $telephone = trim($_POST['telephone'] ?? '');
-    
-    // Validation
-    if (empty($prenom)) {
-        $errors[] = "Le prénom est obligatoire.";
-    }
-    if (empty($nom)) {
-        $errors[] = "Le nom est obligatoire.";
-    }
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "L'email est invalide.";
-    }
-    
-    // Champs spécifiques selon le rôle
-    if (is_etudiant()) {
-        $ville_recherche = trim($_POST['ville_recherche'] ?? '');
-        $budget = trim($_POST['budget'] ?? '');
+    $form_type = $_POST['form_type'] ?? 'personal';
+
+    // ===== FORMULAIRE 1 : Infos personnelles =====
+    if ($form_type === 'personal') {
+        $prenom = trim($_POST['prenom'] ?? '');
+        $nom = trim($_POST['nom'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $telephone = trim($_POST['telephone'] ?? '');
         
-        if (empty($ville_recherche)) {
-            $errors[] = "La ville de recherche est obligatoire.";
+        // Validation
+        if (empty($prenom)) {
+            $errors[] = "Le prénom est obligatoire.";
         }
-        if (empty($budget) || !is_numeric($budget) || $budget <= 0) {
-            $errors[] = "Le budget doit être un nombre positif.";
+        if (empty($nom)) {
+            $errors[] = "Le nom est obligatoire.";
         }
-    } elseif (is_loueur()) {
-        $type_loueur = $_POST['type_loueur'] ?? '';
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "L'email est invalide.";
+        }
         
-        if (empty($type_loueur)) {
-            $errors[] = "Le type de loueur est obligatoire.";
-        }
-        if (!empty($telephone) && !preg_match('/^[0-9]{10}$/', str_replace(' ', '', $telephone))) {
-            $errors[] = "Le téléphone doit contenir 10 chiffres.";
-        }
-    }
-    
-    // Gestion du changement de mot de passe
-    $new_password = $_POST['new_password'] ?? '';
-    $confirm_password = $_POST['confirm_password'] ?? '';
-    
-    if (!empty($new_password)) {
-        if (strlen($new_password) < 8) {
-            $errors[] = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
-        }
-        if ($new_password !== $confirm_password) {
-            $errors[] = "Les mots de passe ne correspondent pas.";
-        }
-    }
-    
-    // Gestion de l'upload de photo
-    $photo_path = null;
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
-        $max_size = 2 * 1024 * 1024; // 2MB
-        
-        if (!in_array($_FILES['photo']['type'], $allowed_types)) {
-            $errors[] = "Format de photo non autorisé. Utilisez JPG, JPEG ou PNG.";
-        } elseif ($_FILES['photo']['size'] > $max_size) {
-            $errors[] = "La photo ne doit pas dépasser 2MB.";
-        } else {
-            $upload_dir = 'uploads/profiles/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
-            $file_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-            $unique_name = uniqid('profile_', true) . '.' . $file_extension;
-            $photo_path = $upload_dir . $unique_name;
+        // Champs spécifiques selon le rôle
+        if (is_etudiant()) {
+            $ville_recherche = trim($_POST['ville_recherche'] ?? '');
+            $budget = trim($_POST['budget'] ?? '');
             
-            if (!move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path)) {
-                $errors[] = "Erreur lors de l'upload de la photo.";
-                $photo_path = null;
+            if (empty($ville_recherche)) {
+                $errors[] = "La ville de recherche est obligatoire.";
+            }
+            if (empty($budget) || !is_numeric($budget) || $budget <= 0) {
+                $errors[] = "Le budget doit être un nombre positif.";
+            }
+        } elseif (is_loueur()) {
+            $type_loueur = $_POST['type_loueur'] ?? '';
+            
+            if (empty($type_loueur)) {
+                $errors[] = "Le type de loueur est obligatoire.";
+            }
+            if (!empty($telephone) && !preg_match('/^[0-9]{10}$/', str_replace(' ', '', $telephone))) {
+                $errors[] = "Le téléphone doit contenir 10 chiffres.";
             }
         }
-    }
-    
-    // Si pas d'erreurs, mise à jour
-    if (empty($errors)) {
-        try {
-            // Vérifier l'email unique (sauf pour l'utilisateur actuel)
-            $stmt = $pdo->prepare("SELECT id FROM utilisateurs WHERE email = ? AND id != ?");
-            $stmt->execute([$email, $user_id]);
+        
+        // Gestion de l'upload de photo
+        $photo_path = null;
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
+            $max_size = 2 * 1024 * 1024; // 2MB
             
-            if ($stmt->fetch()) {
-                $errors[] = "Cet email est déjà utilisé par un autre compte.";
+            if (!in_array($_FILES['photo']['type'], $allowed_types)) {
+                $errors[] = "Format de photo non autorisé. Utilisez JPG, JPEG ou PNG.";
+            } elseif ($_FILES['photo']['size'] > $max_size) {
+                $errors[] = "La photo ne doit pas dépasser 2MB.";
             } else {
-                // Préparer la requête de mise à jour
-                if (is_etudiant()) {
-                    $sql = "UPDATE utilisateurs SET 
-                            prenom = ?, nom = ?, email = ?, 
-                            villeRecherche = ?, budget = ?";
-                    $params = [$prenom, $nom, $email, $ville_recherche, $budget];
-                } else {
-                    $sql = "UPDATE utilisateurs SET 
-                            prenom = ?, nom = ?, email = ?, 
-                            telephone = ?, typeLoueur = ?";
-                    $params = [$prenom, $nom, $email, $telephone, $type_loueur];
+                $upload_dir = 'uploads/profiles/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0777, true);
                 }
+                $file_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+                $unique_name = uniqid('profile_', true) . '.' . $file_extension;
+                $photo_path = $upload_dir . $unique_name;
                 
-                // Ajouter la photo si uploadée
-                if ($photo_path) {
-                    $sql .= ", photoDeProfil = ?";
-                    $params[] = $photo_path;
+                if (!move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path)) {
+                    $errors[] = "Erreur lors de l'upload de la photo.";
+                    $photo_path = null;
                 }
-                
-                // Ajouter le mot de passe si changé
-                if (!empty($new_password)) {
-                    $sql .= ", motDePasse = ?";
-                    $params[] = password_hash($new_password, PASSWORD_DEFAULT);
-                }
-                
-                $sql .= " WHERE id = ?";
-                $params[] = $user_id;
-                
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute($params);
-                
-                // Refresh session data from DB
-                refresh_session($pdo);
-                
-                $success = "Profil mis à jour avec succès !";
             }
-        } catch (PDOException $e) {
-            $errors[] = "Erreur lors de la mise à jour : " . $e->getMessage();
+        }
+        
+        // Si pas d'erreurs, mise à jour des infos personnelles
+        if (empty($errors)) {
+            try {
+                // Vérifier l'email unique (sauf pour l'utilisateur actuel)
+                $stmt = $pdo->prepare("SELECT id FROM utilisateurs WHERE email = ? AND id != ?");
+                $stmt->execute([$email, $user_id]);
+                
+                if ($stmt->fetch()) {
+                    $errors[] = "Cet email est déjà utilisé par un autre compte.";
+                } else {
+                    // Préparer la requête de mise à jour
+                    if (is_etudiant()) {
+                        $sql = "UPDATE utilisateurs SET 
+                                prenom = ?, nom = ?, email = ?, 
+                                villeRecherche = ?, budget = ?";
+                        $params = [$prenom, $nom, $email, $ville_recherche, $budget];
+                    } else {
+                        $sql = "UPDATE utilisateurs SET 
+                                prenom = ?, nom = ?, email = ?, 
+                                telephone = ?, typeLoueur = ?";
+                        $params = [$prenom, $nom, $email, $telephone, $type_loueur];
+                    }
+                    
+                    // Ajouter la photo si uploadée
+                    if ($photo_path) {
+                        $sql .= ", photoDeProfil = ?";
+                        $params[] = $photo_path;
+                    }
+                    
+                    $sql .= " WHERE id = ?";
+                    $params[] = $user_id;
+                    
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute($params);
+                    
+                    // Refresh session data from DB
+                    refresh_session($pdo);
+                    
+                    $success = "Informations personnelles mises à jour avec succès !";
+                }
+            } catch (PDOException $e) {
+                $errors[] = "Erreur lors de la mise à jour : " . $e->getMessage();
+            }
+        }
+    }
+
+    // ===== FORMULAIRE 2 : Mot de passe =====
+    elseif ($form_type === 'password') {
+        $new_password = $_POST['new_password'] ?? '';
+        $confirm_password = $_POST['confirm_password'] ?? '';
+        
+        // Gestion du changement de mot de passe
+        if (!empty($new_password)) {
+            if (strlen($new_password) < 8) {
+                $errors[] = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
+            }
+            if ($new_password !== $confirm_password) {
+                $errors[] = "Les mots de passe ne correspondent pas.";
+            }
+            
+            // Si pas d'erreurs, mise à jour du mot de passe
+            if (empty($errors)) {
+                try {
+                    $sql = "UPDATE utilisateurs SET motDePasse = ? WHERE id = ?";
+                    $params = [password_hash($new_password, PASSWORD_DEFAULT), $user_id];
+                    
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute($params);
+                    
+                    $success = "Mot de passe mis à jour avec succès !";
+                } catch (PDOException $e) {
+                    $errors[] = "Erreur lors de la mise à jour : " . $e->getMessage();
+                }
+            }
+        } else {
+            $errors[] = "Veuillez entrer un nouveau mot de passe.";
         }
     }
 }
@@ -334,15 +353,14 @@ try {
                         </div>
                     </div>
 
-                    <!-- Danger Zone -->
-                    <div class="danger-zone">
-                        <h3 class="danger-zone__title">⚠️ Action sensible ⚠️</h3>
-                        <p class="danger-zone__text">
-                            La suppression de votre compte est irréversible.
-                        </p>
-                        <button class="danger-zone__btn" id="delete-account-btn">
+                    <!-- Danger Zone - Delete Account -->
+                    <div class="delete-account-section">
+                        <button class="delete-account__btn" id="delete-account-btn">
                             Supprimer mon compte
                         </button>
+                        <p class="delete-account__warning">
+                            Action irréversible
+                        </p>
                     </div>
                 </aside>
 
@@ -368,8 +386,10 @@ try {
                     <?php endif; ?>
 
                     <!-- Formulaire de modification -->
-                    <form method="POST" action="profil.php" class="profil-form" enctype="multipart/form-data">
+                    <!-- FORMULAIRE 1 : Infos personnelles -->
+                    <form method="POST" action="profil.php" class="profil-form" enctype="multipart/form-data" id="form-personal">
                         <?php csrf_field(); ?>
+                        <input type="hidden" name="form_type" value="personal">
 
                         <!-- Section Informations personnelles -->
                         <div class="form-section">
@@ -461,6 +481,12 @@ try {
                             </div>
                         </div>
                         <?php endif; ?>
+                    </form>
+
+                    <!-- FORMULAIRE 2 : Mot de passe -->
+                    <form method="POST" action="profil.php" class="profil-form" id="form-password">
+                        <?php csrf_field(); ?>
+                        <input type="hidden" name="form_type" value="password">
 
                         <!-- Section Sécurité -->
                         <div class="form-section">
@@ -483,17 +509,17 @@ try {
                             </div>
                         </div>
 
-                        <!-- Boutons d'action -->
-                        <div class="form-actions form-actions--multiple">
-                            <a href="<?php echo is_etudiant() ? 'dashboard-etudiant.php' : 'dashboard-loueur.php'; ?>"
-                                class="form-btn form-btn--secondary">
-                                Annuler
-                            </a>
+                        <!-- Bouton d'action pour mot de passe -->
+                        <div class="form-actions form-actions--single">
                             <button type="submit" class="form-btn form-btn--primary">
-                                💾 Enregistrer les modifications
+                                🔒 Mettre à jour le mot de passe
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </main>
                 </div>
             </div>
         </div>

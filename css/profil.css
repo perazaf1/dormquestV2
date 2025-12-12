@@ -182,40 +182,39 @@
 }
 
 /* Zone de danger */
-.danger-zone {
-  background: linear-gradient(135deg, rgba(239,68,68,0.05), rgba(220,38,38,0.05));
-  border: 1px solid rgba(239,68,68,0.2);
-  border-radius: 12px;
-  padding: 16px;
+/* Delete Account Section - Épuré et minimaliste */
+.delete-account-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
 }
 
-.danger-zone__title {
-  font-size: 1rem;
-  color: #dc2626;
-  margin: 0 0 8px 0;
-  font-weight: 600;
+.delete-account__warning {
+  font-size: 0.8rem;
+  color: var(--color-gray);
+  margin: 0;
+  font-style: italic;
+  text-align: center;
 }
 
-.danger-zone__text {
-  font-size: 0.9rem;
-  color: var(--color-gray-dark);
-  margin: 0 0 12px 0;
-}
-
-.danger-zone__btn {
-  width: 100%;
-  padding: 10px;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 8px;
+.delete-account__btn {
+  padding: 10px 16px;
+  background: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  width: auto;
 }
 
-.danger-zone__btn:hover {
-  background: #dc2626;
+.delete-account__btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #dc2626;
+  color: #dc2626;
 }
 
 /* === CONTENU PRINCIPAL === */
@@ -352,6 +351,13 @@
 
 .form-actions--multiple {
   gap: 12px;
+}
+
+.form-actions--single {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 
 .form-btn {

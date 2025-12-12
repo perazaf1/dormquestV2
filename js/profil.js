@@ -178,6 +178,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Veuillez entrer une adresse email valide!');
                 return false;
             }
+
+            // Mettre à jour le nom affichéé dans le sidebar après soumission
+            const prenom = document.getElementById('prenom').value;
+            const nom = document.getElementById('nom').value;
+            const nameDisplay = document.querySelector('.profile-card__name');
+            if (nameDisplay && prenom && nom) {
+                nameDisplay.textContent = prenom + ' ' + nom;
+            }
         });
     }
 
@@ -208,6 +216,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 const hint = this.parentElement.querySelector('small.phone-hint');
                 if (hint) hint.remove();
             }
+        });
+    }
+
+    // Auto-save nom et prénom
+    const prenomInput = document.getElementById('prenom');
+    const nomInput = document.getElementById('nom');
+    if (prenomInput && nomInput) {
+        let nomPrenomTimeout = null;
+        const saveNomPrenom = () => {
+            clearTimeout(nomPrenomTimeout);
+            nomPrenomTimeout = setTimeout(() => {
+                const prenom = prenomInput.value.trim();
+                const nom = nomInput.value.trim();
+                if (prenom && nom) {
+                    saveNomPrenomToServer(prenom, nom);
+                }
+            }, 500);
+        };
+
+        prenomInput.addEventListener('input', saveNomPrenom);
+        nomInput.addEventListener('input', saveNomPrenom);
+    }
+
+    // Auto-save ville de recherche
+    const villeInput = document.getElementById('ville_recherche');
+    if (villeInput) {
+        let villeTimeout = null;
+        villeInput.addEventListener('input', () => {
+            clearTimeout(villeTimeout);
+            villeTimeout = setTimeout(() => {
+                const ville = villeInput.value.trim();
+                if (ville) {
+                    saveVilleToServer(ville);
+                }
+            }, 500);
         });
     }
 
@@ -428,4 +471,85 @@ function attachDeletePhotoListener(deleteBtn) {
             console.error('delete photo error', e);
         }
     });
+}
+
+// Fonction de sauvegarde du nom et prénom
+function saveNomPrenomToServer(prenom, nom) {
+    try {
+        const tokenInput = document.querySelector('input[name="csrf_token"]');
+        const csrf = tokenInput ? tokenInput.value : '';
+        const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+        const url = baseUrl + '/api/update-nom-prenom.php';
+
+        const form = new URLSearchParams();
+        form.append('csrf_token', csrf);
+        form.append('prenom', prenom);
+        form.append('nom', nom);
+
+        return fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form.toString(),
+            credentials: 'same-origin'
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            if (data && data.success) {
+                console.log('Nom et prénom sauvegardés :', data.prenom, data.nom);
+                
+                // Mettre à jour le nom affiché dans le sidebar
+                const nameDisplay = document.querySelector('.profile-card__name');
+                if (nameDisplay) {
+                    nameDisplay.textContent = prenom + ' ' + nom;
+                }
+            } else if (data && data.error) {
+                console.warn('Erreur sauvegarde nom/prénom :', data.error);
+            }
+            return data;
+        })
+        .catch(err => {
+            console.error('Erreur lors de la sauvegarde du nom/prénom :', err);
+            throw err;
+        });
+    } catch (e) {
+        console.error('saveNomPrenomToServer error', e);
+        return Promise.resolve({ success: false, error: 'client_error' });
+    }
+}
+
+// Fonction de sauvegarde de la ville de recherche
+function saveVilleToServer(ville) {
+    try {
+        const tokenInput = document.querySelector('input[name="csrf_token"]');
+        const csrf = tokenInput ? tokenInput.value : '';
+        const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+        const url = baseUrl + '/api/update-ville.php';
+
+        const form = new URLSearchParams();
+        form.append('csrf_token', csrf);
+        form.append('ville_recherche', ville);
+
+        return fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form.toString(),
+            credentials: 'same-origin'
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            if (data && data.success) {
+                console.log('Ville sauvegardée :', data.ville);
+            } else if (data && data.error) {
+                console.warn('Erreur sauvegarde ville :', data.error);
+            }
+            return data;
+        })
+        .catch(err => {
+            console.error('Erreur lors de la sauvegarde de la ville :', err);
+            throw err;
+        });
+    } catch (e) {
+        console.error('saveVilleToServer error', e);
+        return Promise.resolve({ success: false, error: 'client_error' });
+    }
 }
