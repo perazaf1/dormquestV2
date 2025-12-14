@@ -260,11 +260,11 @@ try {
             <!-- En-tête -->
             <div class="profil-header">
                 <div class="profil-header__content">
-                    <h1 class="profil-header__title">⚙️ Mon profil</h1>
+                    <h1 class="profil-header__title"><i class="fa-solid fa-gear"></i> Mon profil</h1>
                     <p class="profil-header__subtitle">Gérez vos informations personnelles</p>
                 </div>
                 <div class="profil-header__badge">
-                    <?php echo is_etudiant() ? '🎓 Étudiant' : '🏠 Loueur'; ?>
+                    <?php echo is_etudiant() ? '<i class="fa-solid fa-graduation-cap"></i> Étudiant' : '<i class="fa-solid fa-house"></i> Loueur'; ?>
                 </div>
             </div>
 
@@ -286,7 +286,7 @@ try {
                             <?php echo htmlspecialchars($user['prenom'] . ' ' . $user['nom']); ?>
                         </h2>
                         <p class="profile-card__role">
-                            <?php echo is_etudiant() ? '🎓 Étudiant' : '🏠 Loueur'; ?>
+                            <?php echo is_etudiant() ? '<i class="fa-solid fa-graduation-cap"></i> Étudiant' : '<i class="fa-solid fa-house"></i> Loueur'; ?>
                         </p>
                         <div class="profile-card__date">
                             Membre depuis le <?php 
@@ -302,25 +302,25 @@ try {
 
                     <!-- Statistiques -->
                     <div class="stats-card">
-                        <h3 class="stats-card__title">📊 Mes statistiques</h3>
+                        <h3 class="stats-card__title"><i class="fa-solid fa-chart-line"></i> Mes statistiques</h3>
                         <div class="stats-card__items">
                             <?php if (is_etudiant()): ?>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">⭐</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-star"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_favoris; ?></strong>
                                     <span>Favori<?php echo $nb_favoris > 1 ? 's' : ''; ?></span>
                                 </div>
                             </div>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">📨</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-envelopes-bulk"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_candidatures; ?></strong>
                                     <span>Candidature<?php echo $nb_candidatures > 1 ? 's' : ''; ?></span>
                                 </div>
                             </div>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">✅</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-check"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_acceptees; ?></strong>
                                     <span>Acceptée<?php echo $nb_acceptees > 1 ? 's' : ''; ?></span>
@@ -328,21 +328,21 @@ try {
                             </div>
                             <?php else: ?>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">📋</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-file"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_annonces; ?></strong>
                                     <span>Annonce<?php echo $nb_annonces > 1 ? 's' : ''; ?></span>
                                 </div>
                             </div>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">✅</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-check"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_actives; ?></strong>
                                     <span>Active<?php echo $nb_actives > 1 ? 's' : ''; ?></span>
                                 </div>
                             </div>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">📬</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-envelopes-bulk"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_candidatures_recues; ?></strong>
                                     <span>Candidature<?php echo $nb_candidatures_recues > 1 ? 's' : ''; ?>
@@ -370,7 +370,7 @@ try {
                     <!-- Messages -->
                     <?php if ($success): ?>
                     <div class="alert alert--success">
-                        <strong>✅ <?php echo htmlspecialchars($success); ?></strong>
+                        <strong><i class="fa-solid fa-check"></i> <?php echo htmlspecialchars($success); ?></strong>
                     </div>
                     <?php endif; ?>
 
@@ -393,7 +393,7 @@ try {
 
                         <!-- Section Informations personnelles -->
                         <div class="form-section">
-                            <h2 class="form-section__title">👤 Informations personnelles</h2>
+                            <h2 class="form-section__title"><i class="fa-solid fa-user"></i> Informations personnelles</h2>
 
                             <div class="form-row">
                                 <div class="form-group">
@@ -434,7 +434,7 @@ try {
                         <!-- Section spécifique selon le rôle -->
                         <?php if (is_etudiant()): ?>
                         <div class="form-section">
-                            <h2 class="form-section__title">🎓 Informations étudiant</h2>
+                            <h2 class="form-section__title"><i class="fa-solid fa-graduation-cap"></i> Informations étudiant</h2>
 
                             <div class="form-group form-group--autocomplete">
                                 <label for="ville_recherche" class="form-label">Ville de recherche *</label>
@@ -453,7 +453,7 @@ try {
                         </div>
                         <?php else: ?>
                         <div class="form-section">
-                            <h2 class="form-section__title">🏠 Informations loueur</h2>
+                            <h2 class="form-section__title"><i class="fa-solid fa-house"></i> Informations loueur</h2>
 
                             <div class="form-group">
                                 <label for="type_loueur" class="form-label">Type de loueur *</label>
@@ -490,7 +490,7 @@ try {
 
                         <!-- Section Sécurité -->
                         <div class="form-section">
-                            <h2 class="form-section__title">🔒 Modifier le mot de passe</h2>
+                            <h2 class="form-section__title"><i class="fa-solid fa-lock"></i> Modifier le mot de passe</h2>
                             <p class="form-section__desc">Laissez vide si vous ne souhaitez pas changer votre mot de
                                 passe.</p>
 
@@ -512,7 +512,7 @@ try {
                         <!-- Bouton d'action pour mot de passe -->
                         <div class="form-actions form-actions--single">
                             <button type="submit" class="form-btn form-btn--primary">
-                                🔒 Mettre à jour le mot de passe
+                                <i class="fa-solid fa-lock"></i> Mettre à jour le mot de passe
                             </button>
                         </div>
                     </form>
@@ -529,6 +529,7 @@ try {
 
     <script src="js/profil.js"></script>
     <script src="js/autocomplete-ville.js"></script>
+    <script src="https://kit.fontawesome.com/794b85b760.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
