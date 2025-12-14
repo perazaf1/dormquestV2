@@ -32,10 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const input = document.getElementById('password');
             if (input.type === 'password') {
                 input.type = 'text';
-                this.textContent = '👁️';
+                this.textContent = <i class="fa-regular fa-eye"></i>;
             } else {
                 input.type = 'password';
-                this.textContent = '👁️‍🗨️';
+                this.textContent = <i class="fa-regular fa-eye-slash"></i>;
             }
         });
     }

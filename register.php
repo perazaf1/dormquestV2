@@ -267,7 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label for="password">Mot de passe *</label>
                     <input type="password" id="password" name="password" required minlength="8">
-                    <span class="password-toggle">👁️‍🗨️</span>
+                    <span class="password-toggle"><i class="fa-regular fa-eye-slash"></i></span>
                     <small>Minimum 8 caractères</small>
                 </div>
 
