@@ -1,6 +1,53 @@
-/* ==========================================
-   DormQuest - Page Favoris (BEM)
-   ========================================== */
+/* Styles pour la page Mes favoris */
 
-/* === PAGE PRINCIPALE === */
+.container {
+   max-width: 1000px;
+   margin: 28px auto;
+   padding: 0 16px;
+}
+
+h1 {
+   font-size: 1.6rem;
+   margin-bottom: 18px;
+}
+
+.alert {
+   padding: 10px 14px;
+   border-radius: 6px;
+   margin-bottom: 14px;
+   font-size: 0.95rem;
+}
+
+.alert-success { background: #e6f9ec; color: #1b6b2f; border: 1px solid #c6efd2; }
+.alert-error { background: #fdecea; color: #8a1f1f; border: 1px solid #f0c7c7; }
+
+.candidatures-list { overflow-x: auto; }
+
+.table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.table thead th { text-align: left; padding: 10px 8px; background: #fafafa; border-bottom: 2px solid #eee; }
+.table tbody td { padding: 10px 8px; vertical-align: middle; border-bottom: 1px solid #f0f0f0; }
+
+.table a { color: #0b66c3; text-decoration: none; }
+.table a:hover { text-decoration: underline; }
+
+.table img { width: 70px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 8px; vertical-align: middle; }
+
+.btn { display: inline-block; padding: 6px 10px; border-radius: 4px; font-size: 0.9rem; cursor: pointer; border: none; }
+.btn-warning { background: #ffb74d; color: #4a2b00; }
+
+.remove-fav { background: #ff6b6b; color: #fff; padding: 6px 8px; border-radius: 4px; }
+.remove-fav:hover { opacity: 0.95; }
+
+@media (max-width: 720px) {
+   .table thead { display: none; }
+   .table, .table tbody, .table tr, .table td { display: block; width: 100%; }
+   .table tr { margin-bottom: 12px; border: 1px solid #f0f0f0; border-radius: 6px; padding: 8px; }
+   .table td { padding: 6px 8px; }
+   .table td:before { font-weight: 600; display: inline-block; width: 110px; }
+   .table td:nth-of-type(1):before { content: "Annonce: "; }
+   .table td:nth-of-type(2):before { content: "Ville: "; }
+   .table td:nth-of-type(3):before { content: "Prix: "; }
+   .table td:nth-of-type(4):before { content: "Ajouté: "; }
+   .table td:nth-of-type(5):before { content: "Actions: "; }
+}
 
