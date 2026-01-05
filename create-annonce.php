@@ -1,8 +1,10 @@
 <?php
-// create-annonce.php - Cr�er une annonce (loueur)
+// create-annonce.php - Créer une annonce (loueur)
+require_once __DIR__ . '/includes/db.php';
+require_once 'includes/auth.php';
 session_start();
 
-// V�rifier si l'utilisateur est connect�
+// Vérifier si l'utilisateur est connecté
 $isLoggedIn = isset($_SESSION['user_id']);
 $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 ?>
@@ -12,7 +14,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cr�er une annonce - DormQuest</title>
+    <title>Créer une annonce - DormQuest</title>
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/stylecss">
     <link rel="stylesheet" href="css/forms.css">
@@ -20,7 +22,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 <body>
     <?php include 'includes/header.php'; ?>
 
-    <!-- Contenu de la page cr�ation d'annonce � ajouter ici -->
+    <!-- Contenu de la page création d'annonce à ajouter ici -->
 
     <?php include 'includes/footer.php'; ?>
 </body>
