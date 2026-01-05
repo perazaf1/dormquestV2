@@ -17,6 +17,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     <title>Créer une annonce - DormQuest</title>
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/stylecss">
+    
     <link rel="stylesheet" href="css/forms.css">
 </head>
 <body>
