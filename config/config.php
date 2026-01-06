@@ -206,42 +206,6 @@ function e($string) {
 }
 
 /**
- * Vérifie si un utilisateur est connecté
- * 
- * Retourne true si une session active existe, false sinon
- */
-function is_logged_in() {
-    return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
-}
-
-/**
- * Vérifie si l'utilisateur a un rôle spécifique
- * 
- * Utilisé pour contrôler les accès selon le type d'utilisateur
- */
-function has_role($role) {
-    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === $role;
-}
-
-/**
- * Vérifie si l'utilisateur connecté est un étudiant
- * 
- * Raccourci pratique pour has_role('etudiant')
- */
-function is_etudiant() {
-    return has_role('etudiant');
-}
-
-/**
- * Vérifie si l'utilisateur connecté est un loueur
- * 
- * Raccourci pratique pour has_role('loueur')
- */
-function is_loueur() {
-    return has_role('loueur');
-}
-
-/**
  * Formate un prix en euros avec le bon séparateur français
  * 
  * Exemple : format_prix(450.50) retourne "450,50 €"
@@ -276,32 +240,6 @@ function format_datetime($datetime) {
     $timestamp = is_numeric($datetime) ? $datetime : strtotime($datetime);
     
     return date('d/m/Y à H:i', $timestamp);
-}
-
-/**
- * Génère un token CSRF (protection contre les attaques Cross-Site Request Forgery)
- * 
- * Ce token unique est inclus dans les formulaires pour vérifier que 
- * la requête vient bien de notre site et pas d'un site malveillant
- * 
- * random_bytes(32) = générer 32 octets aléatoires
- * bin2hex() = convertir en format hexadécimal lisible
- */
-function generate_csrf_token() {
-    if (!isset($_SESSION['csrf_token'])) {
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    }
-    return $_SESSION['csrf_token'];
-}
-
-/**
- * Vérifie si un token CSRF est valide
- * 
- * hash_equals() compare les tokens de manière sécurisée
- * (évite les attaques par timing)
- */
-function verify_csrf_token($token) {
-    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
 /**
