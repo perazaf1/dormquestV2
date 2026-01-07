@@ -123,10 +123,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span class="password-toggle">👁️‍🗨️</span>
                 </div>
 
-                <label class="remember-me">
-                    <input type="checkbox" name="remember_me" <?php echo $remember_me ? 'checked' : ''; ?>>
-                    <span>Se souvenir de moi</span>
-                </label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <label class="remember-me" style="margin: 0;">
+                        <input type="checkbox" name="remember_me" <?php echo $remember_me ? 'checked' : ''; ?>>
+                        <span>Se souvenir de moi</span>
+                    </label>
+                    <a href="mot-de-passe-oublie.php" style="color: #007bff; text-decoration: none; font-size: 14px;">Mot de passe oublié ?</a>
+                </div>
 
                 <button type="submit" class="btn-submit">Se connecter</button>
             </form>

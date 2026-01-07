@@ -28,6 +28,14 @@ if (!defined('ACCESS_ALLOWED')) {
 
 define('DB_HOST', 'localhost');        // Adresse du serveur de base de données
 define('DB_NAME', 'dormquest');        // Nom de la base de données à utiliser
+
+// ============================================================================
+// SECTION : CONFIGURATION EMAIL
+// ============================================================================
+// Configuration pour l'envoi d'emails (réinitialisation de mot de passe, etc.)
+define('MAIL_FROM', 'noreply@dormquest.com');
+define('MAIL_FROM_NAME', 'DormQuest');
+define('SITE_URL', 'http://localhost/dormquestV2'); // URL de base du site (sans slash à la fin)
 define('DB_USER', 'root');             // Nom d'utilisateur MySQL (root = admin local)
 define('DB_PASS', '');                 // Mot de passe (vide en local avec XAMPP/WAMP)
 define('DB_CHARSET', 'utf8mb4');       // Encodage pour supporter tous les caractères (emojis inclus)
