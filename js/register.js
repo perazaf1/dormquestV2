@@ -152,4 +152,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // initialize role display
     updateRoleDisplay();
+
+    // Secret question: show custom input when 'Autre' selected
+    const secretSelect = document.getElementById('secret_question');
+    const customGroup = document.getElementById('secret-question-custom-group');
+    const customInput = document.getElementById('secret_question_custom');
+    function updateSecretCustomVisibility() {
+        if (!secretSelect || !customGroup) return;
+        const isOther = secretSelect.value === 'Autre';
+        customGroup.style.display = isOther ? 'block' : 'none';
+        if (customInput) {
+            if (isOther) {
+                customInput.setAttribute('required', 'required');
+                customInput.focus();
+            } else {
+                customInput.removeAttribute('required');
+            }
+        }
+    }
+    if (secretSelect) {
+        secretSelect.addEventListener('change', updateSecretCustomVisibility);
+        // initial state
+        updateSecretCustomVisibility();
+    }
 });

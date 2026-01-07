@@ -13,6 +13,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 5000);
         }
     });
+        // Toggle custom secret question field when "Autre" is selected
+        const secretQuestionSelect = document.getElementById('secret_question');
+        const customGroup = document.getElementById('secret-question-custom-group');
+        const customInput = document.getElementById('secret_question_custom');
+
+        if (secretQuestionSelect && customGroup && customInput) {
+            const syncCustomVisibility = () => {
+                const isOther = secretQuestionSelect.value === 'Autre';
+                customGroup.style.display = isOther ? 'block' : 'none';
+                customInput.required = isOther;
+                if (!isOther) {
+                    customInput.value = '';
+                }
+            };
+
+            secretQuestionSelect.addEventListener('change', syncCustomVisibility);
+            // Ensure correct state on load as well
+            syncCustomVisibility();
+        }
 
     // Confirmation de suppression de compte
     const deleteBtn = document.getElementById('delete-account-btn');

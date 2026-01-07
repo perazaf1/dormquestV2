@@ -166,6 +166,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = "Veuillez entrer un nouveau mot de passe.";
         }
     }
+
+    // ===== FORMULAIRE 3 : Question secrète =====
+    elseif ($form_type === 'secret') {
+        $secret_question = trim($_POST['secret_question'] ?? '');
+        $secret_question_custom = trim($_POST['secret_question_custom'] ?? '');
+        $secret_answer = trim($_POST['secret_answer'] ?? '');
+
+        // Helper: check if a column exists in `utilisateurs`
+        $columnExists = function($col) use ($pdo) {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'utilisateurs' AND COLUMN_NAME = ?");
+            $stmt->execute([$col]);
+            return (bool) $stmt->fetchColumn();
+        };
+
+        // Best effort: ensure columns exist
+        $toAdd = [];
+        if (!$columnExists('secret_question')) { $toAdd[] = "ADD COLUMN secret_question VARCHAR(255) NULL"; }
+        if (!$columnExists('secret_answer_hash')) { $toAdd[] = "ADD COLUMN secret_answer_hash VARCHAR(255) NULL"; }
+        if (!empty($toAdd)) {
+            try { $pdo->exec("ALTER TABLE utilisateurs " . implode(', ', $toAdd)); }
+            catch (PDOException $e) { $errors[] = "Impossible d'activer la question secrète: " . $e->getMessage(); }
+        }
+
+        if (empty($errors)) {
+            $predefined = [
+                'Quel est le nom de jeune fille de votre mère?',
+                'Quel est le nom de votre premier animal?',
+                'Quel est le code postal de votre ville de naissance?',
+                'Quel est le nom de votre école primaire?',
+                'Autre'
+            ];
+            $effective_secret_question = ($secret_question === 'Autre') ? $secret_question_custom : $secret_question;
+
+            if (empty($effective_secret_question)) { $errors[] = "La question secrète est obligatoire."; }
+            if (empty($secret_answer)) { $errors[] = "La réponse à la question secrète est obligatoire."; }
+        }
+
+        if (empty($errors)) {
+            try {
+                $sql = "UPDATE utilisateurs SET secret_question = ?, secret_answer_hash = ? WHERE id = ?";
+                $params = [$effective_secret_question, password_hash($secret_answer, PASSWORD_DEFAULT), $user_id];
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute($params);
+
+                // Refresh session data from DB
+                refresh_session($pdo);
+
+                $success = "Question secrète mise à jour avec succès !";
+            } catch (PDOException $e) {
+                $errors[] = "Erreur lors de la mise à jour : " . $e->getMessage();
+            }
+        }
+    }
 }
 
 // Récupérer les informations de l'utilisateur
@@ -516,6 +569,56 @@ try {
                             </button>
                         </div>
                     </form>
+
+                        <!-- FORMULAIRE 3 : Question secrète -->
+                        <form method="POST" action="profil.php" class="profil-form" id="form-secret">
+                            <?php csrf_field(); ?>
+                            <input type="hidden" name="form_type" value="secret">
+
+                            <div class="form-section">
+                                <h2 class="form-section__title">🔐 Question secrète</h2>
+                                <p class="form-section__desc">Définissez ou modifiez votre question de sécurité. Elle sera utilisée pour réinitialiser votre mot de passe.</p>
+
+                                <div class="form-group">
+                                    <label for="secret_question" class="form-label">Question secrète *</label>
+                                    <?php $currentQ = $user['secret_question'] ?? ''; 
+                                          $predefined = [
+                                            'Quel est le nom de jeune fille de votre mère?',
+                                            'Quel est le nom de votre premier animal?',
+                                            'Quel est le code postal de votre ville de naissance?',
+                                            'Quel est le nom de votre école primaire?',
+                                            'Autre'
+                                          ];
+                                          $isCustom = $currentQ && !in_array($currentQ, $predefined);
+                                    ?>
+                                    <select id="secret_question" name="secret_question" class="form-input" required>
+                                        <option value="" <?php echo $currentQ === '' ? 'selected' : ''; ?>>-- Choisir une question --</option>
+                                        <option value="Quel est le nom de jeune fille de votre mère?" <?php echo $currentQ === 'Quel est le nom de jeune fille de votre mère?' ? 'selected' : ''; ?>>Quel est le nom de jeune fille de votre mère?</option>
+                                        <option value="Quel est le nom de votre premier animal?" <?php echo $currentQ === 'Quel est le nom de votre premier animal?' ? 'selected' : ''; ?>>Quel est le nom de votre premier animal?</option>
+                                        <option value="Quel est le code postal de votre ville de naissance?" <?php echo $currentQ === 'Quel est le code postal de votre ville de naissance?' ? 'selected' : ''; ?>>Quel est le code postal de votre ville de naissance?</option>
+                                        <option value="Quel est le nom de votre école primaire?" <?php echo $currentQ === 'Quel est le nom de votre école primaire?' ? 'selected' : ''; ?>>Quel est le nom de votre école primaire?</option>
+                                        <option value="Autre" <?php echo ($currentQ === 'Autre' || $isCustom) ? 'selected' : ''; ?>>Autre (écrire ma propre question)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" id="secret-question-custom-group" style="display: <?php echo ($currentQ === 'Autre' || $isCustom) ? 'block' : 'none'; ?>;">
+                                    <label for="secret_question_custom" class="form-label">Votre question secrète *</label>
+                                    <input type="text" id="secret_question_custom" name="secret_question_custom" class="form-input" placeholder="Saisissez votre question" value="<?php echo $isCustom ? htmlspecialchars($currentQ) : ''; ?>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="secret_answer" class="form-label">Réponse *</label>
+                                    <input type="text" id="secret_answer" name="secret_answer" class="form-input" placeholder="Votre réponse" required>
+                                    <small class="form-hint">Conseil: utilisez une réponse mémorisable mais difficile à deviner.</small>
+                                </div>
+                            </div>
+
+                            <div class="form-actions form-actions--single">
+                                <button type="submit" class="form-btn form-btn--primary">
+                                    🔐 Mettre à jour la question secrète
+                                </button>
+                            </div>
+                        </form>
                 </div>
             </div>
         </div>
