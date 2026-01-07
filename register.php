@@ -11,6 +11,32 @@ if (isset($_SESSION['user_id'])) {
 // Connexion à la base de données (chemin absolu basé sur ce fichier)
 require_once __DIR__ . '/includes/db.php';
 require_once 'includes/auth.php';
+// Helper: check if a column exists in `utilisateurs` (utilisé pour questions secrètes)
+$columnExists = function($col) use ($pdo) {
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'utilisateurs' AND COLUMN_NAME = ?");
+    $stmt->execute([$col]);
+    return (bool) $stmt->fetchColumn();
+};
+// Ensure secret question columns exist; returns null on success or error message string
+$ensureSecretColumnsExist = function() use ($pdo, $columnExists) {
+    $toAdd = [];
+    if (!$columnExists('secret_question')) {
+        $toAdd[] = "ADD COLUMN secret_question VARCHAR(255) NULL";
+    }
+    if (!$columnExists('secret_answer_hash')) {
+        $toAdd[] = "ADD COLUMN secret_answer_hash VARCHAR(255) NULL";
+    }
+    if (empty($toAdd)) {
+        return null;
+    }
+    try {
+        $sql = "ALTER TABLE utilisateurs " . implode(', ', $toAdd);
+        $pdo->exec($sql);
+        return null;
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+};
 // Variables pour pré-remplir le formulaire en cas d'erreur
 $errors = [];
 $success = '';
@@ -32,6 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $password_confirm = $_POST['password_confirm'] ?? '';
     $role = $_POST['role'] ?? 'etudiant';
+    $secret_question = trim($_POST['secret_question'] ?? '');
+    $secret_question_custom = trim($_POST['secret_question_custom'] ?? '');
+    $secret_answer = trim($_POST['secret_answer'] ?? '');
     
     // Validation des champs communs
     if (empty($prenom)) {
@@ -52,6 +81,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if ($password !== $password_confirm) {
         $errors[] = "Les mots de passe ne correspondent pas.";
+    }
+
+    // Vérification des champs de question secrète (on tente de créer les colonnes si nécessaire)
+    $ensureErr = $ensureSecretColumnsExist();
+    if ($ensureErr !== null) {
+        $errors[] = "Le serveur n'est pas configuré pour les questions secrètes : " . $ensureErr;
+    } else {
+        $effective_secret_question = ($secret_question === 'Autre') ? $secret_question_custom : $secret_question;
+        if (empty($effective_secret_question)) {
+            $errors[] = "La question secrète est obligatoire.";
+        }
+        if (empty($secret_answer)) {
+            $errors[] = "La réponse à la question secrète est obligatoire.";
+        }
     }
     
     // Validation spécifique selon le rôle
@@ -178,6 +221,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // dateInscription will use DB default CURRENT_TIMESTAMP
 
+                // Gestion de la question secrète si les colonnes existent
+                if (!empty($effective_secret_question) && !empty($secret_answer)) {
+                    if ($columnExists('secret_question') && $columnExists('secret_answer_hash')) {
+                        $cols[] = 'secret_question';
+                        $placeholders[] = '?';
+                        $values[] = $effective_secret_question;
+
+                        $cols[] = 'secret_answer_hash';
+                        $placeholders[] = '?';
+                        $values[] = password_hash($secret_answer, PASSWORD_DEFAULT);
+                    }
+                }
+
                 // Build final SQL
                 $placeholders_sql = [];
                 foreach ($placeholders as $ph) {
@@ -279,6 +335,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label for="photo">Photo de profil (facultatif)</label>
                     <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="secret_question">Question secrète *</label>
+                    <select id="secret_question" name="secret_question" required>
+                        <option value="">-- Choisir une question --</option>
+                        <option value="Quel est le nom de jeune fille de votre mère?" <?php echo (isset($_POST['secret_question']) && $_POST['secret_question'] === "Quel est le nom de jeune fille de votre mère?") ? 'selected' : ''; ?>>Quel est le nom de jeune fille de votre mère?</option>
+                        <option value="Quel est le nom de votre premier animal?" <?php echo (isset($_POST['secret_question']) && $_POST['secret_question'] === "Quel est le nom de votre premier animal?") ? 'selected' : ''; ?>>Quel est le nom de votre premier animal?</option>
+                        <option value="Quel est le code postal de votre ville de naissance?" <?php echo (isset($_POST['secret_question']) && $_POST['secret_question'] === "Quel est le code postal de votre ville de naissance?") ? 'selected' : ''; ?>>Quel est le code postal de votre ville de naissance?</option>
+                        <option value="Quel est le nom de votre école primaire?" <?php echo (isset($_POST['secret_question']) && $_POST['secret_question'] === "Quel est le nom de votre école primaire?") ? 'selected' : ''; ?>>Quel est le nom de votre école primaire?</option>
+                        <option value="Autre" <?php echo (isset($_POST['secret_question']) && $_POST['secret_question'] === "Autre") ? 'selected' : ''; ?>>Autre (écrire ma propre question)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="secret-question-custom-group" style="display: <?php echo (isset($_POST['secret_question']) && $_POST['secret_question'] === 'Autre') ? 'block' : 'none'; ?>;">
+                    <label for="secret_question_custom">Votre question secrète *</label>
+                    <input type="text" id="secret_question_custom" name="secret_question_custom" value="<?php echo isset($_POST['secret_question_custom']) ? htmlspecialchars($_POST['secret_question_custom']) : ''; ?>" placeholder="Saisissez votre question">
+                </div>
+
+                <div class="form-group">
+                    <label for="secret_answer">Réponse à la question secrète *</label>
+                    <input type="text" id="secret_answer" name="secret_answer" required value="<?php echo isset($_POST['secret_answer']) ? htmlspecialchars($_POST['secret_answer']) : ''; ?>" placeholder="Votre réponse">
                 </div>
 
                 <div id="etudiant-fields" style="display: <?php echo ($role === 'etudiant') ? 'block' : 'none'; ?>;">

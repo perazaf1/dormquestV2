@@ -314,6 +314,7 @@
 }
 
 .form-input {
+  width: 100%;
   padding: 10px 12px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
@@ -321,6 +322,18 @@
   font-size: 0.95rem;
   color: var(--color-text);
   transition: var(--transition);
+}
+
+/* Harmoniser les <select> pour occuper toute la largeur et afficher une flèche */
+select.form-input {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b7280' d='M1.41 0L6 4.59L10.59 0L12 1.41l-6 6l-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
 }
 
 .form-input:focus {
@@ -462,7 +475,7 @@
   overflow-y: auto;
   z-index: 1000;
   animation: slideDown 0.2s ease-out;
-  padding: 8px;
+  padding: 0;
 }
 
 @keyframes slideDown {
@@ -477,14 +490,16 @@
 }
 
 .autocomplete-item {
+  width: 100%;
+  box-sizing: border-box;
   padding: 14px 16px;
-  margin: 6px 0;
+  margin: 0;
   cursor: pointer !important;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   color: #374151;
   background-color: #f9fafb;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   position: relative;
@@ -492,28 +507,24 @@
   font-weight: 500;
 }
 
-.autocomplete-item:last-child {
-  border: 2px solid #e5e7eb;
-  margin-bottom: 0;
-}
+.autocomplete-item:first-child { border-top: none; }
+.autocomplete-item:last-child { border-bottom: none; }
 
 .autocomplete-item:hover {
   background-color: #e0f2fe;
   color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
   padding-left: 20px;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-  transform: translateX(4px);
+  box-shadow: inset 0 0 0 9999px rgba(37, 99, 235, 0.06);
 }
 
 .autocomplete-item.autocomplete-focused {
   background-color: #dbeafe;
   color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
   font-weight: 600;
   padding-left: 20px;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-  transform: translateX(4px);
+  box-shadow: inset 0 0 0 9999px rgba(37, 99, 235, 0.08);
 }
 
 .autocomplete-item::before {
