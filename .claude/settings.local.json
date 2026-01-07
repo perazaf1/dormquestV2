@@ -12,7 +12,11 @@
       "Bash(if [ -f \"c:/xampp/htdocs/dormQuestV2/reset-password.php\" ])",
       "Bash(then rm \"c:/xampp/htdocs/dormQuestV2/reset-password.php\")",
       "Bash(else echo \"Fichier n''existe pas\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(if [ -f \"includes/functions.php\" ])",
+      "Bash(then echo \"File exists\")",
+      "Bash(else echo \"File does not exist\")",
+      "Bash(php -l:*)"
     ],
     "deny": [],
     "ask": []

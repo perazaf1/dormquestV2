@@ -4,6 +4,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 if (!is_logged_in()) {
     http_response_code(401);
@@ -28,26 +29,23 @@ $user_id = get_user_id();
 
 try {
     // Récupérer le chemin de la photo actuelle
-    $stmt = $pdo->prepare("SELECT photoDeProfil FROM utilisateurs WHERE id = ?");
-    $stmt->execute([$user_id]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $photoPath = get_user_photo($pdo, $user_id);
 
-    if (!$user || !$user['photoDeProfil']) {
+    if (!$photoPath) {
         http_response_code(400);
         echo json_encode(['error' => 'Aucune photo à supprimer']);
         exit();
     }
 
-    $photoPath = __DIR__ . '/../' . $user['photoDeProfil'];
+    $fullPath = __DIR__ . '/../' . $photoPath;
 
     // Supprimer le fichier du serveur si existe
-    if (file_exists($photoPath)) {
-        unlink($photoPath);
+    if (file_exists($fullPath)) {
+        unlink($fullPath);
     }
 
     // Supprimer de la base de données
-    $stmt = $pdo->prepare("UPDATE utilisateurs SET photoDeProfil = NULL WHERE id = ?");
-    $stmt->execute([$user_id]);
+    delete_user_photo($pdo, $user_id);
 
     // Rafraîchir la session
     refresh_session($pdo);

@@ -154,10 +154,10 @@ ul {
 
 /* Le mot animé avec la couleur du texte qui change */
 .hero__animation-word {
-  display: inline-block;
+  display: inline-block;  /* ecrit dans le bloc */
   font-size: 2.5rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.2; /* espacement entre les lignes */
   transition: color 0.3s ease;
 }
 
@@ -717,18 +717,6 @@ ul {
     transform: translateY(0);
   }
 }
-
-/* Animation au scroll pour les cartes */
-/* @keyframes appear{
-  from{
-    opacity: 0;
-    clip-path: inset(100% 100% 0 0);
-  }
-  to {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-} */
 
 
 @keyframes fadeInCard {
