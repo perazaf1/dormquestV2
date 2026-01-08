@@ -47,7 +47,7 @@ define('DB_CHARSET', 'utf8mb4');       // Encodage pour supporter tous les carac
 
 define('SITE_NAME', 'DormQuest');                                      // Nom du site
 define('SITE_SLOGAN', 'Trouvez le logement parfait pour vos études !'); // Slogan affiché
-define('SITE_URL', 'http://localhost/dormquest');                       // URL de base du site
+// define('SITE_URL', 'http://localhost/dormquest');                       // URL de base du site
 define('SITE_EMAIL', 'contact@dormquest.fr');                           // Email de contact
 
 // ============================================================================
