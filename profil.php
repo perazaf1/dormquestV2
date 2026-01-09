@@ -576,7 +576,7 @@ try {
                             <input type="hidden" name="form_type" value="secret">
 
                             <div class="form-section">
-                                <h2 class="form-section__title">🔐 Question secrète</h2>
+                                <h2 class="form-section__title"><i class="fa-solid fa-lock"></i> Question secrète</h2>
                                 <p class="form-section__desc">Définissez ou modifiez votre question de sécurité. Elle sera utilisée pour réinitialiser votre mot de passe.</p>
 
                                 <div class="form-group">
@@ -615,7 +615,7 @@ try {
 
                             <div class="form-actions form-actions--single">
                                 <button type="submit" class="form-btn form-btn--primary">
-                                    🔐 Mettre à jour la question secrète
+                                     <i class="fa-solid fa-lock"></i> Mettre à jour la question secrète
                                 </button>
                             </div>
                         </form>

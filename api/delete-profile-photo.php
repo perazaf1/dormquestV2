@@ -29,7 +29,7 @@ $user_id = get_user_id();
 
 try {
     // Récupérer le chemin de la photo actuelle
-    $photoPath = get_user_photo($pdo, $user_id);
+    $photoPath = get_user_photo_by_id($pdo, $user_id);
 
     if (!$photoPath) {
         http_response_code(400);

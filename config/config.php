@@ -37,7 +37,7 @@ define('MAIL_FROM', 'noreply@dormquest.com');
 define('MAIL_FROM_NAME', 'DormQuest');
 define('SITE_URL', 'http://localhost/dormquestV2'); // URL de base du site (sans slash à la fin)
 define('DB_USER', 'root');             // Nom d'utilisateur MySQL (root = admin local)
-define('DB_PASS', '');                 // Mot de passe (vide en local avec XAMPP/WAMP)
+define('DB_PASS', '');                 // Maot de passe (vide en local avec XAMPP/WAMP)
 define('DB_CHARSET', 'utf8mb4');       // Encodage pour supporter tous les caractères (emojis inclus)
 
 // ============================================================================
@@ -161,11 +161,11 @@ define('DEBUG_MODE', true); // true = afficher les erreurs, false = masquer
 
 if (DEBUG_MODE) {
     // En mode développement : afficher toutes les erreurs pour déboguer
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+    ini_set('display_errors', 1); // Affichage des erreurs à l'écran
+    ini_set('display_startup_errors', 1); // Affichage des erreurs au démarrage de PHP
+    error_reporting(E_ALL); // Active le rapport de toutes les erreurs (notices, warnings, erreurs fatales)
 } else {
-    // En production : masquer les erreurs pour la sécurité
+    // En production : On masque les erreurs pour éviter de donner des informations sensibles (comme le chemin des fichiers ou la structure du serveur) aux visiteurs.
     ini_set('display_errors', 0);
     error_reporting(0);
 }
@@ -208,6 +208,7 @@ function redirect($path = '') {
  * Empêche les attaques XSS (injection de code malveillant)
  * Exemple : e('<script>alert("hack")</script>') 
  * Affiche le texte brut au lieu d'exécuter le script
+ * --> &lt;script&gt;alert('Hacked!');&lt;/script&gt; (change les guillemets en HTML (ENT_QUOTES), e() fonction utilitaire que l'on peut réutiliser partout)
  */
 function e($string) {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');

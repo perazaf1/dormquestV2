@@ -57,13 +57,13 @@ function email_exists($pdo, $email, $excludeUserId = null) {
 }
 
 /**
- * Récupère la photo de profil d'un utilisateur
+ * Récupère la photo de profil d'un utilisateur depuis la BDD
  *
  * @param PDO $pdo Connexion à la base de données
  * @param int $userId ID de l'utilisateur
  * @return string|null Chemin de la photo ou null
  */
-function get_user_photo($pdo, $userId) {
+function get_user_photo_by_id($pdo, $userId) {
     $stmt = $pdo->prepare("SELECT photoDeProfil FROM utilisateurs WHERE id = ?");
     $stmt->execute([$userId]);
     $result = $stmt->fetch();
@@ -254,6 +254,39 @@ function delete_annonce($pdo, $annonceId) {
     return $stmt->execute([$annonceId]);
 }
 
+/**
+ * Met à jour les informations d'une annonce
+ *
+ * @param PDO $pdo Connexion à la base de données
+ * @param int $annonceId ID de l'annonce
+ * @param array $data Données à mettre à jour
+ * @return bool true si succès, false sinon
+ */
+function update_annonce($pdo, $annonceId, $data) {
+    $stmt = $pdo->prepare("
+        UPDATE annonces SET
+            titre = :titre,
+            description = :description,
+            adresse = :adresse,
+            ville = :ville,
+            typeLogement = :typeLogement,
+            prixMensuel = :prixMensuel,
+            superficie = :superficie
+        WHERE id = :id
+    ");
+
+    return $stmt->execute([
+        ':titre' => $data['titre'],
+        ':description' => $data['description'],
+        ':adresse' => $data['adresse'],
+        ':ville' => $data['ville'],
+        ':typeLogement' => $data['typeLogement'],
+        ':prixMensuel' => $data['prixMensuel'],
+        ':superficie' => $data['superficie'],
+        ':id' => $annonceId
+    ]);
+}
+
 // ============================================================================
 // SECTION 3 : FONCTIONS PHOTOS ANNONCES
 // ============================================================================
@@ -273,6 +306,23 @@ function get_photos_annonce($pdo, $annonceId) {
     ");
     $stmt->execute([$annonceId]);
     return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+/**
+ * Récupère toutes les photos d'une annonce avec leurs IDs
+ *
+ * @param PDO $pdo Connexion à la base de données
+ * @param int $annonceId ID de l'annonce
+ * @return array Liste des photos avec id et cheminPhoto
+ */
+function get_photos_annonce_with_ids($pdo, $annonceId) {
+    $stmt = $pdo->prepare("
+        SELECT id, cheminPhoto FROM photos_annonces
+        WHERE idAnnonce = ?
+        ORDER BY id
+    ");
+    $stmt->execute([$annonceId]);
+    return $stmt->fetchAll();
 }
 
 /**
@@ -338,6 +388,35 @@ function get_criteres_annonce($pdo, $annonceId) {
     $stmt = $pdo->prepare("SELECT * FROM criteres_logement WHERE idAnnonce = ?");
     $stmt->execute([$annonceId]);
     return $stmt->fetch();
+}
+
+/**
+ * Met à jour les critères d'une annonce
+ *
+ * @param PDO $pdo Connexion à la base de données
+ * @param int $annonceId ID de l'annonce
+ * @param array $criteres Critères à mettre à jour
+ * @return bool true si succès, false sinon
+ */
+function update_criteres_annonce($pdo, $annonceId, $criteres) {
+    $stmt = $pdo->prepare("
+        UPDATE criteres_logement SET
+            accesPMR = :accesPMR,
+            meuble = :meuble,
+            eligibleAPL = :eligibleAPL,
+            parkingDisponible = :parkingDisponible,
+            animauxAcceptes = :animauxAcceptes
+        WHERE idAnnonce = :idAnnonce
+    ");
+
+    return $stmt->execute([
+        ':accesPMR' => $criteres['accesPMR'],
+        ':meuble' => $criteres['meuble'],
+        ':eligibleAPL' => $criteres['eligibleAPL'],
+        ':parkingDisponible' => $criteres['parkingDisponible'],
+        ':animauxAcceptes' => $criteres['animauxAcceptes'],
+        ':idAnnonce' => $annonceId
+    ]);
 }
 
 // ============================================================================
