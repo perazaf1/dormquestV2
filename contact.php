@@ -4,7 +4,7 @@ session_start();
 require_once __DIR__ . '/includes/db.php';
 require_once 'includes/auth.php';
 
-// V�rifier si l'utilisateur est connect�
+// Vérifier si l'utilisateur est connect�
 $isLoggedIn = isset($_SESSION['user_id']);
 $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 ?>
