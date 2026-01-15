@@ -201,6 +201,215 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialiser le compteur
     updateAnnonceCount();
 
+    /**
+     * ============================================
+     * CHARGEMENT ET AFFICHAGE DES ANNONCES
+     * ============================================
+     */
+    const annonceGrid = document.querySelector('.annonces__grid');
+    let allAnnonces = []; // Stocker toutes les annonces
+
+    // Charger les annonces depuis l'API
+    function loadAnnonces(filters = {}) {
+        // Construire l'URL avec les filtres
+        const params = new URLSearchParams();
+
+        if (filters.ville) params.append('ville', filters.ville);
+        if (filters.typeLogement) params.append('typeLogement', filters.typeLogement);
+        if (filters.prixMin !== undefined) params.append('prixMin', filters.prixMin);
+        if (filters.prixMax !== undefined) params.append('prixMax', filters.prixMax);
+
+        const url = `api/get-annonces.php${params.toString() ? '?' + params.toString() : ''}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    allAnnonces = data.data;
+                    displayAnnonces(allAnnonces);
+                } else {
+                    console.error('Erreur:', data.error);
+                    annonceGrid.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--color-text-light);">Erreur lors du chargement des annonces</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Erreur fetch:', error);
+                annonceGrid.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--color-text-light);">Erreur lors du chargement des annonces</p>';
+            });
+    }
+
+    // Afficher les annonces dans la grille
+    function displayAnnonces(annonces) {
+        if (!annonceGrid) return;
+
+        if (annonces.length === 0) {
+            annonceGrid.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--color-text-light);">Aucune annonce trouvée</p>';
+            updateAnnonceCount();
+            return;
+        }
+
+        annonceGrid.innerHTML = '';
+
+        annonces.forEach(annonce => {
+            const card = createAnnonceCard(annonce);
+            annonceGrid.appendChild(card);
+        });
+
+        updateAnnonceCount();
+    }
+
+    // Créer une carte d'annonce
+    function createAnnonceCard(annonce) {
+        const card = document.createElement('article');
+        card.className = 'annonces__card';
+
+        // Photo principale (première photo ou placeholder dynamique)
+        const photoUrl = annonce.photos && annonce.photos.length > 0
+            ? annonce.photos[0].cheminPhoto
+            : `placeholder.php?type=${annonce.typeLogement}&seed=${annonce.id}&width=400&height=300`;
+
+        // Type de logement formaté
+        const typeLogement = formatTypeLogement(annonce.typeLogement);
+
+        // Critères
+        const criteres = annonce.criteres || {};
+        const criteresHTML = [];
+        if (criteres.meuble) criteresHTML.push('<span class="annonces__badge">Meublé</span>');
+        if (criteres.eligibleAPL) criteresHTML.push('<span class="annonces__badge">APL</span>');
+        if (criteres.parkingDisponible) criteresHTML.push('<span class="annonces__badge">Parking</span>');
+
+        card.innerHTML = `
+            <a href="annonce.php?id=${annonce.id}" class="annonces__card-link">
+                <div class="annonces__card-image">
+                    <img src="${photoUrl}" alt="${annonce.titre}">
+                    <div class="annonces__card-type">${typeLogement}</div>
+                </div>
+                <div class="annonces__card-content">
+                    <h3 class="annonces__card-title">${annonce.titre}</h3>
+                    <p class="annonces__card-location">
+                        <i class="fa-solid fa-location-dot"></i>
+                        ${annonce.ville}
+                    </p>
+                    <div class="annonces__card-details">
+                        <span class="annonces__card-surface">
+                            <i class="fa-solid fa-maximize"></i>
+                            ${annonce.superficie} m²
+                        </span>
+                    </div>
+                    ${criteresHTML.length > 0 ? `<div class="annonces__card-badges">${criteresHTML.join('')}</div>` : ''}
+                    <div class="annonces__card-footer">
+                        <span class="annonces__card-price">${annonce.prixMensuel}€<small>/mois</small></span>
+                        <span class="annonces__card-cta">Voir plus →</span>
+                    </div>
+                </div>
+            </a>
+        `;
+
+        return card;
+    }
+
+    // Formater le type de logement
+    function formatTypeLogement(type) {
+        const types = {
+            'studio': 'Studio',
+            'colocation': 'Colocation',
+            'residence_etudiante': 'Résidence étudiante',
+            'chambre_habitant': 'Chambre chez l\'habitant'
+        };
+        return types[type] || type;
+    }
+
+    // Charger les annonces au chargement de la page
+    loadAnnonces();
+
+    /**
+     * ============================================
+     * FILTRAGE DES ANNONCES
+     * ============================================
+     */
+
+    // Fonction pour appliquer les filtres
+    function applyFilters() {
+        const filters = {};
+
+        // Budget
+        const minBudget = parseInt(sliderMin?.value || 0);
+        const maxBudget = parseInt(sliderMax?.value || 3000);
+
+        if (minBudget > 0) filters.prixMin = minBudget;
+        if (maxBudget < 3000) filters.prixMax = maxBudget;
+
+        // Recherche par ville
+        const searchValue = searchInput?.value.trim();
+        if (searchValue) filters.ville = searchValue;
+
+        // Type de logement (depuis les checkboxes)
+        const typeLogement = [];
+        if (document.getElementById('studio')?.checked) typeLogement.push('studio');
+        if (document.getElementById('appartement')?.checked) typeLogement.push('colocation');
+        if (document.getElementById('chambre')?.checked) typeLogement.push('chambre_habitant');
+
+        if (typeLogement.length > 0) {
+            // Pour l'instant, on ne filtre que par le premier type sélectionné
+            // (l'API search_annonces ne supporte qu'un type à la fois)
+            filters.typeLogement = typeLogement[0];
+        }
+
+        loadAnnonces(filters);
+    }
+
+    // Écouter les changements sur les filtres
+    if (sliderMin && sliderMax) {
+        sliderMin.addEventListener('change', applyFilters);
+        sliderMax.addEventListener('change', applyFilters);
+    }
+
+    // Écouter les checkboxes
+    const filterCheckboxes = document.querySelectorAll('.annonces__checkbox input[type="checkbox"]');
+    filterCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', applyFilters);
+    });
+
+    // Modifier le bouton réinitialiser pour recharger les annonces
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            // Réinitialiser toutes les checkboxes
+            const checkboxes = document.querySelectorAll('.annonces__checkbox input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            // Réinitialiser les sliders de budget
+            if (sliderMin && sliderMax) {
+                sliderMin.value = 0;
+                sliderMax.value = 3000;
+                updateBudgetDisplay();
+            }
+
+            // Réinitialiser la recherche
+            if (searchInput) {
+                searchInput.value = '';
+            }
+
+            // Recharger toutes les annonces
+            loadAnnonces();
+
+            // Animation du bouton
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    }
+
+    // Modifier la recherche pour filtrer les annonces
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            applyFilters();
+        });
+    }
+
 });
 
 /**
