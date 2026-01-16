@@ -30,20 +30,21 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 Contactez-nous en cas de problème
             </h1>
             <div class="hero__contact--form">
-                <form id="contact" action="" method="post">
+                <div id="contact-message"></div>
+                <form id="contact" method="post">
                     <h3></h3>
                     <h3>Contactez-nous aujourd'hui, obtenez une réponse sous 48 heures !</h3>
                     <fieldset>
-                        <input placeholder="Votre nom" type="text" tabindex="1" required autofocus>
+                        <input placeholder="Votre nom" name="nom" type="text" tabindex="1" required autofocus>
                     </fieldset>
                     <fieldset>
-                        <input placeholder="Votre adresse mail" type="email" tabindex="2" required>
+                        <input placeholder="Votre adresse mail" name="email" type="email" tabindex="2" required>
                     </fieldset>
                     <fieldset>
-                        <input placeholder="Votre numéro de téléphone" type="tel" tabindex="3" required>
+                        <input placeholder="Votre numéro de téléphone" name="telephone" type="tel" tabindex="3" required>
                     </fieldset>
                     <fieldset>
-                        <textarea placeholder="Ecrivez votre message ici..." tabindex="4" required></textarea>
+                        <textarea placeholder="Ecrivez votre message ici..." name="message" tabindex="4" required></textarea>
                     </fieldset>
                     <fieldset>
                         <button name="submit" type="submit" id="contact-submit"
@@ -120,6 +121,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 
     <?php include 'includes/footer.php'; ?>
     <script src="https://kit.fontawesome.com/794b85b760.js" crossorigin="anonymous"></script>
+    <script src="js/contact.js"></script>
 </body>
 
 </html>

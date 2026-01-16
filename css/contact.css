@@ -962,3 +962,36 @@ a.coordonnees__info--value:hover::after {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Messages d'alerte */
+.alert {
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  display: none;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-success {
+  background: #e6f9ec;
+  color: #1b6b2f;
+  border: 1px solid #c6efd2;
+}
+
+.alert-error {
+  background: #fdecea;
+  color: #8a1f1f;
+  border: 1px solid #f0c7c7;
+}
