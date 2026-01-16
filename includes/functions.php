@@ -595,6 +595,27 @@ function update_candidature_statut($pdo, $candidatureId, $statut) {
     return $stmt->execute([$statut, $candidatureId]);
 }
 
+/**
+ * Crée une nouvelle candidature
+ *
+ * @param PDO $pdo Connexion à la base de données
+ * @param int $etudiantId ID de l'étudiant
+ * @param int $annonceId ID de l'annonce
+ * @return int|false ID de la candidature créée ou false en cas d'échec
+ */
+function create_candidature($pdo, $etudiantId, $annonceId) {
+    $stmt = $pdo->prepare("
+        INSERT INTO candidatures (idEtudiant, idAnnonce, statut, dateEnvoi)
+        VALUES (?, ?, 'en_attente', NOW())
+    ");
+
+    if ($stmt->execute([$etudiantId, $annonceId])) {
+        return $pdo->lastInsertId();
+    }
+
+    return false;
+}
+
 // ============================================================================
 // RÉSUMÉ DE CE FICHIER :
 // ============================================================================

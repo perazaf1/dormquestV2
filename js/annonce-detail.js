@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const annonceId = this.dataset.annonceId;
             const isActive = this.classList.contains('active');
 
+            console.log('Annonce ID:', annonceId);
+            console.log('Is Active:', isActive);
+            console.log('Action:', isActive ? 'remove' : 'add');
+
             // Appeler l'API pour toggle le favori
             fetch('api/toggle-favori.php', {
                 method: 'POST',
@@ -46,7 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    annonce_id: annonceId
+                    annonce_id: annonceId,
+                    action: isActive ? 'remove' : 'add'
                 })
             })
             .then(response => response.json())

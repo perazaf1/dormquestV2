@@ -16,7 +16,8 @@
       "Bash(if [ -f \"includes/functions.php\" ])",
       "Bash(then echo \"File exists\")",
       "Bash(else echo \"File does not exist\")",
-      "Bash(php -l:*)"
+      "Bash(php -l:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
