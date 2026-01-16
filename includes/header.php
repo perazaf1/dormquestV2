@@ -1,5 +1,13 @@
 <!-- Header DormQuest -->
 <?php
+// Inclure les fichiers nécessaires si pas déjà inclus
+if (!function_exists('is_logged_in')) {
+    require_once __DIR__ . '/auth.php';
+}
+if (!isset($pdo)) {
+    require_once __DIR__ . '/db.php';
+}
+
 // Initialiser les variables si elles ne sont pas déjà définies
 if (!isset($isLoggedIn)) {
     $isLoggedIn = is_logged_in();
@@ -10,13 +18,25 @@ if (!isset($userType)) {
 
 // Compter les favoris pour les étudiants
 $nbFavoris = 0;
-if ($isLoggedIn && $userType === 'etudiant') {
+if ($isLoggedIn && $userType === 'etudiant' && isset($pdo)) {
     try {
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM favoris WHERE idEtudiant = ?");
         $stmt->execute([get_user_id()]);
         $nbFavoris = (int)$stmt->fetchColumn();
     } catch (PDOException $e) {
         $nbFavoris = 0;
+    }
+}
+
+// Compter les notifications non lues
+$nbNotificationsNonLues = 0;
+if ($isLoggedIn && isset($pdo)) {
+    try {
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE idUtilisateur = ? AND lue = FALSE");
+        $stmt->execute([get_user_id()]);
+        $nbNotificationsNonLues = (int)$stmt->fetchColumn();
+    } catch (PDOException $e) {
+        $nbNotificationsNonLues = 0;
     }
 }
 ?>
@@ -49,6 +69,14 @@ if ($isLoggedIn && $userType === 'etudiant') {
                     </a>
                 </li>
                 <li><a href="candidatures.php" class="nav-link">Candidatures</a></li>
+                <li>
+                    <a href="notifications.php" class="nav-link">
+                        <i class="fa-regular fa-bell"></i>
+                        <?php if ($nbNotificationsNonLues > 0): ?>
+                            <span class="badge-count"><?php echo $nbNotificationsNonLues; ?></span>
+                        <?php endif; ?>
+                    </a>
+                </li>
                 <?php endif; ?>
                 <?php endif; ?>
             </ul>
