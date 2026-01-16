@@ -86,7 +86,7 @@ try {
                                 <td><?php echo $c['dateReponse'] ? htmlspecialchars($c['dateReponse']) : '-'; ?></td>
                                 <td>
                                     <?php if ($c['statut'] === 'en_attente'): ?>
-                                        <form method="post" action="api/candidature-action.php" onsubmit="return confirm('Confirmer l\'annulation de cette candidature ?');">
+                                        <form method="post" action="api/candidature-action.php" class="candidature-form" data-candidature-id="<?php echo (int)$c['id']; ?>" data-annonce-title="<?php echo htmlspecialchars($c['titre']); ?>">
                                             <?php csrf_field(); ?>
                                             <input type="hidden" name="action" value="cancel">
                                             <input type="hidden" name="id" value="<?php echo (int)$c['id']; ?>">
@@ -105,5 +105,8 @@ try {
         <?php endif; ?>
     </main>
     <?php include 'includes/footer.php'; ?>
+    
+    <!-- Script JavaScript pour la gestion AJAX des candidatures -->
+    <script src="js/candidatures.js"></script>
 </body>
 </html>

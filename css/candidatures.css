@@ -70,6 +70,158 @@ h1 {
    color: #4a2b00;
 }
 
+.btn-warning:hover:not(:disabled) {
+   background: #ff9800;
+   color: #3a2100;
+}
+
+.btn:disabled {
+   opacity: 0.6;
+   cursor: not-allowed;
+}
+
+/* ============================================================================
+   STYLES POUR LE SPINNER (LOADER)
+   ============================================================================ */
+
+.spinner {
+   display: inline-block;
+   width: 14px;
+   height: 14px;
+   border: 2px solid rgba(0, 0, 0, 0.1);
+   border-top: 2px solid rgba(0, 0, 0, 0.5);
+   border-radius: 50%;
+   animation: spin 0.8s linear infinite;
+   margin-right: 6px;
+}
+
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+
+.btn.loading {
+   transition: all 0.3s ease;
+}
+
+/* ============================================================================
+   STYLES POUR LES TOASTS (NOTIFICATIONS)
+   ============================================================================ */
+
+.toast {
+   position: fixed;
+   top: 20px;
+   right: 20px;
+   padding: 12px 16px;
+   border-radius: 6px;
+   font-size: 0.95rem;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 12px;
+   min-width: 250px;
+   max-width: 400px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+   z-index: 9999;
+   opacity: 0;
+   transform: translateX(400px);
+   transition: all 0.3s ease;
+   animation: toastEnter 0.3s ease forwards;
+}
+
+@keyframes toastEnter {
+   from {
+      opacity: 0;
+      transform: translateX(400px);
+   }
+   to {
+      opacity: 1;
+      transform: translateX(0);
+   }
+}
+
+.toast.show {
+   animation: toastShow 0.3s ease forwards;
+}
+
+@keyframes toastShow {
+   from {
+      opacity: 0;
+      transform: translateX(400px);
+   }
+   to {
+      opacity: 1;
+      transform: translateX(0);
+   }
+}
+
+.toast-success {
+   background: #e6f9ec;
+   color: #1b6b2f;
+   border: 1px solid #c6efd2;
+}
+
+.toast-error {
+   background: #fdecea;
+   color: #8a1f1f;
+   border: 1px solid #f0c7c7;
+}
+
+.toast-close {
+   background: none;
+   border: none;
+   color: inherit;
+   font-size: 1.2rem;
+   cursor: pointer;
+   padding: 0;
+   width: 24px;
+   height: 24px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   opacity: 0.7;
+   transition: opacity 0.2s ease;
+}
+
+.toast-close:hover {
+   opacity: 1;
+}
+
+/* ============================================================================
+   STYLES POUR L'ANIMATION DE SUPPRESSION DE LIGNE
+   ============================================================================ */
+
+.row-removing {
+   animation: rowFadeOut 0.5s ease forwards;
+}
+
+@keyframes rowFadeOut {
+   from {
+      opacity: 1;
+      height: auto;
+   }
+   to {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+   }
+}
+
+/* ============================================================================
+   RESPONSIVE - Toasts sur mobile
+   ============================================================================ */
+
+@media (max-width: 480px) {
+   .toast {
+      top: auto;
+      bottom: 20px;
+      right: 10px;
+      left: 10px;
+      min-width: auto;
+      max-width: none;
+   }
+}
+
 @media (max-width: 720px) {
    .table thead { display: none; }
    .table, .table tbody, .table tr, .table td { display: block; width: 100%; }
