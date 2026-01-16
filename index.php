@@ -3,9 +3,21 @@
 session_start();
 require_once 'includes/auth.php';
 
-// Vérifier si l'utilisateur est connecté
-$isLoggedIn = isset($_SESSION['user_id']);
-$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
+// Vérifier si l'utilisateur est connecté et déterminer les URLs des boutons
+$isLoggedIn = is_logged_in();
+$userRole = get_user_role();
+
+// Déterminer les URLs selon le statut de connexion
+if ($isLoggedIn) {
+    // Si connecté en tant qu'étudiant, les deux boutons mènent vers les annonces
+    // Si connecté en tant que loueur, "Je propose" mène vers créer annonce
+    $btnEtudiantUrl = 'annonces.php';
+    $btnLoueurUrl = ($userRole === 'loueur') ? 'create-annonce.php' : 'annonces.php';
+} else {
+    // Si non connecté, rediriger vers la page d'inscription appropriée
+    $btnEtudiantUrl = 'register.php?type=etudiant';
+    $btnLoueurUrl = 'register.php?type=loueur';
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,10 +47,10 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 <span class="hero__animation-cursor">|</span>
             </div>
             <div class="hero__button">
-                <a href="register.php?type=etudiant" class="hero__btn hero__btn--primary">
+                <a href="<?php echo $btnEtudiantUrl; ?>" class="hero__btn hero__btn--primary">
                     Je cherche un logement
                 </a>
-                <a href="register.php?type=loueur" class="hero__btn hero__btn--secondary">
+                <a href="<?php echo $btnLoueurUrl; ?>" class="hero__btn hero__btn--secondary">
                     Je propose un logement
                 </a>
                 <a href="#avantages" class="hero__btn hero__btn--icon" style="--i:#fbbf24;--j:#ffa700">
