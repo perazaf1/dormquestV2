@@ -4,7 +4,7 @@ session_start();
 require_once __DIR__ . '/includes/db.php';
 require_once 'includes/auth.php';
 
-// V�rifier si l'utilisateur est connect�
+// Vérifier si l'utilisateur est connect�
 $isLoggedIn = isset($_SESSION['user_id']);
 $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 ?>
@@ -30,20 +30,21 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 Contactez-nous en cas de problème
             </h1>
             <div class="hero__contact--form">
-                <form id="contact" action="" method="post">
+                <div id="contact-message"></div>
+                <form id="contact" method="post">
                     <h3></h3>
                     <h3>Contactez-nous aujourd'hui, obtenez une réponse sous 48 heures !</h3>
                     <fieldset>
-                        <input placeholder="Votre nom" type="text" tabindex="1" required autofocus>
+                        <input placeholder="Votre nom" name="nom" type="text" tabindex="1" required autofocus>
                     </fieldset>
                     <fieldset>
-                        <input placeholder="Votre adresse mail" type="email" tabindex="2" required>
+                        <input placeholder="Votre adresse mail" name="email" type="email" tabindex="2" required>
                     </fieldset>
                     <fieldset>
-                        <input placeholder="Votre numéro de téléphone" type="tel" tabindex="3" required>
+                        <input placeholder="Votre numéro de téléphone" name="telephone" type="tel" tabindex="3" required>
                     </fieldset>
                     <fieldset>
-                        <textarea placeholder="Ecrivez votre message ici..." tabindex="4" required></textarea>
+                        <textarea placeholder="Ecrivez votre message ici..." name="message" tabindex="4" required></textarea>
                     </fieldset>
                     <fieldset>
                         <button name="submit" type="submit" id="contact-submit"
@@ -84,21 +85,21 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                     </h3>
                     <div class="coordonnees__info--items">
                         <div class="coordonnees__info--item">
-                            <div class="coordonnees__info--icon">📞</div>
+                            <div class="coordonnees__info--icon"><i class="fa-solid fa-phone-volume"></i></div>
                             <div class="coordonnees__info--content">
                                 <span class="coordonnees__info--label">Téléphone</span>
                                 <a href="tel:+33123456789" class="coordonnees__info--value">+33 1 23 45 67 89</a>
                             </div>
                         </div>
                         <div class="coordonnees__info--item">
-                            <div class="coordonnees__info--icon">✉️</div>
+                            <div class="coordonnees__info--icon"><i class="fa-regular fa-message"></i></div>
                             <div class="coordonnees__info--content">
                                 <span class="coordonnees__info--label">Email</span>
                                 <a href="mailto:contact@dormquest.com" class="coordonnees__info--value">contact@dormquest.com</a>
                             </div>
                         </div>
                         <div class="coordonnees__info--item">
-                            <div class="coordonnees__info--icon">📍</div>
+                            <div class="coordonnees__info--icon"><i class="fa-solid fa-location-dot"></i></div>
                             <div class="coordonnees__info--content">
                                 <span class="coordonnees__info--label">Adresse</span>
                                 <span class="coordonnees__info--value">10 Rue de Vanves<br>92130 Issy-les-Moulineaux, France</span>
@@ -119,6 +120,8 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     </section>
 
     <?php include 'includes/footer.php'; ?>
+    <script src="https://kit.fontawesome.com/794b85b760.js" crossorigin="anonymous"></script>
+    <script src="js/contact.js"></script>
 </body>
 
 </html>

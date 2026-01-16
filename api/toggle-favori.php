@@ -12,8 +12,9 @@ session_start();
 header('Content-Type: application/json');
 
 // Inclure les fichiers nécessaires pour vérifier l'authentification et accéder à la base de données
-require_once '../includes/auth.php';  // Fonctions de vérification de connexion
-require_once '../includes/db.php';    // Connexion à la base de données ($pdo)
+require_once __DIR__ . '/../includes/db.php';        // Connexion à la base de données ($pdo)
+require_once __DIR__ . '/../includes/functions.php'; // Fonctions de base de données
+require_once __DIR__ . '/../includes/auth.php';      // Fonctions de vérification de connexion
 
 // ============================================================================
 // ÉTAPE 1 : Vérifications de sécurité
@@ -25,7 +26,7 @@ if (!is_logged_in() || !is_etudiant()) {
     // Si la vérification échoue, on renvoie une réponse JSON avec une erreur
     echo json_encode([
         'success' => false,  // Indique que l'opération a échoué
-        'message' => 'Vous devez être connecté en tant qu\'étudiant'
+        'error' => 'Vous devez être connecté en tant qu\'étudiant'
     ]);
     exit(); // Arrêter l'exécution du script ici
 }
@@ -44,7 +45,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 if (!isset($input['annonce_id']) || !isset($input['action'])) {
     echo json_encode([
         'success' => false,
-        'message' => 'Données manquantes'
+        'error' => 'Données manquantes'
     ]);
     exit(); // Arrêter si les données sont incomplètes
 }
@@ -110,7 +111,7 @@ try {
         // Si l'action n'est ni 'add' ni 'remove', c'est une erreur
         echo json_encode([
             'success' => false,
-            'message' => 'Action invalide'
+            'error' => 'Action invalide'
         ]);
     }
     
@@ -119,7 +120,13 @@ try {
     // On capture l'exception et on renvoie un message d'erreur
     echo json_encode([
         'success' => false,
-        'message' => 'Erreur serveur : ' . $e->getMessage()
+        'error' => 'Erreur serveur : ' . $e->getMessage()
+    ]);
+} catch (Exception $e) {
+    // Capture toute autre erreur
+    echo json_encode([
+        'success' => false,
+        'error' => 'Erreur : ' . $e->getMessage()
     ]);
 }
 

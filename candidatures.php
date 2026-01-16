@@ -1,5 +1,5 @@
 <?php
-// candidatures.php - Mes candidatures (�tudiant)
+// candidatures.php - Mes candidatures (etudiant)
 session_start();
 require_once __DIR__ . '/includes/db.php';
 require_once 'includes/auth.php';

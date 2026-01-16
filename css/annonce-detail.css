@@ -1,4 +1,430 @@
 /* ==========================================
-   DormQuest - Page Détail Annonce (BEM)
+   DormQuest - Page Detail Annonce (BEM)
    ========================================== */
 
+.annonce-detail {
+    background: #f8f9fa;
+    min-height: calc(100vh - 200px);
+    padding: 2rem 0;
+}
+
+.annonce-detail__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Fil d'Ariane */
+.annonce-detail__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+}
+
+.annonce-detail__breadcrumb a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.annonce-detail__breadcrumb a:hover {
+    color: var(--color-primary-dark);
+}
+
+/* En-tete */
+.annonce-detail__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    gap: 2rem;
+}
+
+.annonce-detail__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+}
+
+.annonce-detail__location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-light);
+    font-size: 1rem;
+}
+
+.annonce-detail__location i {
+    color: var(--color-primary);
+}
+
+.annonce-detail__btn-favorite {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: white;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.annonce-detail__btn-favorite:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+.annonce-detail__btn-favorite.active {
+    background: var(--color-primary);
+    color: white;
+}
+
+.annonce-detail__btn-favorite i {
+    font-size: 1.25rem;
+}
+
+/* Galerie de photos */
+.annonce-detail__gallery {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.annonce-detail__gallery-main {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+.annonce-detail__gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.annonce-detail__gallery-thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+}
+
+.annonce-detail__gallery-thumb {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 3px solid transparent;
+}
+
+.annonce-detail__gallery-thumb:hover {
+    transform: scale(1.05);
+    border-color: var(--color-primary);
+}
+
+.annonce-detail__gallery-thumb.active {
+    border-color: var(--color-primary);
+}
+
+/* Contenu principal avec sidebar */
+.annonce-detail__content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    align-items: start;
+}
+
+.annonce-detail__main {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.annonce-detail__section {
+    margin-bottom: 2.5rem;
+}
+
+.annonce-detail__section:last-child {
+    margin-bottom: 0;
+}
+
+.annonce-detail__section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+/* Caracteristiques */
+.annonce-detail__features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.annonce-detail__feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.annonce-detail__feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.annonce-detail__feature i {
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+}
+
+.annonce-detail__feature-label {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin-bottom: 0.25rem;
+}
+
+.annonce-detail__feature-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Description */
+.annonce-detail__description {
+    line-height: 1.8;
+    color: var(--color-text);
+}
+
+/* Criteres */
+.annonce-detail__criteria {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.annonce-detail__criterion {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.annonce-detail__criterion i {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+}
+
+/* Sidebar */
+.annonce-detail__sidebar {
+    position: sticky;
+    top: 100px;
+}
+
+.annonce-detail__price-box {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.annonce-detail__price {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.annonce-detail__price-amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.annonce-detail__price-period {
+    font-size: 1rem;
+    color: var(--color-text-light);
+}
+
+.annonce-detail__btn-apply {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.annonce-detail__btn-apply:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.annonce-detail__btn-apply:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.annonce-detail__info-message {
+    text-align: center;
+    color: var(--color-text-light);
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* Informations du loueur */
+.annonce-detail__landlord {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.annonce-detail__landlord-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.annonce-detail__landlord-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.annonce-detail__landlord-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.annonce-detail__landlord-photo-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.annonce-detail__landlord-name {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+}
+
+.annonce-detail__landlord-type {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+}
+
+.annonce-detail__btn-contact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    background: white;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.annonce-detail__btn-contact:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .annonce-detail__content {
+        grid-template-columns: 1fr;
+    }
+
+    .annonce-detail__sidebar {
+        position: static;
+    }
+
+    .annonce-detail__gallery-main {
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .annonce-detail__header {
+        flex-direction: column;
+    }
+
+    .annonce-detail__title {
+        font-size: 1.5rem;
+    }
+
+    .annonce-detail__features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .annonce-detail__gallery-main {
+        height: 300px;
+    }
+
+    .annonce-detail__main {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .annonce-detail__features {
+        grid-template-columns: 1fr;
+    }
+
+    .annonce-detail__criteria {
+        grid-template-columns: 1fr;
+    }
+}

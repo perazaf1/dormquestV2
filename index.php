@@ -3,9 +3,21 @@
 session_start();
 require_once 'includes/auth.php';
 
-// Vérifier si l'utilisateur est connecté
-$isLoggedIn = isset($_SESSION['user_id']);
-$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
+// Vérifier si l'utilisateur est connecté et déterminer les URLs des boutons
+$isLoggedIn = is_logged_in();
+$userRole = get_user_role();
+
+// Déterminer les URLs selon le statut de connexion
+if ($isLoggedIn) {
+    // Si connecté en tant qu'étudiant, les deux boutons mènent vers les annonces
+    // Si connecté en tant que loueur, "Je propose" mène vers créer annonce
+    $btnEtudiantUrl = 'annonces.php';
+    $btnLoueurUrl = ($userRole === 'loueur') ? 'create-annonce.php' : 'annonces.php';
+} else {
+    // Si non connecté, rediriger vers la page d'inscription appropriée
+    $btnEtudiantUrl = 'register.php?type=etudiant';
+    $btnLoueurUrl = 'register.php?type=loueur';
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,10 +47,10 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 <span class="hero__animation-cursor">|</span>
             </div>
             <div class="hero__button">
-                <a href="register.php?type=etudiant" class="hero__btn hero__btn--primary">
+                <a href="<?php echo $btnEtudiantUrl; ?>" class="hero__btn hero__btn--primary">
                     Je cherche un logement
                 </a>
-                <a href="register.php?type=loueur" class="hero__btn hero__btn--secondary">
+                <a href="<?php echo $btnLoueurUrl; ?>" class="hero__btn hero__btn--secondary">
                     Je propose un logement
                 </a>
                 <a href="#avantages" class="hero__btn hero__btn--icon" style="--i:#fbbf24;--j:#ffa700">
@@ -70,7 +82,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 Pour les étudiants
             </h1>
             <div class="avantages__card" data-color="blue">
-                <div class="avantages__card-icon">🔍</div>
+                <div class="avantages__card-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                 <h3 class="avantages__card-title">
                     Recherche simplifiée
                 </h3>
@@ -79,7 +91,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </p>
             </div>
             <div class="avantages__card" data-color="green">
-                <div class="avantages__card-icon">💬</div>
+                <div class="avantages__card-icon"><i class="fa-regular fa-envelope"></i></div>
                 <h3 class="avantages__card-title">
                     Contact direct
                 </h3>
@@ -88,7 +100,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </p>
             </div>
             <div class="avantages__card" data-color="purple">
-                <div class="avantages__card-icon">⭐</div>
+                <div class="avantages__card-icon"><i class="fa-regular fa-star"></i></div>
                 <h3 class="avantages__card-title">
                     Liste de favoris
                 </h3>
@@ -98,7 +110,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             </div>
             <a href="https://www.dossierfacile.logement.gouv.fr/" target="_blank" rel="noopener noreferrer"
                 class="avantages__card avantages__card--link" data-color="orange">
-                <div class="avantages__card-icon">📋</div>
+                <div class="avantages__card-icon"><i class="fa-regular fa-folder-closed"></i></div>
                 <h3 class="avantages__card-title">
                     Dossier facile
                 </h3>
@@ -109,7 +121,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             <a href="https://wwwd.caf.fr/wps/portal/caffr/aidesetdemarches/mesdemarches/faireunesimulation/lelogement#/preparation"
                 target="_blank" rel="noopener noreferrer" class="avantages__card avantages__card--link"
                 data-color="pink">
-                <div class="avantages__card-icon">💰</div>
+                <div class="avantages__card-icon"><i class="fa-regular fa-credit-card"></i></div>
                 <h3 class="avantages__card-title">
                     Calculateur d'APL
                 </h3>
@@ -119,7 +131,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             </a>
             <a href="https://www.visale.fr/" target="_blank" rel="noopener noreferrer"
                 class="avantages__card avantages__card--link" data-color="teal">
-                <div class="avantages__card-icon">🤝</div>
+                <div class="avantages__card-icon"><i class="fa-solid fa-handshake-angle"></i></div>
                 <h3 class="avantages__card-title">
                     Obtenez un garant
                 </h3>
@@ -132,7 +144,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 Pour les loueurs
             </h1>
             <div class="avantages__card" data-color="indigo">
-                <div class="avantages__card-icon">⚙️</div>
+                <div class="avantages__card-icon"><i class="fa-solid fa-gear"></i></div>
                 <h3 class="avantages__card-title">
                     Gestion facile
                 </h3>
@@ -141,7 +153,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </p>
             </div>
             <div class="avantages__card" data-color="emerald">
-                <div class="avantages__card-icon">🔒</div>
+                <div class="avantages__card-icon"><i class="fa-solid fa-lock"></i></div>
                 <h3 class="avantages__card-title">
                     Sécurisé
                 </h3>
@@ -150,7 +162,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </p>
             </div>
             <div class="avantages__card" data-color="amber">
-                <div class="avantages__card-icon">📢</div>
+                <div class="avantages__card-icon"><i class="fa-solid fa-people-line"></i></div>
                 <h3 class="avantages__card-title">
                     Large audience
                 </h3>
@@ -269,6 +281,7 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     <script src="js/main.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://kit.fontawesome.com/794b85b760.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

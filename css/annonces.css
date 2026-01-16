@@ -1,4 +1,849 @@
-/* ==========================================
-   DormQuest - Page Annonces (BEM)
-   ========================================== */
+/**
+ * ============================================
+ * PAGE ANNONCES - DormQuest
+ * ============================================
+ * Structure BEM avec layout sidebar + contenu principal
+ * Inspiré du style de style.css
+ */
 
+/**
+ * ============================================
+ * SECTION ANNONCES - LAYOUT PRINCIPAL
+ * ============================================
+ * Block: annonces
+ * Element: annonces__container, annonces__sidebar, annonces__main
+ */
+
+/* Conteneur principal de la page annonces */
+.annonces {
+  padding: 120px 20px 80px; /* Top padding pour éviter le header */
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.03) 0%,
+    rgba(96, 165, 250, 0.03) 100%
+  );
+  min-height: 100vh;
+}
+
+/* Container avec layout Grid (sidebar + main) */
+.annonces__container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr; /* Sidebar fixe 280px + contenu flexible */
+  gap: 40px;
+  align-items: start;
+}
+
+/**
+ * ============================================
+ * SIDEBAR - FILTRES
+ * ============================================
+ * Block: annonces__sidebar, annonces__filters
+ */
+
+/* Sidebar des filtres - position sticky pour suivre le scroll */
+.annonces__sidebar {
+  position: sticky;
+  top: 100px; /* Distance du haut lors du scroll */
+  background: var(--color-white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  max-height: calc(100vh - 120px); /* Hauteur max = viewport - padding */
+  overflow-y: auto; /* Scroll si contenu trop grand */
+}
+
+/* Titre principal des filtres */
+.annonces__filters-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid var(--color-primary);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Groupe de filtres (Type de logement, Budget, etc.) */
+.annonces__filter-group {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.annonces__filter-group:last-of-type {
+  border-bottom: none;
+}
+
+/* Label de chaque groupe de filtres */
+.annonces__filter-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 15px;
+}
+
+/* Options de filtres */
+.annonces__filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Checkbox personnalisée */
+.annonces__checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: var(--transition);
+  position: relative;
+}
+
+.annonces__checkbox:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.annonces__checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.annonces__checkbox-text {
+  font-size: 0.95rem;
+  color: var(--color-gray-dark);
+  transition: var(--transition);
+}
+
+.annonces__checkbox:hover .annonces__checkbox-text {
+  color: var(--color-primary);
+}
+
+/* Slider de budget - simple et compact */
+.annonces__slider-container {
+  padding: 10px 5px;
+}
+
+.annonces__slider-values {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.annonces__slider-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.annonces__slider-wrapper {
+  position: relative;
+  height: 30px;
+}
+
+.annonces__slider {
+  position: absolute;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+  pointer-events: none;
+}
+
+.annonces__slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: var(--color-gray-light);
+  border-radius: 4px;
+}
+
+.annonces__slider::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  background: var(--color-gray-light);
+  border-radius: 4px;
+}
+
+.annonces__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  background: var(--color-primary);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin-top: -6px;
+}
+
+.annonces__slider::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  background: var(--color-primary);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Bouton réinitialiser les filtres */
+.annonces__reset-btn {
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(
+    135deg,
+    var(--color-gray-light),
+    #e5e7eb
+  );
+  color: var(--color-gray-dark);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 10px;
+}
+
+.annonces__reset-btn:hover {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+/**
+ * ============================================
+ * CONTENU PRINCIPAL
+ * ============================================
+ * Block: annonces__main
+ */
+
+.annonces__main {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/**
+ * ============================================
+ * BARRE DE RECHERCHE
+ * ============================================
+ * Block: annonces__search
+ */
+
+.annonces__search {
+  background: linear-gradient(
+    135deg,
+    var(--color-white) 0%,
+    #f8f9fa 100%
+  );
+  padding: 40px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+/* Titre de la section recherche */
+.annonces__search-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 25px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Box de recherche */
+.annonces__search-box {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Formulaire de recherche avec animation moderne */
+.annonces__search-form {
+  display: flex;
+  align-items: center;
+  background: var(--color-white);
+  border: 2px solid transparent;
+  border-radius: 60px;
+  padding: 8px 8px 8px 25px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de brillance animé au hover */
+.annonces__search-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(37, 99, 235, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.annonces__search-form:hover::before {
+  left: 100%;
+}
+
+.annonces__search-form:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Icône de recherche fixe à gauche */
+.annonces__search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  margin-right: 10px;
+  transition: var(--transition);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.annonces__search-form:focus-within .annonces__search-icon {
+  animation: none;
+  color: var(--color-primary-dark);
+  transform: scale(1.15);
+}
+
+/* Input de recherche */
+.annonces__search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1.05rem;
+  font-family: var(--font-primary);
+  color: var(--color-text);
+  padding: 12px 15px;
+  background: transparent;
+  font-weight: 500;
+}
+
+.annonces__search-input::placeholder {
+  color: var(--color-gray);
+  font-weight: 400;
+  transition: var(--transition);
+}
+
+.annonces__search-input:focus::placeholder {
+  opacity: 0.6;
+  transform: translateX(5px);
+}
+
+/* Bouton de recherche moderne */
+.annonces__search-btn {
+  padding: 14px 30px;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  color: var(--color-white);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de vague au clic */
+.annonces__search-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.annonces__search-btn:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+.annonces__search-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.6);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark),
+    var(--color-primary)
+  );
+}
+
+.annonces__search-btn:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/**
+ * ============================================
+ * SECTION CONTENU - LISTE DES ANNONCES
+ * ============================================
+ * Block: annonces__content
+ */
+
+.annonces__content {
+  background: var(--color-white);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Header avec titre et compteur */
+.annonces__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--color-gray-light);
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Titre du contenu */
+.annonces__content-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Compteur d'annonces */
+.annonces__count {
+  font-size: 1rem;
+  color: var(--color-gray);
+  font-weight: 500;
+}
+
+.annonces__count-number {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 1.2rem;
+}
+
+/**
+ * ============================================
+ * GRILLE DES ANNONCES
+ * ============================================
+ * Block: annonces__grid
+ */
+
+.annonces__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/**
+ * ============================================
+ * CARTE D'ANNONCE
+ * ============================================
+ * Block: annonces__card
+ */
+
+.annonces__card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid transparent;
+}
+
+.annonces__card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(37, 99, 235, 0.2);
+  border-color: var(--color-primary-light);
+}
+
+/* Image de la carte */
+.annonces__card-image {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.annonces__card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.annonces__card:hover .annonces__card-image img {
+  transform: scale(1.1);
+}
+
+/* Badge "Nouveau" sur l'image */
+.annonces__card-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(
+    135deg,
+    var(--color-secondary),
+    var(--color-tertiary)
+  );
+  color: var(--color-white);
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  box-shadow: 0 2px 10px rgba(251, 191, 36, 0.4);
+}
+
+/* Contenu de la carte */
+.annonces__card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+/* Titre de l'annonce */
+.annonces__card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.3;
+  transition: var(--transition);
+}
+
+.annonces__card:hover .annonces__card-title {
+  color: var(--color-primary);
+}
+
+/* Localisation */
+.annonces__card-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--color-gray);
+}
+
+.annonces__card-location i {
+  color: var(--color-primary);
+}
+
+/* Description */
+.annonces__card-description {
+  font-size: 0.95rem;
+  color: var(--color-gray);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limite à 2 lignes */
+  line-clamp: 2; /* Propriété standard pour compatibilité */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Caractéristiques (m², meublé, etc.) */
+.annonces__card-features {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.annonces__card-feature {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--color-gray-dark);
+  font-weight: 500;
+}
+
+.annonces__card-feature i {
+  color: var(--color-primary);
+  font-size: 1rem;
+}
+
+/* Footer de la carte (prix + bouton) */
+.annonces__card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-gray-light);
+  margin-top: 10px;
+}
+
+/* Prix */
+.annonces__card-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.annonces__card-price small {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-gray);
+}
+
+/* Bouton "Voir plus" */
+.annonces__card-btn {
+  padding: 10px 20px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+}
+
+.annonces__card-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.5);
+}
+
+/**
+ * ============================================
+ * RESPONSIVE - TABLETTES
+ * ============================================
+ */
+@media (max-width: 968px) {
+  .annonces {
+    padding: 100px 20px 60px;
+  }
+
+  .annonces__container {
+    grid-template-columns: 240px 1fr;
+    gap: 30px;
+  }
+
+  .annonces__sidebar {
+    padding: 20px;
+    top: 90px;
+  }
+
+  .annonces__filters-title {
+    font-size: 1.3rem;
+  }
+
+  .annonces__search {
+    padding: 30px;
+  }
+
+  .annonces__search-title {
+    font-size: 2rem;
+  }
+
+  .annonces__search-btn {
+    padding: 12px 25px;
+    font-size: 0.95rem;
+  }
+
+  .annonces__content {
+    padding: 25px;
+  }
+
+  .annonces__content-title {
+    font-size: 1.5rem;
+  }
+
+  .annonces__grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+  }
+}
+
+/**
+ * ============================================
+ * RESPONSIVE - MOBILE
+ * ============================================
+ */
+@media (max-width: 768px) {
+  .annonces {
+    padding: 90px 15px 50px;
+  }
+
+  /* Passe à une colonne : sidebar au-dessus du contenu */
+  .annonces__container {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  /* Sidebar devient statique (pas sticky) sur mobile */
+  .annonces__sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .annonces__search {
+    padding: 25px 20px;
+  }
+
+  .annonces__search-title {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+  }
+
+  .annonces__search-form {
+    padding: 6px 6px 6px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .annonces__search-icon {
+    font-size: 1.1rem;
+    margin-right: 5px;
+  }
+
+  .annonces__search-input {
+    font-size: 0.95rem;
+    padding: 10px 8px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .annonces__search-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .annonces__content {
+    padding: 20px;
+  }
+
+  .annonces__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .annonces__content-title {
+    font-size: 1.3rem;
+  }
+
+  .annonces__grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .annonces__card-image {
+    height: 200px;
+  }
+
+  .annonces__card-content {
+    padding: 15px;
+  }
+
+  .annonces__card-title {
+    font-size: 1.1rem;
+  }
+
+  .annonces__card-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .annonces__card-btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+  }
+}
+
+/**
+ * ============================================
+ * RESPONSIVE - PETITS MOBILES
+ * ============================================
+ */
+@media (max-width: 480px) {
+  .annonces {
+    padding: 80px 10px 40px;
+  }
+
+  .annonces__search-title {
+    font-size: 1.5rem;
+  }
+
+  .annonces__filters-title {
+    font-size: 1.2rem;
+  }
+
+  .annonces__filter-label {
+    font-size: 0.95rem;
+  }
+
+  .annonces__checkbox-text {
+    font-size: 0.9rem;
+  }
+}

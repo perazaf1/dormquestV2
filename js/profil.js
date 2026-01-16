@@ -13,6 +13,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 5000);
         }
     });
+        // Toggle custom secret question field when "Autre" is selected
+        const secretQuestionSelect = document.getElementById('secret_question');
+        const customGroup = document.getElementById('secret-question-custom-group');
+        const customInput = document.getElementById('secret_question_custom');
+
+        if (secretQuestionSelect && customGroup && customInput) {
+            const syncCustomVisibility = () => {
+                const isOther = secretQuestionSelect.value === 'Autre';
+                customGroup.style.display = isOther ? 'block' : 'none';
+                customInput.required = isOther;
+                if (!isOther) {
+                    customInput.value = '';
+                }
+            };
+
+            secretQuestionSelect.addEventListener('change', syncCustomVisibility);
+            // Ensure correct state on load as well
+            syncCustomVisibility();
+        }
 
     // Confirmation de suppression de compte
     const deleteBtn = document.getElementById('delete-account-btn');
@@ -28,8 +47,25 @@ document.addEventListener('DOMContentLoaded', function() {
             if (confirmed) {
                 const input = prompt('Confirmez en tapant: SUPPRIMER');
                 if (input === 'SUPPRIMER') {
-                    // TODO: Implémenter suppression de compte
-                    alert('Fonction de suppression à implémenter');
+                    // Appeler l'API de suppression
+                    fetch('./api/delete-account.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Votre compte a été supprimé avec succès.');
+                            window.location.href = './index.php';
+                        } else {
+                            alert('Erreur: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert('Erreur lors de la suppression: ' + error.message);
+                    });
                 }
             }
         });
@@ -95,6 +131,25 @@ document.addEventListener('DOMContentLoaded', function() {
                             previewImg.style.opacity = '1';
                         }
                         console.log('Photo uploadée :', data.path);
+
+                        // Créer le bouton de suppression s'il n'existe pas
+                        let deleteBtn = document.getElementById('deletePhotoBtn');
+                        if (!deleteBtn) {
+                            deleteBtn = document.createElement('button');
+                            deleteBtn.type = 'button';
+                            deleteBtn.id = 'deletePhotoBtn';
+                            deleteBtn.className = 'btn-delete-photo';
+                            deleteBtn.textContent = '🗑️ Supprimer la photo';
+                            
+                            // Insérer après le champ photo
+                            const photoGroup = photoInput.parentElement;
+                            if (photoGroup) {
+                                photoGroup.appendChild(deleteBtn);
+                            }
+
+                            // Ajouter l'event listener au nouveau bouton
+                            attachDeletePhotoListener(deleteBtn);
+                        }
                     } else if (data && data.error) {
                         alert('Erreur upload: ' + data.error);
                         photoInput.value = '';
@@ -142,6 +197,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Veuillez entrer une adresse email valide!');
                 return false;
             }
+
+            // Mettre à jour le nom affichéé dans le sidebar après soumission
+            const prenom = document.getElementById('prenom').value;
+            const nom = document.getElementById('nom').value;
+            const nameDisplay = document.querySelector('.profile-card__name');
+            if (nameDisplay && prenom && nom) {
+                nameDisplay.textContent = prenom + ' ' + nom;
+            }
         });
     }
 
@@ -172,6 +235,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 const hint = this.parentElement.querySelector('small.phone-hint');
                 if (hint) hint.remove();
             }
+        });
+    }
+
+    // Auto-save nom et prénom
+    const prenomInput = document.getElementById('prenom');
+    const nomInput = document.getElementById('nom');
+    if (prenomInput && nomInput) {
+        let nomPrenomTimeout = null;
+        const saveNomPrenom = () => {
+            clearTimeout(nomPrenomTimeout);
+            nomPrenomTimeout = setTimeout(() => {
+                const prenom = prenomInput.value.trim();
+                const nom = nomInput.value.trim();
+                if (prenom && nom) {
+                    saveNomPrenomToServer(prenom, nom);
+                }
+            }, 500);
+        };
+
+        prenomInput.addEventListener('input', saveNomPrenom);
+        nomInput.addEventListener('input', saveNomPrenom);
+    }
+
+    // Auto-save ville de recherche
+    const villeInput = document.getElementById('ville_recherche');
+    if (villeInput) {
+        let villeTimeout = null;
+        villeInput.addEventListener('input', () => {
+            clearTimeout(villeTimeout);
+            villeTimeout = setTimeout(() => {
+                const ville = villeInput.value.trim();
+                if (ville) {
+                    saveVilleToServer(ville);
+                }
+            }, 500);
         });
     }
 
@@ -239,6 +337,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.querySelector('.profil-main');
     if (mainContent) {
         mainContent.style.animation = 'slideIn 0.5s ease';
+    }
+
+    // Gestion de la suppression de photo de profil
+    const deletePhotoBtn = document.getElementById('deletePhotoBtn');
+    if (deletePhotoBtn) {
+        attachDeletePhotoListener(deletePhotoBtn);
     }
 });
 
@@ -324,4 +428,147 @@ function removeBudgetError() {
         if (existing) existing.remove();
         budgetInput.style.borderColor = '';
     } catch (e) { console.warn('removeBudgetError', e); }
+}
+// Fonction réutilisable pour attacher l'event listener de suppression de photo
+function attachDeletePhotoListener(deleteBtn) {
+    deleteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        if (!confirm('Êtes-vous sûr de vouloir supprimer votre photo de profil ?')) {
+            return;
+        }
+
+        try {
+            const tokenInput = document.querySelector('input[name="csrf_token"]');
+            const csrf = tokenInput ? tokenInput.value : '';
+            const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+            const url = baseUrl + '/api/delete-profile-photo.php';
+
+            const form = new URLSearchParams();
+            form.append('csrf_token', csrf);
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: form.toString(),
+                credentials: 'same-origin'
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data && data.success) {
+                    // Remplacer l'aperçu avec l'image par défaut
+                    const previewImg = document.getElementById('preview-photo');
+                    if (previewImg) {
+                        previewImg.src = 'img/default-avatar.png';
+                        previewImg.style.opacity = '0.8';
+                    }
+
+                    // Vider le champ file input
+                    const photoInput = document.getElementById('photo');
+                    if (photoInput) {
+                        photoInput.value = '';
+                    }
+
+                    // Supprimer le bouton de suppression
+                    deleteBtn.remove();
+
+                    // Message de succès
+                    alert('Photo supprimée avec succès');
+                    console.log('Photo supprimée');
+                } else if (data && data.error) {
+                    alert('Erreur: ' + data.error);
+                    console.error('Erreur suppression photo:', data.error);
+                } else {
+                    alert('Erreur inconnue lors de la suppression');
+                }
+            })
+            .catch(err => {
+                console.error('Erreur suppression photo:', err);
+                alert('Erreur lors de la suppression de la photo');
+            });
+        } catch (e) {
+            console.error('delete photo error', e);
+        }
+    });
+}
+
+// Fonction de sauvegarde du nom et prénom
+function saveNomPrenomToServer(prenom, nom) {
+    try {
+        const tokenInput = document.querySelector('input[name="csrf_token"]');
+        const csrf = tokenInput ? tokenInput.value : '';
+        const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+        const url = baseUrl + '/api/update-nom-prenom.php';
+
+        const form = new URLSearchParams();
+        form.append('csrf_token', csrf);
+        form.append('prenom', prenom);
+        form.append('nom', nom);
+
+        return fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form.toString(),
+            credentials: 'same-origin'
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            if (data && data.success) {
+                console.log('Nom et prénom sauvegardés :', data.prenom, data.nom);
+                
+                // Mettre à jour le nom affiché dans le sidebar
+                const nameDisplay = document.querySelector('.profile-card__name');
+                if (nameDisplay) {
+                    nameDisplay.textContent = prenom + ' ' + nom;
+                }
+            } else if (data && data.error) {
+                console.warn('Erreur sauvegarde nom/prénom :', data.error);
+            }
+            return data;
+        })
+        .catch(err => {
+            console.error('Erreur lors de la sauvegarde du nom/prénom :', err);
+            throw err;
+        });
+    } catch (e) {
+        console.error('saveNomPrenomToServer error', e);
+        return Promise.resolve({ success: false, error: 'client_error' });
+    }
+}
+
+// Fonction de sauvegarde de la ville de recherche
+function saveVilleToServer(ville) {
+    try {
+        const tokenInput = document.querySelector('input[name="csrf_token"]');
+        const csrf = tokenInput ? tokenInput.value : '';
+        const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+        const url = baseUrl + '/api/update-ville.php';
+
+        const form = new URLSearchParams();
+        form.append('csrf_token', csrf);
+        form.append('ville_recherche', ville);
+
+        return fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form.toString(),
+            credentials: 'same-origin'
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            if (data && data.success) {
+                console.log('Ville sauvegardée :', data.ville);
+            } else if (data && data.error) {
+                console.warn('Erreur sauvegarde ville :', data.error);
+            }
+            return data;
+        })
+        .catch(err => {
+            console.error('Erreur lors de la sauvegarde de la ville :', err);
+            throw err;
+        });
+    } catch (e) {
+        console.error('saveVilleToServer error', e);
+        return Promise.resolve({ success: false, error: 'client_error' });
+    }
 }

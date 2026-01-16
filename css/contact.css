@@ -176,7 +176,7 @@
   opacity: 0.7;
 }
 
-/* �tat focus des champs */
+/* état focus des champs */
 #contact input:focus,
 #contact textarea:focus {
   background: rgba(255, 255, 255, 1);
@@ -193,7 +193,7 @@
   transform: translateX(5px);
 }
 
-/* Textarea sp�cifique */
+/* Textarea spécifique */
 #contact textarea {
   min-height: 150px;
   resize: vertical;
@@ -257,7 +257,7 @@
   box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }
 
-/* �tat disabled (lors de l'envoi) */
+/* état disabled (lors de l'envoi) */
 #contact button[type="submit"]:disabled {
   background: linear-gradient(135deg, var(--color-gray) 0%, var(--color-gray-dark) 100%);
   cursor: not-allowed;
@@ -301,7 +301,7 @@
 
 /**
  * ============================================
- * SECTION COORDONN�ES
+ * SECTION COORDONNEES
  * ============================================
  * Block: coordonnees
  * Elements: coordonnees__container, coordonnees__title, etc.
@@ -326,7 +326,7 @@
 
 /**
  * ============================================
- * TITRE DE LA SECTION COORDONN�ES
+ * TITRE DE LA SECTION COORDONNEES
  * ============================================
  */
 
@@ -961,4 +961,37 @@ a.coordonnees__info--value:hover::after {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Messages d'alerte */
+.alert {
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  display: none;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-success {
+  background: #e6f9ec;
+  color: #1b6b2f;
+  border: 1px solid #c6efd2;
+}
+
+.alert-error {
+  background: #fdecea;
+  color: #8a1f1f;
+  border: 1px solid #f0c7c7;
 }

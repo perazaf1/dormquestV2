@@ -28,8 +28,16 @@ if (!defined('ACCESS_ALLOWED')) {
 
 define('DB_HOST', 'localhost');        // Adresse du serveur de base de données
 define('DB_NAME', 'dormquest');        // Nom de la base de données à utiliser
+
+// ============================================================================
+// SECTION : CONFIGURATION EMAIL
+// ============================================================================
+// Configuration pour l'envoi d'emails (réinitialisation de mot de passe, etc.)
+define('MAIL_FROM', 'noreply@dormquest.com');
+define('MAIL_FROM_NAME', 'DormQuest');
+define('SITE_URL', 'http://localhost/dormquestV2'); // URL de base du site (sans slash à la fin)
 define('DB_USER', 'root');             // Nom d'utilisateur MySQL (root = admin local)
-define('DB_PASS', '');                 // Mot de passe (vide en local avec XAMPP/WAMP)
+define('DB_PASS', '');                 // Maot de passe (vide en local avec XAMPP/WAMP)
 define('DB_CHARSET', 'utf8mb4');       // Encodage pour supporter tous les caractères (emojis inclus)
 
 // ============================================================================
@@ -39,7 +47,7 @@ define('DB_CHARSET', 'utf8mb4');       // Encodage pour supporter tous les carac
 
 define('SITE_NAME', 'DormQuest');                                      // Nom du site
 define('SITE_SLOGAN', 'Trouvez le logement parfait pour vos études !'); // Slogan affiché
-define('SITE_URL', 'http://localhost/dormquest');                       // URL de base du site
+// define('SITE_URL', 'http://localhost/dormquest');                       // URL de base du site
 define('SITE_EMAIL', 'contact@dormquest.fr');                           // Email de contact
 
 // ============================================================================
@@ -153,11 +161,11 @@ define('DEBUG_MODE', true); // true = afficher les erreurs, false = masquer
 
 if (DEBUG_MODE) {
     // En mode développement : afficher toutes les erreurs pour déboguer
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+    ini_set('display_errors', 1); // Affichage des erreurs à l'écran
+    ini_set('display_startup_errors', 1); // Affichage des erreurs au démarrage de PHP
+    error_reporting(E_ALL); // Active le rapport de toutes les erreurs (notices, warnings, erreurs fatales)
 } else {
-    // En production : masquer les erreurs pour la sécurité
+    // En production : On masque les erreurs pour éviter de donner des informations sensibles (comme le chemin des fichiers ou la structure du serveur) aux visiteurs.
     ini_set('display_errors', 0);
     error_reporting(0);
 }
@@ -200,45 +208,10 @@ function redirect($path = '') {
  * Empêche les attaques XSS (injection de code malveillant)
  * Exemple : e('<script>alert("hack")</script>') 
  * Affiche le texte brut au lieu d'exécuter le script
+ * --> &lt;script&gt;alert('Hacked!');&lt;/script&gt; (change les guillemets en HTML (ENT_QUOTES), e() fonction utilitaire que l'on peut réutiliser partout)
  */
 function e($string) {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
-}
-
-/**
- * Vérifie si un utilisateur est connecté
- * 
- * Retourne true si une session active existe, false sinon
- */
-function is_logged_in() {
-    return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
-}
-
-/**
- * Vérifie si l'utilisateur a un rôle spécifique
- * 
- * Utilisé pour contrôler les accès selon le type d'utilisateur
- */
-function has_role($role) {
-    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === $role;
-}
-
-/**
- * Vérifie si l'utilisateur connecté est un étudiant
- * 
- * Raccourci pratique pour has_role('etudiant')
- */
-function is_etudiant() {
-    return has_role('etudiant');
-}
-
-/**
- * Vérifie si l'utilisateur connecté est un loueur
- * 
- * Raccourci pratique pour has_role('loueur')
- */
-function is_loueur() {
-    return has_role('loueur');
 }
 
 /**
@@ -276,32 +249,6 @@ function format_datetime($datetime) {
     $timestamp = is_numeric($datetime) ? $datetime : strtotime($datetime);
     
     return date('d/m/Y à H:i', $timestamp);
-}
-
-/**
- * Génère un token CSRF (protection contre les attaques Cross-Site Request Forgery)
- * 
- * Ce token unique est inclus dans les formulaires pour vérifier que 
- * la requête vient bien de notre site et pas d'un site malveillant
- * 
- * random_bytes(32) = générer 32 octets aléatoires
- * bin2hex() = convertir en format hexadécimal lisible
- */
-function generate_csrf_token() {
-    if (!isset($_SESSION['csrf_token'])) {
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    }
-    return $_SESSION['csrf_token'];
-}
-
-/**
- * Vérifie si un token CSRF est valide
- * 
- * hash_equals() compare les tokens de manière sécurisée
- * (évite les attaques par timing)
- */
-function verify_csrf_token($token) {
-    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
 /**

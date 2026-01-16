@@ -3,13 +3,33 @@ session_start();
 define('ACCESS_ALLOWED', true);
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
 
-// Seuls les loueurs peuvent créer des annonces
+// Seuls les loueurs peuvent modifier des annonces
 require_loueur();
 
 $errors = [];
 $success = false;
+$annonceId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+// Récupérer l'annonce
+if ($annonceId) {
+    $annonce = get_annonce_by_id($pdo, $annonceId);
+
+    // Vérifier que l'annonce existe et appartient au loueur connecté
+    if (!$annonce || $annonce['idLoueur'] != get_user_id()) {
+        header('Location: dashboard-loueur.php');
+        exit;
+    }
+
+    // Récupérer les photos et critères
+    $photos = get_photos_annonce_with_ids($pdo, $annonceId);
+    $criteres = get_criteres_annonce($pdo, $annonceId);
+} else {
+    header('Location: dashboard-loueur.php');
+    exit;
+}
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -44,51 +64,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($prixMensuel <= 0) $errors[] = 'Le prix mensuel doit être supérieur à 0';
         if ($superficie <= 0) $errors[] = 'La superficie doit être supérieure à 0';
 
-        // Validation des photos
-        $photos = [];
+        // Validation des nouvelles photos
+        $photoActuelCount = count($photos);
+        $newPhotoCount = 0;
         if (isset($_FILES['photos']) && is_array($_FILES['photos']['name'])) {
-            $photoCount = count(array_filter($_FILES['photos']['name']));
-            if ($photoCount > MAX_PHOTOS_PER_ANNONCE) {
-                $errors[] = 'Maximum ' . MAX_PHOTOS_PER_ANNONCE . ' photos autorisées';
+            $newPhotoCount = count(array_filter($_FILES['photos']['name']));
+            if ($photoActuelCount + $newPhotoCount > MAX_PHOTOS_PER_ANNONCE) {
+                $errors[] = 'Maximum ' . MAX_PHOTOS_PER_ANNONCE . ' photos autorisées (actuellement: ' . $photoActuelCount . ')';
             }
         }
 
-        // Si pas d'erreurs, insérer dans la base de données
+        // Si pas d'erreurs, mettre à jour dans la base de données
         if (empty($errors)) {
             try {
                 $pdo->beginTransaction();
 
-                // Insérer l'annonce
-                $sql = "INSERT INTO annonces (idLoueur, titre, description, adresse, ville, typeLogement, prixMensuel, superficie, statut, dateCreation)
-                        VALUES (:idLoueur, :titre, :description, :adresse, :ville, :typeLogement, :prixMensuel, :superficie, 'active', NOW())";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([
-                    ':idLoueur' => get_user_id(),
-                    ':titre' => $titre,
-                    ':description' => $description,
-                    ':adresse' => $adresse,
-                    ':ville' => $ville,
-                    ':typeLogement' => $typeLogement,
-                    ':prixMensuel' => $prixMensuel,
-                    ':superficie' => $superficie
-                ]);
+                // Mettre à jour l'annonce
+                $updateData = [
+                    'titre' => $titre,
+                    'description' => $description,
+                    'adresse' => $adresse,
+                    'ville' => $ville,
+                    'typeLogement' => $typeLogement,
+                    'prixMensuel' => $prixMensuel,
+                    'superficie' => $superficie
+                ];
+                update_annonce($pdo, $annonceId, $updateData);
 
-                $annonceId = $pdo->lastInsertId();
+                // Mettre à jour les critères
+                $criteresData = [
+                    'accesPMR' => $accesPMR,
+                    'meuble' => $meuble,
+                    'eligibleAPL' => $eligibleAPL,
+                    'parkingDisponible' => $parkingDisponible,
+                    'animauxAcceptes' => $animauxAcceptes
+                ];
+                update_criteres_annonce($pdo, $annonceId, $criteresData);
 
-                // Insérer les critères
-                $sqlCriteres = "INSERT INTO criteres_logement (idAnnonce, accesPMR, meuble, eligibleAPL, parkingDisponible, animauxAcceptes)
-                                VALUES (:idAnnonce, :accesPMR, :meuble, :eligibleAPL, :parkingDisponible, :animauxAcceptes)";
-                $stmtCriteres = $pdo->prepare($sqlCriteres);
-                $stmtCriteres->execute([
-                    ':idAnnonce' => $annonceId,
-                    ':accesPMR' => $accesPMR,
-                    ':meuble' => $meuble,
-                    ':eligibleAPL' => $eligibleAPL,
-                    ':parkingDisponible' => $parkingDisponible,
-                    ':animauxAcceptes' => $animauxAcceptes
-                ]);
-
-                // Traiter les photos
+                // Traiter les nouvelles photos
                 if (isset($_FILES['photos']) && is_array($_FILES['photos']['name'])) {
                     foreach ($_FILES['photos']['name'] as $key => $name) {
                         if (empty($name)) continue;
@@ -107,12 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $destination = ANNONCE_UPLOAD_PATH . '/' . $filename;
 
                             if (move_uploaded_file($file['tmp_name'], $destination)) {
-                                $sqlPhoto = "INSERT INTO photos_annonces (idAnnonce, cheminPhoto) VALUES (:idAnnonce, :cheminPhoto)";
-                                $stmtPhoto = $pdo->prepare($sqlPhoto);
-                                $stmtPhoto->execute([
-                                    ':idAnnonce' => $annonceId,
-                                    ':cheminPhoto' => 'uploads/annonces/' . $filename
-                                ]);
+                                add_photo_annonce($pdo, $annonceId, 'uploads/annonces/' . $filename);
                             }
                         }
                     }
@@ -121,9 +129,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo->commit();
                 $success = true;
 
+                // Recharger les données
+                $annonce = get_annonce_by_id($pdo, $annonceId);
+                $photos = get_photos_annonce_with_ids($pdo, $annonceId);
+                $criteres = get_criteres_annonce($pdo, $annonceId);
+
             } catch (PDOException $e) {
                 $pdo->rollBack();
-                $errors[] = 'Erreur lors de la création de l\'annonce : ' . $e->getMessage();
+                $errors[] = 'Erreur lors de la mise à jour de l\'annonce : ' . $e->getMessage();
             }
         }
     }
@@ -135,19 +148,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer une annonce - DormQuest</title>
+    <title>Modifier l'annonce - DormQuest</title>
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/create-annonce.css">
-    <style>
-        
-    </style>
+    <link rel="stylesheet" href="css/edit-annonce.css">
 </head>
 <body>
     <?php include 'includes/header.php'; ?>
 
-    <div class="create-annonce-container">
-        <h1>Créer une annonce</h1>
+    <div class="edit-annonce-container">
+        <h1>Modifier l'annonce</h1>
 
         <?php if (!empty($errors)): ?>
             <div class="alert alert-error">
@@ -162,10 +172,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if ($success): ?>
             <div class="alert alert-success">
-                <strong>Succès !</strong> Votre annonce a été créée avec succès.
-                <br><a href="dashboard-loueur.php">Voir mes annonces</a>
+                <strong>Succès !</strong> Votre annonce a été mise à jour avec succès.
             </div>
-        <?php else: ?>
+        <?php endif; ?>
 
         <form method="POST" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
@@ -174,13 +183,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="titre">Titre de l'annonce *</label>
                 <input type="text" id="titre" name="titre" required
                        placeholder="Ex: Studio meublé proche université"
-                       value="<?php echo isset($_POST['titre']) ? e($_POST['titre']) : ''; ?>">
+                       value="<?php echo e($annonce['titre']); ?>">
             </div>
 
             <div class="form-group">
                 <label for="description">Description *</label>
                 <textarea id="description" name="description" required
-                          placeholder="Décrivez votre logement en détail..."><?php echo isset($_POST['description']) ? e($_POST['description']) : ''; ?></textarea>
+                          placeholder="Décrivez votre logement en détail..."><?php echo e($annonce['description']); ?></textarea>
             </div>
 
             <div class="form-row">
@@ -190,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="">Sélectionnez...</option>
                         <?php foreach (TYPES_LOGEMENT as $key => $label): ?>
                             <option value="<?php echo $key; ?>"
-                                    <?php echo (isset($_POST['type_logement']) && $_POST['type_logement'] === $key) ? 'selected' : ''; ?>>
+                                    <?php echo ($annonce['typeLogement'] === $key) ? 'selected' : ''; ?>>
                                 <?php echo e($label); ?>
                             </option>
                         <?php endforeach; ?>
@@ -201,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="ville">Ville *</label>
                     <input type="text" id="ville" name="ville" required
                            placeholder="Ex: Paris"
-                           value="<?php echo isset($_POST['ville']) ? e($_POST['ville']) : ''; ?>">
+                           value="<?php echo e($annonce['ville']); ?>">
                 </div>
             </div>
 
@@ -209,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="adresse">Adresse complète *</label>
                 <input type="text" id="adresse" name="adresse" required
                        placeholder="Ex: 15 rue de la République"
-                       value="<?php echo isset($_POST['adresse']) ? e($_POST['adresse']) : ''; ?>">
+                       value="<?php echo e($annonce['adresse']); ?>">
             </div>
 
             <div class="form-row">
@@ -217,14 +226,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="prix_mensuel">Prix mensuel (€) *</label>
                     <input type="number" id="prix_mensuel" name="prix_mensuel" step="0.01" min="0" required
                            placeholder="Ex: 450"
-                           value="<?php echo isset($_POST['prix_mensuel']) ? e($_POST['prix_mensuel']) : ''; ?>">
+                           value="<?php echo e($annonce['prixMensuel']); ?>">
                 </div>
 
                 <div class="form-group">
                     <label for="superficie">Superficie (m²) *</label>
                     <input type="number" id="superficie" name="superficie" min="1" required
                            placeholder="Ex: 25"
-                           value="<?php echo isset($_POST['superficie']) ? e($_POST['superficie']) : ''; ?>">
+                           value="<?php echo e($annonce['superficie']); ?>">
                 </div>
             </div>
 
@@ -233,50 +242,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="checkbox-group">
                     <div class="checkbox-item">
                         <input type="checkbox" id="meuble" name="meuble"
-                               <?php echo isset($_POST['meuble']) ? 'checked' : ''; ?>>
+                               <?php echo $criteres['meuble'] ? 'checked' : ''; ?>>
                         <label for="meuble">Meublé</label>
                     </div>
                     <div class="checkbox-item">
                         <input type="checkbox" id="eligible_apl" name="eligible_apl"
-                               <?php echo isset($_POST['eligible_apl']) ? 'checked' : ''; ?>>
+                               <?php echo $criteres['eligibleAPL'] ? 'checked' : ''; ?>>
                         <label for="eligible_apl">Éligible APL</label>
                     </div>
                     <div class="checkbox-item">
                         <input type="checkbox" id="acces_pmr" name="acces_pmr"
-                               <?php echo isset($_POST['acces_pmr']) ? 'checked' : ''; ?>>
+                               <?php echo $criteres['accesPMR'] ? 'checked' : ''; ?>>
                         <label for="acces_pmr">Accès PMR</label>
                     </div>
                     <div class="checkbox-item">
                         <input type="checkbox" id="parking" name="parking"
-                               <?php echo isset($_POST['parking']) ? 'checked' : ''; ?>>
+                               <?php echo $criteres['parkingDisponible'] ? 'checked' : ''; ?>>
                         <label for="parking">Parking</label>
                     </div>
                     <div class="checkbox-item">
                         <input type="checkbox" id="animaux" name="animaux"
-                               <?php echo isset($_POST['animaux']) ? 'checked' : ''; ?>>
+                               <?php echo $criteres['animauxAcceptes'] ? 'checked' : ''; ?>>
                         <label for="animaux">Animaux acceptés</label>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Photos (max <?php echo MAX_PHOTOS_PER_ANNONCE; ?>)</label>
+                <label>Photos actuelles (<?php echo count($photos); ?>/<?php echo MAX_PHOTOS_PER_ANNONCE; ?>)</label>
+                <?php if (!empty($photos)): ?>
+                    <div class="photos-grid">
+                        <?php foreach ($photos as $photo): ?>
+                            <div class="photo-item" data-photo-id="<?php echo $photo['id']; ?>">
+                                <img src="<?php echo e($photo['cheminPhoto']); ?>" alt="Photo">
+                                <button type="button" class="delete-photo-btn"
+                                        data-photo-id="<?php echo $photo['id']; ?>"
+                                        data-csrf="<?php echo generate_csrf_token(); ?>">
+                                    Supprimer
+                                </button>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="no-photos">Aucune photo pour cette annonce</p>
+                <?php endif; ?>
+            </div>
+
+            <div class="form-group">
+                <label>Ajouter des photos (max <?php echo MAX_PHOTOS_PER_ANNONCE - count($photos); ?> photos)</label>
                 <div class="photo-upload">
-                    <p>Ajoutez des photos de votre logement</p>
+                    <p>Ajoutez de nouvelles photos de votre logement</p>
                     <input type="file" name="photos[]" accept="image/jpeg,image/png,image/jpg" multiple>
                     <small>Formats acceptés : JPG, PNG (max 2 Mo par photo)</small>
                 </div>
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Créer l'annonce</button>
+                <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
                 <a href="dashboard-loueur.php" class="btn btn-secondary">Annuler</a>
             </div>
         </form>
-
-        <?php endif; ?>
     </div>
 
     <?php include 'includes/footer.php'; ?>
+    <script src="js/edit-annonce.js"></script>
 </body>
 </html>

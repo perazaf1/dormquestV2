@@ -20,131 +20,203 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Token CSRF invalide. Veuillez réessayer.";
     }
 
-    $prenom = trim($_POST['prenom'] ?? '');
-    $nom = trim($_POST['nom'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $telephone = trim($_POST['telephone'] ?? '');
-    
-    // Validation
-    if (empty($prenom)) {
-        $errors[] = "Le prénom est obligatoire.";
-    }
-    if (empty($nom)) {
-        $errors[] = "Le nom est obligatoire.";
-    }
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "L'email est invalide.";
-    }
-    
-    // Champs spécifiques selon le rôle
-    if (is_etudiant()) {
-        $ville_recherche = trim($_POST['ville_recherche'] ?? '');
-        $budget = trim($_POST['budget'] ?? '');
+    $form_type = $_POST['form_type'] ?? 'personal';
+
+    // ===== FORMULAIRE 1 : Infos personnelles =====
+    if ($form_type === 'personal') {
+        $prenom = trim($_POST['prenom'] ?? '');
+        $nom = trim($_POST['nom'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $telephone = trim($_POST['telephone'] ?? '');
         
-        if (empty($ville_recherche)) {
-            $errors[] = "La ville de recherche est obligatoire.";
+        // Validation
+        if (empty($prenom)) {
+            $errors[] = "Le prénom est obligatoire.";
         }
-        if (empty($budget) || !is_numeric($budget) || $budget <= 0) {
-            $errors[] = "Le budget doit être un nombre positif.";
+        if (empty($nom)) {
+            $errors[] = "Le nom est obligatoire.";
         }
-    } elseif (is_loueur()) {
-        $type_loueur = $_POST['type_loueur'] ?? '';
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "L'email est invalide.";
+        }
         
-        if (empty($type_loueur)) {
-            $errors[] = "Le type de loueur est obligatoire.";
-        }
-        if (!empty($telephone) && !preg_match('/^[0-9]{10}$/', str_replace(' ', '', $telephone))) {
-            $errors[] = "Le téléphone doit contenir 10 chiffres.";
-        }
-    }
-    
-    // Gestion du changement de mot de passe
-    $new_password = $_POST['new_password'] ?? '';
-    $confirm_password = $_POST['confirm_password'] ?? '';
-    
-    if (!empty($new_password)) {
-        if (strlen($new_password) < 8) {
-            $errors[] = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
-        }
-        if ($new_password !== $confirm_password) {
-            $errors[] = "Les mots de passe ne correspondent pas.";
-        }
-    }
-    
-    // Gestion de l'upload de photo
-    $photo_path = null;
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
-        $max_size = 2 * 1024 * 1024; // 2MB
-        
-        if (!in_array($_FILES['photo']['type'], $allowed_types)) {
-            $errors[] = "Format de photo non autorisé. Utilisez JPG, JPEG ou PNG.";
-        } elseif ($_FILES['photo']['size'] > $max_size) {
-            $errors[] = "La photo ne doit pas dépasser 2MB.";
-        } else {
-            $upload_dir = 'uploads/profiles/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
-            $file_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-            $unique_name = uniqid('profile_', true) . '.' . $file_extension;
-            $photo_path = $upload_dir . $unique_name;
+        // Champs spécifiques selon le rôle
+        if (is_etudiant()) {
+            $ville_recherche = trim($_POST['ville_recherche'] ?? '');
+            $budget = trim($_POST['budget'] ?? '');
             
-            if (!move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path)) {
-                $errors[] = "Erreur lors de l'upload de la photo.";
-                $photo_path = null;
+            if (empty($ville_recherche)) {
+                $errors[] = "La ville de recherche est obligatoire.";
+            }
+            if (empty($budget) || !is_numeric($budget) || $budget <= 0) {
+                $errors[] = "Le budget doit être un nombre positif.";
+            }
+        } elseif (is_loueur()) {
+            $type_loueur = $_POST['type_loueur'] ?? '';
+            
+            if (empty($type_loueur)) {
+                $errors[] = "Le type de loueur est obligatoire.";
+            }
+            if (!empty($telephone) && !preg_match('/^[0-9]{10}$/', str_replace(' ', '', $telephone))) {
+                $errors[] = "Le téléphone doit contenir 10 chiffres.";
             }
         }
-    }
-    
-    // Si pas d'erreurs, mise à jour
-    if (empty($errors)) {
-        try {
-            // Vérifier l'email unique (sauf pour l'utilisateur actuel)
-            $stmt = $pdo->prepare("SELECT id FROM utilisateurs WHERE email = ? AND id != ?");
-            $stmt->execute([$email, $user_id]);
+        
+        // Gestion de l'upload de photo
+        $photo_path = null;
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $allowed_types = ['image/jpeg', 'image/png', 'image/jpg'];
+            $max_size = 2 * 1024 * 1024; // 2MB
             
-            if ($stmt->fetch()) {
-                $errors[] = "Cet email est déjà utilisé par un autre compte.";
+            if (!in_array($_FILES['photo']['type'], $allowed_types)) {
+                $errors[] = "Format de photo non autorisé. Utilisez JPG, JPEG ou PNG.";
+            } elseif ($_FILES['photo']['size'] > $max_size) {
+                $errors[] = "La photo ne doit pas dépasser 2MB.";
             } else {
-                // Préparer la requête de mise à jour
-                if (is_etudiant()) {
-                    $sql = "UPDATE utilisateurs SET 
-                            prenom = ?, nom = ?, email = ?, 
-                            villeRecherche = ?, budget = ?";
-                    $params = [$prenom, $nom, $email, $ville_recherche, $budget];
+                $upload_dir = 'uploads/profiles/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0777, true);
+                }
+                $file_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+                $unique_name = uniqid('profile_', true) . '.' . $file_extension;
+                $photo_path = $upload_dir . $unique_name;
+                
+                if (!move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path)) {
+                    $errors[] = "Erreur lors de l'upload de la photo.";
+                    $photo_path = null;
+                }
+            }
+        }
+        
+        // Si pas d'erreurs, mise à jour des infos personnelles
+        if (empty($errors)) {
+            try {
+                // Vérifier l'email unique (sauf pour l'utilisateur actuel)
+                $stmt = $pdo->prepare("SELECT id FROM utilisateurs WHERE email = ? AND id != ?");
+                $stmt->execute([$email, $user_id]);
+                
+                if ($stmt->fetch()) {
+                    $errors[] = "Cet email est déjà utilisé par un autre compte.";
                 } else {
-                    $sql = "UPDATE utilisateurs SET 
-                            prenom = ?, nom = ?, email = ?, 
-                            telephone = ?, typeLoueur = ?";
-                    $params = [$prenom, $nom, $email, $telephone, $type_loueur];
+                    // Préparer la requête de mise à jour
+                    if (is_etudiant()) {
+                        $sql = "UPDATE utilisateurs SET 
+                                prenom = ?, nom = ?, email = ?, 
+                                villeRecherche = ?, budget = ?";
+                        $params = [$prenom, $nom, $email, $ville_recherche, $budget];
+                    } else {
+                        $sql = "UPDATE utilisateurs SET 
+                                prenom = ?, nom = ?, email = ?, 
+                                telephone = ?, typeLoueur = ?";
+                        $params = [$prenom, $nom, $email, $telephone, $type_loueur];
+                    }
+                    
+                    // Ajouter la photo si uploadée
+                    if ($photo_path) {
+                        $sql .= ", photoDeProfil = ?";
+                        $params[] = $photo_path;
+                    }
+                    
+                    $sql .= " WHERE id = ?";
+                    $params[] = $user_id;
+                    
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute($params);
+                    
+                    // Refresh session data from DB
+                    refresh_session($pdo);
+                    
+                    $success = "Informations personnelles mises à jour avec succès !";
                 }
-                
-                // Ajouter la photo si uploadée
-                if ($photo_path) {
-                    $sql .= ", photoDeProfil = ?";
-                    $params[] = $photo_path;
+            } catch (PDOException $e) {
+                $errors[] = "Erreur lors de la mise à jour : " . $e->getMessage();
+            }
+        }
+    }
+
+    // ===== FORMULAIRE 2 : Mot de passe =====
+    elseif ($form_type === 'password') {
+        $new_password = $_POST['new_password'] ?? '';
+        $confirm_password = $_POST['confirm_password'] ?? '';
+        
+        // Gestion du changement de mot de passe
+        if (!empty($new_password)) {
+            if (strlen($new_password) < 8) {
+                $errors[] = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
+            }
+            if ($new_password !== $confirm_password) {
+                $errors[] = "Les mots de passe ne correspondent pas.";
+            }
+            
+            // Si pas d'erreurs, mise à jour du mot de passe
+            if (empty($errors)) {
+                try {
+                    $sql = "UPDATE utilisateurs SET motDePasse = ? WHERE id = ?";
+                    $params = [password_hash($new_password, PASSWORD_DEFAULT), $user_id];
+                    
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->execute($params);
+                    
+                    $success = "Mot de passe mis à jour avec succès !";
+                } catch (PDOException $e) {
+                    $errors[] = "Erreur lors de la mise à jour : " . $e->getMessage();
                 }
-                
-                // Ajouter le mot de passe si changé
-                if (!empty($new_password)) {
-                    $sql .= ", motDePasse = ?";
-                    $params[] = password_hash($new_password, PASSWORD_DEFAULT);
-                }
-                
-                $sql .= " WHERE id = ?";
-                $params[] = $user_id;
-                
+            }
+        } else {
+            $errors[] = "Veuillez entrer un nouveau mot de passe.";
+        }
+    }
+
+    // ===== FORMULAIRE 3 : Question secrète =====
+    elseif ($form_type === 'secret') {
+        $secret_question = trim($_POST['secret_question'] ?? '');
+        $secret_question_custom = trim($_POST['secret_question_custom'] ?? '');
+        $secret_answer = trim($_POST['secret_answer'] ?? '');
+
+        // Helper: check if a column exists in `utilisateurs`
+        $columnExists = function($col) use ($pdo) {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'utilisateurs' AND COLUMN_NAME = ?");
+            $stmt->execute([$col]);
+            return (bool) $stmt->fetchColumn();
+        };
+
+        // Best effort: ensure columns exist
+        $toAdd = [];
+        if (!$columnExists('secret_question')) { $toAdd[] = "ADD COLUMN secret_question VARCHAR(255) NULL"; }
+        if (!$columnExists('secret_answer_hash')) { $toAdd[] = "ADD COLUMN secret_answer_hash VARCHAR(255) NULL"; }
+        if (!empty($toAdd)) {
+            try { $pdo->exec("ALTER TABLE utilisateurs " . implode(', ', $toAdd)); }
+            catch (PDOException $e) { $errors[] = "Impossible d'activer la question secrète: " . $e->getMessage(); }
+        }
+
+        if (empty($errors)) {
+            $predefined = [
+                'Quel est le nom de jeune fille de votre mère?',
+                'Quel est le nom de votre premier animal?',
+                'Quel est le code postal de votre ville de naissance?',
+                'Quel est le nom de votre école primaire?',
+                'Autre'
+            ];
+            $effective_secret_question = ($secret_question === 'Autre') ? $secret_question_custom : $secret_question;
+
+            if (empty($effective_secret_question)) { $errors[] = "La question secrète est obligatoire."; }
+            if (empty($secret_answer)) { $errors[] = "La réponse à la question secrète est obligatoire."; }
+        }
+
+        if (empty($errors)) {
+            try {
+                $sql = "UPDATE utilisateurs SET secret_question = ?, secret_answer_hash = ? WHERE id = ?";
+                $params = [$effective_secret_question, password_hash($secret_answer, PASSWORD_DEFAULT), $user_id];
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute($params);
-                
+
                 // Refresh session data from DB
                 refresh_session($pdo);
-                
-                $success = "Profil mis à jour avec succès !";
+
+                $success = "Question secrète mise à jour avec succès !";
+            } catch (PDOException $e) {
+                $errors[] = "Erreur lors de la mise à jour : " . $e->getMessage();
             }
-        } catch (PDOException $e) {
-            $errors[] = "Erreur lors de la mise à jour : " . $e->getMessage();
         }
     }
 }
@@ -241,11 +313,11 @@ try {
             <!-- En-tête -->
             <div class="profil-header">
                 <div class="profil-header__content">
-                    <h1 class="profil-header__title">⚙️ Mon profil</h1>
+                    <h1 class="profil-header__title"><i class="fa-solid fa-gear"></i> Mon profil</h1>
                     <p class="profil-header__subtitle">Gérez vos informations personnelles</p>
                 </div>
                 <div class="profil-header__badge">
-                    <?php echo is_etudiant() ? '🎓 Étudiant' : '🏠 Loueur'; ?>
+                    <?php echo is_etudiant() ? '<i class="fa-solid fa-graduation-cap"></i> Étudiant' : '<i class="fa-solid fa-house"></i> Loueur'; ?>
                 </div>
             </div>
 
@@ -267,37 +339,41 @@ try {
                             <?php echo htmlspecialchars($user['prenom'] . ' ' . $user['nom']); ?>
                         </h2>
                         <p class="profile-card__role">
-                            <?php echo is_etudiant() ? '🎓 Étudiant' : '🏠 Loueur'; ?>
+                            <?php echo is_etudiant() ? '<i class="fa-solid fa-graduation-cap"></i> Étudiant' : '<i class="fa-solid fa-house"></i> Loueur'; ?>
                         </p>
                         <div class="profile-card__date">
                             Membre depuis le <?php 
                                 $dateInscription = $user['dateInscription'] ?? null;
                                 echo $dateInscription ? date('d/m/Y', strtotime($dateInscription)) : 'N/A'; 
+                            ?><br>
+                            Dernière connexion le <?php 
+                                $derniereConnexion = $user['derniereConnexion'] ?? null;
+                                echo $derniereConnexion ? date('d/m/Y', strtotime($derniereConnexion)) : 'N/A'; 
                             ?>
                         </div>
                     </div>
 
                     <!-- Statistiques -->
                     <div class="stats-card">
-                        <h3 class="stats-card__title">📊 Mes statistiques</h3>
+                        <h3 class="stats-card__title"><i class="fa-solid fa-chart-line"></i> Mes statistiques</h3>
                         <div class="stats-card__items">
                             <?php if (is_etudiant()): ?>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">⭐</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-star"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_favoris; ?></strong>
                                     <span>Favori<?php echo $nb_favoris > 1 ? 's' : ''; ?></span>
                                 </div>
                             </div>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">📨</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-envelopes-bulk"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_candidatures; ?></strong>
                                     <span>Candidature<?php echo $nb_candidatures > 1 ? 's' : ''; ?></span>
                                 </div>
                             </div>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">✅</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-check"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_acceptees; ?></strong>
                                     <span>Acceptée<?php echo $nb_acceptees > 1 ? 's' : ''; ?></span>
@@ -305,21 +381,21 @@ try {
                             </div>
                             <?php else: ?>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">📋</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-file"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_annonces; ?></strong>
                                     <span>Annonce<?php echo $nb_annonces > 1 ? 's' : ''; ?></span>
                                 </div>
                             </div>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">✅</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-check"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_actives; ?></strong>
                                     <span>Active<?php echo $nb_actives > 1 ? 's' : ''; ?></span>
                                 </div>
                             </div>
                             <div class="stats-card__item">
-                                <span class="stats-card__icon">📬</span>
+                                <span class="stats-card__icon"><i class="fa-solid fa-envelopes-bulk"></i></span>
                                 <div class="stats-card__content">
                                     <strong><?php echo $nb_candidatures_recues; ?></strong>
                                     <span>Candidature<?php echo $nb_candidatures_recues > 1 ? 's' : ''; ?>
@@ -330,15 +406,14 @@ try {
                         </div>
                     </div>
 
-                    <!-- Danger Zone -->
-                    <div class="danger-zone">
-                        <h3 class="danger-zone__title">⚠️ Action sensible ⚠️</h3>
-                        <p class="danger-zone__text">
-                            La suppression de votre compte est irréversible.
-                        </p>
-                        <button class="danger-zone__btn" id="delete-account-btn">
+                    <!-- Danger Zone - Delete Account -->
+                    <div class="delete-account-section">
+                        <button class="delete-account__btn" id="delete-account-btn">
                             Supprimer mon compte
                         </button>
+                        <p class="delete-account__warning">
+                            Action irréversible
+                        </p>
                     </div>
                 </aside>
 
@@ -348,7 +423,7 @@ try {
                     <!-- Messages -->
                     <?php if ($success): ?>
                     <div class="alert alert--success">
-                        <strong>✅ <?php echo htmlspecialchars($success); ?></strong>
+                        <strong><i class="fa-solid fa-check"></i> <?php echo htmlspecialchars($success); ?></strong>
                     </div>
                     <?php endif; ?>
 
@@ -364,12 +439,14 @@ try {
                     <?php endif; ?>
 
                     <!-- Formulaire de modification -->
-                    <form method="POST" action="profil.php" class="profil-form" enctype="multipart/form-data">
+                    <!-- FORMULAIRE 1 : Infos personnelles -->
+                    <form method="POST" action="profil.php" class="profil-form" enctype="multipart/form-data" id="form-personal">
                         <?php csrf_field(); ?>
+                        <input type="hidden" name="form_type" value="personal">
 
                         <!-- Section Informations personnelles -->
                         <div class="form-section">
-                            <h2 class="form-section__title">👤 Informations personnelles</h2>
+                            <h2 class="form-section__title"><i class="fa-solid fa-user"></i> Informations personnelles</h2>
 
                             <div class="form-row">
                                 <div class="form-group">
@@ -395,21 +472,22 @@ try {
                             <div class="form-group">
                                 <label for="photo">Photo de profil</label>
                                 <input type="file" id="photo" name="photo" accept="image/*" class="form-input">
-                                <small class="form-hint">JPG, PNG (Max 2MB)</small>
-                                
-                                <!-- Bouton de suppression (visible seulement si photo existe) -->
-                                <?php if (!empty($user['photoDeProfil'])): ?>
-                                <button type="button" id="deletePhotoBtn" class="btn-delete-photo">
-                                    🗑️ Supprimer la photo
-                                </button>
-                                <?php endif; ?>
+                                <div class="form-hint-wrapper">
+                                    <small class="form-hint">JPG, PNG (Max 2MB)</small>
+                                    <!-- Bouton de suppression (visible seulement si photo existe) -->
+                                    <?php if (!empty($user['photoDeProfil'])): ?>
+                                    <button type="button" id="deletePhotoBtn" class="btn-delete-photo">
+                                        Supprimer la photo actuelle
+                                    </button>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Section spécifique selon le rôle -->
                         <?php if (is_etudiant()): ?>
                         <div class="form-section">
-                            <h2 class="form-section__title">🎓 Informations étudiant</h2>
+                            <h2 class="form-section__title"><i class="fa-solid fa-graduation-cap"></i> Informations étudiant</h2>
 
                             <div class="form-group form-group--autocomplete">
                                 <label for="ville_recherche" class="form-label">Ville de recherche *</label>
@@ -428,7 +506,7 @@ try {
                         </div>
                         <?php else: ?>
                         <div class="form-section">
-                            <h2 class="form-section__title">🏠 Informations loueur</h2>
+                            <h2 class="form-section__title"><i class="fa-solid fa-house"></i> Informations loueur</h2>
 
                             <div class="form-group">
                                 <label for="type_loueur" class="form-label">Type de loueur *</label>
@@ -456,10 +534,16 @@ try {
                             </div>
                         </div>
                         <?php endif; ?>
+                    </form>
+
+                    <!-- FORMULAIRE 2 : Mot de passe -->
+                    <form method="POST" action="profil.php" class="profil-form" id="form-password">
+                        <?php csrf_field(); ?>
+                        <input type="hidden" name="form_type" value="password">
 
                         <!-- Section Sécurité -->
                         <div class="form-section">
-                            <h2 class="form-section__title">🔒 Modifier le mot de passe</h2>
+                            <h2 class="form-section__title"><i class="fa-solid fa-lock"></i> Modifier le mot de passe</h2>
                             <p class="form-section__desc">Laissez vide si vous ne souhaitez pas changer votre mot de
                                 passe.</p>
 
@@ -478,17 +562,67 @@ try {
                             </div>
                         </div>
 
-                        <!-- Boutons d'action -->
-                        <div class="form-actions form-actions--multiple">
-                            <a href="<?php echo is_etudiant() ? 'dashboard-etudiant.php' : 'dashboard-loueur.php'; ?>"
-                                class="form-btn form-btn--secondary">
-                                Annuler
-                            </a>
+                        <!-- Bouton d'action pour mot de passe -->
+                        <div class="form-actions form-actions--single">
                             <button type="submit" class="form-btn form-btn--primary">
-                                💾 Enregistrer les modifications
+                                <i class="fa-solid fa-lock"></i> Mettre à jour le mot de passe
                             </button>
                         </div>
                     </form>
+
+                        <!-- FORMULAIRE 3 : Question secrète -->
+                        <form method="POST" action="profil.php" class="profil-form" id="form-secret">
+                            <?php csrf_field(); ?>
+                            <input type="hidden" name="form_type" value="secret">
+
+                            <div class="form-section">
+                                <h2 class="form-section__title"><i class="fa-solid fa-lock"></i> Question secrète</h2>
+                                <p class="form-section__desc">Définissez ou modifiez votre question de sécurité. Elle sera utilisée pour réinitialiser votre mot de passe.</p>
+
+                                <div class="form-group">
+                                    <label for="secret_question" class="form-label">Question secrète *</label>
+                                    <?php $currentQ = $user['secret_question'] ?? ''; 
+                                          $predefined = [
+                                            'Quel est le nom de jeune fille de votre mère?',
+                                            'Quel est le nom de votre premier animal?',
+                                            'Quel est le code postal de votre ville de naissance?',
+                                            'Quel est le nom de votre école primaire?',
+                                            'Autre'
+                                          ];
+                                          $isCustom = $currentQ && !in_array($currentQ, $predefined);
+                                    ?>
+                                    <select id="secret_question" name="secret_question" class="form-input" required>
+                                        <option value="" <?php echo $currentQ === '' ? 'selected' : ''; ?>>-- Choisir une question --</option>
+                                        <option value="Quel est le nom de jeune fille de votre mère?" <?php echo $currentQ === 'Quel est le nom de jeune fille de votre mère?' ? 'selected' : ''; ?>>Quel est le nom de jeune fille de votre mère?</option>
+                                        <option value="Quel est le nom de votre premier animal?" <?php echo $currentQ === 'Quel est le nom de votre premier animal?' ? 'selected' : ''; ?>>Quel est le nom de votre premier animal?</option>
+                                        <option value="Quel est le code postal de votre ville de naissance?" <?php echo $currentQ === 'Quel est le code postal de votre ville de naissance?' ? 'selected' : ''; ?>>Quel est le code postal de votre ville de naissance?</option>
+                                        <option value="Quel est le nom de votre école primaire?" <?php echo $currentQ === 'Quel est le nom de votre école primaire?' ? 'selected' : ''; ?>>Quel est le nom de votre école primaire?</option>
+                                        <option value="Autre" <?php echo ($currentQ === 'Autre' || $isCustom) ? 'selected' : ''; ?>>Autre (écrire ma propre question)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" id="secret-question-custom-group" style="display: <?php echo ($currentQ === 'Autre' || $isCustom) ? 'block' : 'none'; ?>;">
+                                    <label for="secret_question_custom" class="form-label">Votre question secrète *</label>
+                                    <input type="text" id="secret_question_custom" name="secret_question_custom" class="form-input" placeholder="Saisissez votre question" value="<?php echo $isCustom ? htmlspecialchars($currentQ) : ''; ?>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="secret_answer" class="form-label">Réponse *</label>
+                                    <input type="text" id="secret_answer" name="secret_answer" class="form-input" placeholder="Votre réponse" required>
+                                    <small class="form-hint">Conseil: utilisez une réponse mémorisable mais difficile à deviner.</small>
+                                </div>
+                            </div>
+
+                            <div class="form-actions form-actions--single">
+                                <button type="submit" class="form-btn form-btn--primary">
+                                     <i class="fa-solid fa-lock"></i> Mettre à jour la question secrète
+                                </button>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </main>
                 </div>
             </div>
         </div>
@@ -498,6 +632,7 @@ try {
 
     <script src="js/profil.js"></script>
     <script src="js/autocomplete-ville.js"></script>
+    <script src="https://kit.fontawesome.com/794b85b760.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
