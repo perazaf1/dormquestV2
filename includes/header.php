@@ -7,6 +7,18 @@ if (!isset($isLoggedIn)) {
 if (!isset($userType)) {
     $userType = get_user_role();
 }
+
+// Compter les favoris pour les étudiants
+$nbFavoris = 0;
+if ($isLoggedIn && $userType === 'etudiant') {
+    try {
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM favoris WHERE idEtudiant = ?");
+        $stmt->execute([get_user_id()]);
+        $nbFavoris = (int)$stmt->fetchColumn();
+    } catch (PDOException $e) {
+        $nbFavoris = 0;
+    }
+}
 ?>
 <header class="main-header">
     <div class="header-container">
@@ -28,7 +40,14 @@ if (!isset($userType)) {
                 <li><a href="create-annonce.php" class="nav-link">Créer une annonce</a></li>
                 <?php else: ?>
                 <li><a href="dashboard-etudiant.php" class="nav-link">Tableau de bord</a></li>
-                <li><a href="favoris.php" class="nav-link">Favoris</a></li>
+                <li>
+                    <a href="favoris.php" class="nav-link">
+                        Favoris
+                        <?php if ($nbFavoris > 0): ?>
+                            <span class="badge-count"><?php echo $nbFavoris; ?></span>
+                        <?php endif; ?>
+                    </a>
+                </li>
                 <li><a href="candidatures.php" class="nav-link">Candidatures</a></li>
                 <?php endif; ?>
                 <?php endif; ?>
