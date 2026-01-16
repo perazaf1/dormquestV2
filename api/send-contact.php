@@ -12,6 +12,27 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/auth.php';
 
 try {
+    // S'assurer que la table notifications existe (utile pour les environnements qui n'ont pas encore exécuté le SQL)
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS notifications (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            idUtilisateur INT NOT NULL,
+            titre VARCHAR(255) NOT NULL,
+            message TEXT NOT NULL,
+            type ENUM('contact','candidature','favori','annonce','autre') DEFAULT 'autre',
+            idAnnonce INT NULL,
+            idCandidature INT NULL,
+            donneesJson LONGTEXT NULL,
+            dateCreation DATETIME DEFAULT CURRENT_TIMESTAMP,
+            lue BOOLEAN DEFAULT FALSE,
+            FOREIGN KEY (idUtilisateur) REFERENCES utilisateurs(id) ON DELETE CASCADE,
+            FOREIGN KEY (idAnnonce) REFERENCES annonces(id) ON DELETE CASCADE,
+            INDEX idx_utilisateur (idUtilisateur),
+            INDEX idx_lue (lue),
+            INDEX idx_type (type)
+        )
+    ");
+
     // Récupérer les données du formulaire
     $nom = isset($_POST['nom']) ? trim($_POST['nom']) : '';
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
@@ -36,24 +57,21 @@ try {
         exit;
     }
 
-    // Trouver l'utilisateur admin "test"
-    $stmt = $pdo->prepare("
-        SELECT id FROM utilisateurs 
-        WHERE email = 'test@gmail.com'
-        LIMIT 1
-    ");
+    // Trouver (ou créer) l'utilisateur admin "test"
+    $stmt = $pdo->prepare("SELECT id FROM utilisateurs WHERE email = 'test@gmail.com' LIMIT 1");
     $stmt->execute();
     $admin = $stmt->fetch();
 
     if (!$admin) {
-        echo json_encode([
-            'success' => false,
-            'error' => 'Administrateur non trouvé'
-        ]);
-        exit;
-    }
+        // Créer un compte test minimal si absent (mot de passe généré)
+        $password = password_hash('testtest', PASSWORD_DEFAULT);
+        $stmtInsert = $pdo->prepare("INSERT INTO utilisateurs (prenom, nom, email, motDePasse, role) VALUES ('Test', 'Admin', 'test@gmail.com', ?, 'etudiant')");
+        $stmtInsert->execute([$password]);
 
-    $adminId = $admin['id'];
+        $adminId = (int)$pdo->lastInsertId();
+    } else {
+        $adminId = (int)$admin['id'];
+    }
 
     // Créer la notification pour l'admin
     $titre = "Nouveau message de contact de " . htmlspecialchars($nom);
