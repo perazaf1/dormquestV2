@@ -617,6 +617,73 @@ function create_candidature($pdo, $etudiantId, $annonceId) {
 }
 
 // ============================================================================
+// SECTION 7 : FONCTIONS NOTIFICATIONS
+// ============================================================================
+
+/**
+ * S'assure que la table notifications existe dans la base de données
+ * Crée la table si elle n'existe pas déjà
+ *
+ * @param PDO $pdo Connexion à la base de données
+ * @return void
+ */
+function ensure_notifications_table_exists($pdo) {
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS notifications (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            idUtilisateur INT NOT NULL,
+            titre VARCHAR(255) NOT NULL,
+            message TEXT NOT NULL,
+            type ENUM('contact','candidature','favori','annonce','autre') DEFAULT 'autre',
+            idAnnonce INT NULL,
+            idCandidature INT NULL,
+            donneesJson LONGTEXT NULL,
+            dateCreation DATETIME DEFAULT CURRENT_TIMESTAMP,
+            lue BOOLEAN DEFAULT FALSE,
+            FOREIGN KEY (idUtilisateur) REFERENCES utilisateurs(id) ON DELETE CASCADE,
+            FOREIGN KEY (idAnnonce) REFERENCES annonces(id) ON DELETE CASCADE,
+            INDEX idx_utilisateur (idUtilisateur),
+            INDEX idx_lue (lue),
+            INDEX idx_type (type)
+        )
+    ");
+}
+
+/**
+ * Crée une notification pour un utilisateur
+ *
+ * @param PDO $pdo Connexion à la base de données
+ * @param int $idUtilisateur ID de l'utilisateur qui recevra la notification
+ * @param string $titre Titre de la notification
+ * @param string $message Message de la notification
+ * @param string $type Type de notification ('contact', 'candidature', 'favori', 'annonce', 'autre')
+ * @param int|null $idAnnonce ID de l'annonce concernée (optionnel)
+ * @param int|null $idCandidature ID de la candidature concernée (optionnel)
+ * @param array|null $donneesJson Données supplémentaires au format tableau (optionnel)
+ * @return int|false ID de la notification créée ou false en cas d'échec
+ */
+function create_notification($pdo, $idUtilisateur, $titre, $message, $type = 'autre', $idAnnonce = null, $idCandidature = null, $donneesJson = null) {
+    // S'assurer que la table existe
+    ensure_notifications_table_exists($pdo);
+
+    // Encoder les données JSON si un tableau est fourni
+    $jsonString = $donneesJson ? json_encode($donneesJson) : null;
+
+    // Préparer la requête d'insertion
+    $stmt = $pdo->prepare("
+        INSERT INTO notifications (idUtilisateur, titre, message, type, idAnnonce, idCandidature, donneesJson)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ");
+
+    // Exécuter la requête
+    if ($stmt->execute([$idUtilisateur, $titre, $message, $type, $idAnnonce, $idCandidature, $jsonString])) {
+        return $pdo->lastInsertId();
+    }
+
+    return false;
+}
+
+// ============================================================================
 // RÉSUMÉ DE CE FICHIER :
 // ============================================================================
 // Ce fichier functions.php centralise toutes les requêtes SQL du projet.

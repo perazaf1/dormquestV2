@@ -64,26 +64,69 @@ try {
     
     // CAS 1 : Ajouter aux favoris
     if ($action === 'add') {
-        
+
         // Préparer une requête SQL sécurisée pour ajouter le favori
         // INSERT IGNORE = n'ajoute que si la combinaison étudiant/annonce n'existe pas déjà
         // Cela évite les doublons dans la table favoris
         $stmt = $pdo->prepare("
-            INSERT IGNORE INTO favoris (idEtudiant, idAnnonce, dateAjout) 
+            INSERT IGNORE INTO favoris (idEtudiant, idAnnonce, dateAjout)
             VALUES (?, ?, NOW())
         ");
-        
+
         // Exécuter la requête en remplaçant les ? par les vraies valeurs
         // Les ? empêchent les injections SQL (méthode sécurisée)
         $stmt->execute([$etudiant_id, $annonce_id]);
-        
+
+        // Vérifier si le favori a vraiment été ajouté (rowCount > 0 signifie qu'une ligne a été insérée)
+        if ($stmt->rowCount() > 0) {
+            // Le favori a été ajouté, créer une notification pour le loueur
+
+            // Récupérer les informations de l'annonce et du loueur
+            $annonce = get_annonce_by_id($pdo, $annonce_id);
+
+            if ($annonce) {
+                // Récupérer les informations de l'étudiant qui a ajouté le favori
+                $etudiant = get_user_by_id($pdo, $etudiant_id);
+
+                if ($etudiant) {
+                    // Créer le titre et le message de la notification
+                    $titre = "Nouvelle mise en favoris de votre annonce";
+                    $message = htmlspecialchars($etudiant['prenom'] . ' ' . $etudiant['nom']) .
+                               " a ajouté votre annonce \"" . htmlspecialchars($annonce['titre']) . "\" à ses favoris.";
+
+                    // Préparer les données JSON avec les informations complètes
+                    $donneesJson = [
+                        'etudiant_id' => $etudiant['id'],
+                        'etudiant_prenom' => $etudiant['prenom'],
+                        'etudiant_nom' => $etudiant['nom'],
+                        'etudiant_email' => $etudiant['email'],
+                        'annonce_id' => $annonce['id'],
+                        'annonce_titre' => $annonce['titre'],
+                        'date_ajout' => date('Y-m-d H:i:s')
+                    ];
+
+                    // Créer la notification pour le loueur
+                    create_notification(
+                        $pdo,
+                        $annonce['idLoueur'],  // ID du loueur qui recevra la notification
+                        $titre,
+                        $message,
+                        'favori',              // Type de notification
+                        $annonce_id,           // ID de l'annonce concernée
+                        null,                  // Pas de candidature
+                        $donneesJson           // Données supplémentaires
+                    );
+                }
+            }
+        }
+
         // Renvoyer une réponse JSON de succès
         echo json_encode([
             'success' => true,
             'message' => 'Annonce ajoutée aux favoris',
             'action' => 'added'  // Permet au JavaScript de savoir ce qui s'est passé
         ]);
-        
+
     } 
     // CAS 2 : Retirer des favoris
     elseif ($action === 'remove') {
