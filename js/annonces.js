@@ -277,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (criteres.meuble) criteresHTML.push('<span class="annonces__badge">Meublé</span>');
         if (criteres.eligibleAPL) criteresHTML.push('<span class="annonces__badge">APL</span>');
         if (criteres.parkingDisponible) criteresHTML.push('<span class="annonces__badge">Parking</span>');
+        if (criteres.accesPMR) criteresHTML.push('<span class="annonces__badge">PMR</span>');
 
         card.innerHTML = `
             <a href="annonce.php?id=${annonce.id}" class="annonces__card-link">

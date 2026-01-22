@@ -89,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
 
                 // Traiter les photos
+                $uploadErrors = [];
                 if (isset($_FILES['photos']) && is_array($_FILES['photos']['name'])) {
                     foreach ($_FILES['photos']['name'] as $key => $name) {
                         if (empty($name)) continue;
@@ -101,10 +102,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'size' => $_FILES['photos']['size'][$key]
                         ];
 
+                        // Vérifier les erreurs d'upload
+                        if ($file['error'] !== UPLOAD_ERR_OK) {
+                            $uploadErrors[] = "Erreur lors de l'upload de " . $file['name'];
+                            continue;
+                        }
+
                         if (is_valid_image($file)) {
                             $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
                             $filename = generate_unique_filename($extension);
-                            $destination = ANNONCE_UPLOAD_PATH . '/' . $filename;
+                            $destination = ANNONCE_UPLOAD_PATH . DIRECTORY_SEPARATOR . $filename;
 
                             if (move_uploaded_file($file['tmp_name'], $destination)) {
                                 $sqlPhoto = "INSERT INTO photos_annonces (idAnnonce, cheminPhoto) VALUES (:idAnnonce, :cheminPhoto)";
@@ -113,9 +120,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     ':idAnnonce' => $annonceId,
                                     ':cheminPhoto' => 'uploads/annonces/' . $filename
                                 ]);
+                            } else {
+                                $uploadErrors[] = "Impossible de déplacer le fichier " . $file['name'];
                             }
+                        } else {
+                            $uploadErrors[] = "Le fichier " . $file['name'] . " n'est pas une image valide (max 20 Mo, formats: JPG, PNG)";
                         }
                     }
+                }
+
+                // Afficher les erreurs d'upload s'il y en a
+                if (!empty($uploadErrors)) {
+                    $_SESSION['upload_errors'] = $uploadErrors;
                 }
 
                 $pdo->commit();
@@ -165,6 +181,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <strong>Succès !</strong> Votre annonce a été créée avec succès.
                 <br><a href="dashboard-loueur.php">Voir mes annonces</a>
             </div>
+            <?php if (isset($_SESSION['upload_errors']) && !empty($_SESSION['upload_errors'])): ?>
+                <div class="alert alert-warning">
+                    <strong>Attention :</strong> Certaines photos n'ont pas pu être uploadées :
+                    <ul>
+                        <?php foreach ($_SESSION['upload_errors'] as $uploadError): ?>
+                            <li><?php echo e($uploadError); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php unset($_SESSION['upload_errors']); ?>
+            <?php endif; ?>
         <?php else: ?>
 
         <form method="POST" enctype="multipart/form-data">
@@ -264,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="photo-upload">
                     <p>Ajoutez des photos de votre logement</p>
                     <input type="file" name="photos[]" accept="image/jpeg,image/png,image/jpg" multiple>
-                    <small>Formats acceptés : JPG, PNG (max 2 Mo par photo)</small>
+                    <small>Formats acceptés : JPG, PNG (max 20 Mo par photo)</small>
                 </div>
             </div>
 

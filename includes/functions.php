@@ -300,12 +300,12 @@ function update_annonce($pdo, $annonceId, $data) {
  */
 function get_photos_annonce($pdo, $annonceId) {
     $stmt = $pdo->prepare("
-        SELECT cheminPhoto FROM photos_annonces
+        SELECT id, cheminPhoto FROM photos_annonces
         WHERE idAnnonce = ?
         ORDER BY id
     ");
     $stmt->execute([$annonceId]);
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 /**

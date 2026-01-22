@@ -98,6 +98,10 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                                 <input type="checkbox" name="parking" id="parking">
                                 <span class="annonces__checkbox-text">Parking</span>
                             </label>
+                            <label class="annonces__checkbox">
+                                <input type="checkbox" name="accesPMR" id="accesPMR">
+                                <span class="annonces__checkbox-text">Accès PMR</span>
+                            </label>
                         </div>
                     </div>
 

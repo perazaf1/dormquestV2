@@ -17,7 +17,10 @@
       "Bash(then echo \"File exists\")",
       "Bash(else echo \"File does not exist\")",
       "Bash(php -l:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(php:*)",
+      "Bash(del \"C:\\\\xampp\\\\htdocs\\\\dormQuestV2\\\\check-upload-limits.php\")",
+      "Bash(mysql:*)"
     ],
     "deny": [],
     "ask": []

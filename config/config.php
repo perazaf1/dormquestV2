@@ -74,7 +74,7 @@ if (!is_dir(ANNONCE_UPLOAD_PATH)) {
 // SECTION 4 : LIMITES POUR LES UPLOADS DE FICHIERS
 // ============================================================================
 
-define('MAX_FILE_SIZE', 2 * 1024 * 1024); // Taille max : 2 Mo (en octets)
+define('MAX_FILE_SIZE', 20 * 1024 * 1024); // Taille max : 20 Mo (en octets)
 
 // Types MIME autorisés (identifiants techniques des formats d'image)
 define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/png', 'image/jpg']);
